@@ -34,6 +34,7 @@ DudeClass.draw = function(dude)
 		love.graphics.rectangle(fillage, dude.x - dudeSize/2, dude.y - dudeSize/2, dudeSize, dudeSize)
 		if (DEBUG) then
 			love.graphics.print(dude.id, dude.x + dudeSize + 5, dude.y)
+			love.graphics.print(dude.state, dude.x + dudeSize + 5, dude.y + dudeSize + 5)
 		end
 		--]]
 
@@ -90,33 +91,46 @@ DudeClass.update = function(dude,dt)
 	-- dude pathfinding
 	-- arrived at destination?
 	if(distance2Points(dude.x,dude.y,dude.destX,dude.destY) <= destAcceptanceRadius) then
-		dude.fleeing = false
-		if (dude.waitingTime > 0) then
+		if (dude.state ~= 'waiting') then
+			dude.speedX = 0
+			dude.speedY = 0
+			dude:setState('waiting')
+			dude.waitingTime = math.random(dudeNextDestWaitTimeMin,dudeNextDestWaitTimeMax)
+		elseif (dude.waitingTime > 0) then
 			dude.waitingTime = dude.waitingTime - dt
 		else
 			dude:findNewDestination()
+			dude:setState('walking')
 		end
 	else
 		-- attracted by coins
 		closestCoin = dude:findClosestCoin()
-		if (closestCoin ~= nil and not dude.fleeing and not (dude:class() == "rich+")) then
+		if (closestCoin ~= nil and dude.state ~= 'fleeing' and (dude:class() ~= "rich+")) then
 			dude.destX = closestCoin.x
 			dude.destY = closestCoin.y
+			dude:setState('moneyPursuing')
 		end
+		if (closestCoin == nil and dude.state == 'moneyPursuing') then
+			-- the dude was previously attracted by a coin but it doesn't exist
+			dude.destX = dude.x
+			dude.destY = dude.y
+		end
+
 		-- rich+ dudes are attracted to player
 		if (dude:class() == "rich+" and distance2Entities(dude, player) > richPlusStalkDistance) then
 			dude.destX = player.x
 			dude.destY = player.y
+			dude:setState('playerPursuing')
 		end
 
-		-- no distracion --> go to destination
+		-- no distraction --> go to destination
 		dude.speedX = (dude.destX - dude.x)
 		dude.speedY = (dude.destY - dude.y)
 
 		dude:calculateSpeed()
 	end
 
-	-- prey on the weak
+	-- prey on the weak -- TODO: CLEANUP (use findClosest)
 	if (dude:class() == "rich" and not (dude.invulnTimer > 0)) then
 		for _, prey in ipairs(dudes) do
 			if (prey.money < dude.money
@@ -153,7 +167,7 @@ DudeClass.update = function(dude,dt)
 		dude.destY = math.max(dude.destX, fleeMinY)
 		dude.destY = math.min(dude.destX, fleeMaxY)
 		dude.attackedBy = -1
-		dude.fleeing = true
+		dude:setState('fleeing')
 	end
 
 	-- push or be pushed by other players
@@ -232,6 +246,7 @@ DudeClass.findNewDestination = function(dude)
 		dude.destX = math.min(limitMaxX, dude.destX)
 		dude.destY = math.max(limitMinY, dude.destY)
 		dude.destY = math.min(limitMaxY, dude.destY)
+		dude:setState('walking')
 	end
 end
 
@@ -254,6 +269,15 @@ DudeClass.getDudePic = function(dude)
 	else
 		return picRichPlus
 	end
+
+end
+
+DudeClass.acceptedStates = {'waiting', 'walking', 'fleeing', 'moneyPursuing', 'playerPursuing'}
+DudeClass.setState = function(dude, newState)
+	for _,s in ipairs(DudeClass.acceptedStates) do
+		if (newState == s) then dude.state = newState end
+	end
+	-- TODO error detection
 
 end
 
@@ -280,12 +304,14 @@ DudeClass.new = function(x, y, money)
 	littleDude.destY = littleDude.y
 	littleDude.speedX = 0
 	littleDude.speedY = 0
-	littleDude.waitingTime = math.random(0,1)
+	littleDude.waitingTime = 0
 	littleDude.invulnTimer = 0
-	littleDude.fleeing = false
-	littleDude.attacked = -1
-	littleDude.attackedBy = -1
+	littleDude.attacked = -1 -- id of attacked player (-1 if void)
+	littleDude.attackedBy = -1 -- id of attacking player (-1 if void)
 	littleDude.attackTimer = 0
+	littleDude.state = ''
+	littleDude:findNewDestination()
+	littleDude:setState('walking')
 
 	return littleDude
 end
@@ -298,8 +324,8 @@ poorCount = 0
 middleCount = 0
 richCount = 0
 for i=1,numberOfDudes do
-	dudeState = math.random(100)
-	if (dudeState < poorPercent) then -- poor
+	randomPercent = math.random(100)
+	if (randomPercent < poorPercent) then -- poor
 		poorCount = poorCount + 1
 		dudeX, dudeY = randomPointInSubMapCorners()
 		dudeM = math.random(0, moneyMaxPoor)
@@ -307,7 +333,7 @@ for i=1,numberOfDudes do
 		dudeX = math.random(mapMinX, mapMaxX)
 		dudeY = math.random(mapMinY, mapMaxY)
 
-		if (dudeState < poorPercent + middlePercent) then -- middle
+		if (randomPercent < poorPercent + middlePercent) then -- middle
 			middleCount = middleCount + 1
 			dudeM = math.random(moneyMaxPoor + 1, moneyMaxMiddle)
 		else -- rich

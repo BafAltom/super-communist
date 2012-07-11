@@ -51,6 +51,8 @@
 	dudeMaxSpeed = 20
 	destAcceptanceRadius = 10
 	dudeNextDestRadius = 50
+	dudeNextDestWaitTimeMin = 1
+	dudeNextDestWaitTimeMax = 3
 	moneyMaxPoor = 50
 	moneyMaxMiddle = 200
 	moneyMaxRich = 400
