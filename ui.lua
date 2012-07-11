@@ -1,6 +1,4 @@
 ui = {}
-ui.minimapCanvas = love.graphics.newCanvas(minimapHeight, minimapLength)
-ui.minimapCanvas:clear(0,0,0)
 
 ui.update = function(dt)
 
@@ -29,16 +27,12 @@ ui.draw = function()
 	love.graphics.setColor(0,0,0)
 
 	-- miniMap
-	love.graphics.setCanvas(ui.minimapCanvas)
-	ui.minimapCanvas:clear(0,0,0)
+	love.graphics.translate(minimapX, minimapY)
 
-	-- outline of subMap
+	-- outline of subMap in miniMap
 
 	love.graphics.setColor(100,100,100)
-	lineWidthStored = love.graphics.getLineWidth()
-	love.graphics.setLineWidth(1)
 	love.graphics.rectangle("line", (mapMinX - subMapMinX)/ minimapXfactor, (mapMinY - subMapMinY) / minimapYfactor, (mapMaxX - mapMinX) / minimapXfactor, (mapMaxY - mapMinY) / minimapYfactor)
-	love.graphics.setLineWidth(lineWidthStored)
 
 	-- all the dudes
 	for _, d in ipairs(dudes) do
@@ -61,9 +55,7 @@ ui.draw = function()
 	-- player
 	love.graphics.setColor(0,255,255)
 	love.graphics.rectangle("fill", minimapLength/2 + player.x/minimapXfactor, minimapHeight/2 + player.y/minimapYfactor, 4, 4)
-	love.graphics.setCanvas()
+	love.graphics.translate(-minimapX, -minimapY)
 	love.graphics.setColor(255,255,255)
-	love.graphics.draw(ui.minimapCanvas, minimapX, minimapY)
-
 
 end
