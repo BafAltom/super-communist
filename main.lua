@@ -150,5 +150,6 @@ function love.keypressed(k)
 		love.event.push("quit")
 	else
 		player.keypressed(k)
+		ui.keypressed(k)
 	end
 end

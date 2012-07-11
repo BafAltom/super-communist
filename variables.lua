@@ -5,7 +5,7 @@
 	DEBUG = false
 	PAUSE = false
 
----[[ RESSOURCES
+--[[ RESSOURCES
 	picPoor = love.graphics.newImage("res/poor.png")
 	picMiddle = love.graphics.newImage("res/middle.png")
 	picRich = love.graphics.newImage("res/rich.png")

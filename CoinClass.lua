@@ -80,18 +80,15 @@ end
 
 CoinClass.findClosestDude = function(coin)
 
-	closestDude = findClosestOf(dudes, coin, coinsAttractionDistance)
-
-	-- is player closer than the closest Dude?
-	playerDistance = distance2Entities(player, coin)
-	if (closestDude ~= nil)
-	then closestDudeDistance = distance2Entities(closestDude, coin)
-	else closestDudeDistance = playerDistance + 1
+	filteredDudes = {} -- dudes which can attract coins
+	for _,d in ipairs(dudes) do
+		if (d:class() ~= "rich+" and d.invulnTimer <= 0) then
+			table.insert(filteredDudes, d)
+		end
 	end
+	table.insert(filteredDudes, player)
 
-	if (playerDistance < closestDudeDistance and playerDistance < coinsAttractionDistance) then
-		closestDude = player
-	end
+	closestDude = findClosestOf(filteredDudes, coin, coinsAttractionDistance)
 
 	return closestDude
 
