@@ -209,10 +209,11 @@ DudeClass.updateMoney = function(dude, amount) -- negative/positive amount : tak
 end
 
 DudeClass.changeClass = function(dude, previousClass)
--- not much in there for now but seem to be needed (YAGNI, I know...)
 	if (previousClass == "rich") then
 		dude.currentPrey = nil
 	end
+	dude.waitingTime = invulnTimeByClassChange
+	dude:setState("waiting")
 end
 
 DudeClass.dudePush = function(dude, smallerDude)

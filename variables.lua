@@ -61,6 +61,7 @@
 	superRichHitDistance = 100
 	richHitTimer = 2.5
 	invulnTimeByHit = 6
+	invulnTimeByClassChange = 1
 	fleeMinX = mapMinX
 	fleeMaxX = mapMaxX
 	fleeMinY = mapMinY

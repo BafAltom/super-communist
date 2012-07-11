@@ -10,7 +10,6 @@ TODO:
 - coherent corruption effect (fat sprite, cannot attract poor, cannot pick coins up, cannot attack, must go under threshold to regain uncorrupted state)
 
 RANDOM IDEAS:
-- miniMap
 - rich+ indicator (point to it on the edge of the screen, L4D2/Portal2-like)
 - short invulnerability during class transformation
 ]]--
