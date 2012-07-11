@@ -53,16 +53,16 @@ ui.draw = function()
 			local miniSize, miniColors
 			if (d:class() == "poor") then
 				miniColors = {255,0,0}
-				miniSize = 1
+				miniSize = 3
 			elseif (d:class() == "middle") then
 				miniColors = {0,255,0}
-				miniSize = 2
+				miniSize = 1
 			elseif (d:class() == "rich") then
 				miniColors = {0,0,255}
-				miniSize = 2
+				miniSize = 3
 			elseif (d:class() == "rich+") then
 				miniColors = {255,255,255}
-				miniSize = 3
+				miniSize = 5
 			end
 
 			love.graphics.setColor(miniColors)
