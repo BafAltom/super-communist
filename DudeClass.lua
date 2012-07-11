@@ -12,31 +12,34 @@ end
 -- CLASS METHODS
 DudeClass.draw = function(dude)
 		-- choose color
-		local dudeColors
+		local _dudeColors
 		if (dude:class() == "poor") then
-			dudeColors = {255,0,0}
+			_dudeColors = {255,0,0}
 		elseif (dude:class() == "middle") then
-			dudeColors = {0,255,0}
+			_dudeColors = {0,255,0}
 		elseif (dude:class() == "rich") then
-			dudeColors = {0,0,255}
+			_dudeColors = {0,0,255}
 		elseif (dude:class() == "rich+") then
-			dudeColors = {255,255,255}
+			_dudeColors = {255,255,255}
 		end
-		love.graphics.setColor(dudeColors)
+		love.graphics.setColor(_dudeColors)
 
 		---[[ SIMPLE GRAPHICS
 		-- draw shape
-		local dudeSize = dude:dudeSize()
-		local fillage
+		local _dudeSize = dude:dudeSize()
+		local _fillage
 		if (dude.invulnTimer <= 0) then
-			fillage = "fill"
+			_fillage = "fill"
 		else
-			fillage = "line"
+			_fillage = "line"
 		end
-		love.graphics.rectangle(fillage, dude.x - dudeSize/2, dude.y - dudeSize/2, dudeSize, dudeSize)
+		love.graphics.rectangle(_fillage, dude.x - _dudeSize/2, dude.y - _dudeSize/2, _dudeSize, _dudeSize)
 		if (DEBUG) then
-			love.graphics.print(dude.id, dude.x + dudeSize + 5, dude.y)
-			love.graphics.print(dude.state, dude.x + dudeSize + 5, dude.y + dudeSize + 5)
+			love.graphics.print(dude.id, dude.x + _dudeSize + 5, dude.y)
+			love.graphics.print(dude.state, dude.x + _dudeSize + 5, dude.y + 10)
+			if (dude:class() == 'rich') then
+				love.graphics.print(dude.attackTimer, dude.x + _dudeSize + 5, dude.y + 20)
+			end
 		end
 		--]]
 
@@ -50,8 +53,8 @@ DudeClass.draw = function(dude)
 		local _r, _g, _b, _a = love.graphics.getColor()
 		love.graphics.setColor(_r, _g,_b, alpha)
 		local dudePic = dude:getDudePic()
-		love.graphics.draw(dudePic, dude.x, dude.y, 0, dude:dudeSize()/dudePic:getWidth(), 1.5*dude:dudeSize()/dudePic:getHeight(), dude:dudeSize()*1.5, 2*dude:dudeSize(), 0, 0)
-		--love.graphics.circle("line", dude.x, dude.y, dude:dudeSize())
+		love.graphics.draw(dudePic, dude.x, dude.y, 0, _dudeSize/dudePic:getWidth(), 1.5*_dudeSize()/dudePic:getHeight(), _dudeSize()*1.5, 2*_dudeSize(), 0, 0)
+		--love.graphics.circle("line", dude.x, dude.y, _dudeSize())
 		--]]
 
 	-- draw prey circle
@@ -62,25 +65,29 @@ DudeClass.draw = function(dude)
 	--]]
 
 	-- draw lightning
-	if (dude.attackTimer > 0 and not (dude:class() == "rich+")) then
-		attackedDude = dudes.find(dude.attacked)
-		love.graphics.setColor(255,255,0)
-		love.graphics.line(dude.x, dude.y, attackedDude.x, attackedDude.y)
+	if (dude.currentPrey ~= nil and not (dude:class() == "rich+")) then
+		local _attackedDude = dude.currentPrey
+		local _attackBuildUpFactor = dude.attackTimer/richHitTimer
+		local _distance = distance2Entities(dude, _attackedDude)
+		local _endX, _endY = myVector(dude.x, dude.y, _attackedDude.x, _attackedDude.y, _distance*_attackBuildUpFactor)
+		love.graphics.setColor(255,255,0, 255*_attackBuildUpFactor)
+		love.graphics.line(dude.x, dude.y, dude.x + _endX, dude.y + _endY)
 	end
 
 	-- draw dest Path
 	if (DEBUG) then
+		love.graphics.setColor(_dudeColors)
 		love.graphics.line(dude.x, dude.y, dude.destX, dude.destY)
 	end
 end
 
 DudeClass.class  = function(dude)
-	local dudeMoney = dude.money
-	if (dudeMoney <= moneyMaxPoor) then
+	local _dudeMoney = dude.money
+	if (_dudeMoney <= moneyMaxPoor) then
 		return "poor"
-	elseif (dudeMoney <= moneyMaxMiddle) then
+	elseif (_dudeMoney <= moneyMaxMiddle) then
 		return "middle"
-	elseif (dudeMoney < moneyMaxRich) then
+	elseif (_dudeMoney < moneyMaxRich) then
 		return "rich"
 	else
 		return "rich+"
@@ -135,13 +142,25 @@ DudeClass.update = function(dude,dt)
 	end
 
 	-- prey on the weak
-	if (dude:class() == "rich" and dude.invulnTimer <= 0 and dude.attackTimer <= 0) then
-		local _prey = dude:findClosestPrey()
-		if (_prey ~= nil) then
-			dude.attacked = _prey.id
-			dude.attackTimer = richHitTimer
-			local _stolenMoney = math.min(_prey.money, moneyStolenByHit)
-			_prey:isAttacked(dude, _stolenMoney)
+	if (dude:class() == "rich") then
+		if (dude.invulnTimer <= 0 and dude.state == "walking" or dude.state == "waiting") then
+			local _prey = dude:findClosestPrey()
+			if (_prey ~= nil) then
+				if (dude.attackTimer > richHitTimer) then
+					dude.attackTimer = 0
+					dude.attacked = _prey.id
+					dude.attackTimer = richHitTimer
+					local _stolenMoney = math.min(_prey.money, moneyStolenByHit)
+					_prey:isAttacked(dude, _stolenMoney)
+				else
+					dude.attackTimer = dude.attackTimer + dt
+				end
+			else
+				dude.attackTimer = 0
+			end
+			dude.currentPrey = _prey
+		else
+			dude.attackTimer = 0
 		end
 	end
 
@@ -177,13 +196,23 @@ DudeClass.update = function(dude,dt)
 
 	-- timer
 		if (dude.invulnTimer > 0) then dude.invulnTimer = dude.invulnTimer - dt end
-		if (dude.attackTimer > 0) then dude.attackTimer = dude.attackTimer - dt end
+		if (dude:class() == "rich+" and dude.attackTimer > 0) then dude.attackTimer = dude.attackTimer - dt end
 end
 
-DudeClass.updateMoney = function(dude, amount)
--- negative/positive amount : take/give money
+DudeClass.updateMoney = function(dude, amount) -- negative/positive amount : take/give money
+	local _previousClass = dude:class()
 	dude.money = dude.money + amount
+	if (dude:class() ~= _previousClass) then
+		dude:changeClass(_previousClass)
+	end
 
+end
+
+DudeClass.changeClass = function(dude, previousClass)
+-- not much in there for now but seem to be needed (YAGNI, I know...)
+	if (previousClass == "rich") then
+		dude.currentPrey = nil
+	end
 end
 
 DudeClass.dudePush = function(dude, smallerDude)
@@ -302,7 +331,7 @@ DudeClass.new = function(x, y, money)
 	setmetatable(littleDude, {__index = DudeClass})
 
 	littleDude.id = DudeClass.giveNextID()
-	littleDude.money = math.random((moneyMaxMiddle + moneyMaxRich)/2)
+	littleDude.money = money
 	if (DudeClass.class(littleDude) ~= "poor") then
 		littleDude.x = math.random(mapMinX, mapMaxX)
 		littleDude.y = math.random(mapMinY, mapMaxY)
@@ -321,9 +350,10 @@ DudeClass.new = function(x, y, money)
 	littleDude.speedY = 0
 	littleDude.waitingTime = 0
 	littleDude.invulnTimer = 0
-	littleDude.attacked = -1 -- id of attacked player (-1 if void)
-	littleDude.attackedBy = -1 -- id of attacking player (-1 if void)
-	littleDude.attackTimer = 0
+	littleDude.currentPrey = nil -- current target dude
+	littleDude.attacked = -1 -- id of attacked dude (-1 if void)
+	littleDude.attackedBy = -1 -- id of attacking dude (-1 if void)
+	littleDude.attackTimer = 0 -- beware : used by rich and rich+ but behave differently (increase for rich, decrease for rich+) (this is obviously stupid and should be refactored -> TODO)
 	littleDude.state = ''
 	littleDude:findNewDestination()
 	littleDude:setState('walking')
@@ -358,6 +388,10 @@ for i=1,numberOfDudes do
 	table.insert(dudes, DudeClass.new(_dudeX, _dudeY, _dudeM))
 end
 print("poor/middle/rich : ", _poorCount, _middleCount, _richCount)
+
+if (DEBUG) then
+	table.insert(dudes, DudeClass.new(0,0, moneyMaxRich + 1))
+end
 
 dudes.find = function(id)
 	if (id == 0) then

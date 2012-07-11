@@ -96,8 +96,9 @@
 -- FIREBALL CONSTANTS
 
 	fireballSpeed = 30
-	fireBallAttackTimer = 1
-	fireballLifeTime = 5
+	fireBallAttackTimer = 0.2
+	fireballLifeTime = 10
+	fireballFadeTimer = 0.5
 
 -- GRID CONSTANTS
 
@@ -168,9 +169,9 @@
 
 	function myVector(startX, startY, endX, endY, desiredNorm)
 		-- return the (x,y) coordinates of a vector of direction (startX, startY)->(endX, endY) and of norm desiredNorm
-		local currentNorm = distance2Points(startX, startY, endX, endY)
-		local normFactor = desiredNorm / currentNorm
-		local dx = endX - startX
-		local dy = endY - startY
-		return dx*normFactor, dy*normFactor
+		local _currentNorm = distance2Points(startX, startY, endX, endY)
+		local _normFactor = desiredNorm / _currentNorm
+		local _dx = endX - startX
+		local _dy = endY - startY
+		return _dx*_normFactor, _dy*_normFactor
 	end
