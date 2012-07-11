@@ -1,5 +1,7 @@
 ui = {}
 ui.displayHelp = false
+ui.helpHiddenText = "press H to display help"
+ui.helpText = "Use WASD or ZSQD to move (both work)\nPress, hold and release the Spacebar to attack (you'll figure it out)\nPress Shift to drop money\nRed/Green/Blue squares are poor/average/rich dudes\nWhite squares are billionaire dudes, they do not like you\nYour Goal : make everyone average\nGood Luck!\nPress h to hide this text"
 ui.displayMinimap = true
 
 ui.update = function(dt)
@@ -14,7 +16,7 @@ end
 
 ui.draw = function()
 	-- money bar
-	barLength = math.min(moneyBarLength-2, player.money/moneyBar_moneyByPx)
+	local barLength = math.min(moneyBarLength-2, player.money/moneyBar_moneyByPx)
 	love.graphics.setColor(255,255,255)
 	love.graphics.rectangle("fill", moneyBarX, moneyBarY, moneyBarLength, moneyBarHeight)
 	love.graphics.setColor(255,255,0)
@@ -24,6 +26,7 @@ ui.draw = function()
 
 	-- health
 	love.graphics.setColor(255,0,0)
+	local fillage
 	for i=1,3 do
 		if (i <= player.life) then
 			fillage = "fill"
@@ -37,6 +40,8 @@ ui.draw = function()
 		love.graphics.translate(minimapX, minimapY)
 		love.graphics.setColor(0,0,0)
 		love.graphics.rectangle("fill", 0,0, minimapLength, minimapHeight)
+		-- small optimization (or is it?)
+		local minimapXfactor, minimapYfactor = minimapXfactor, minimapYfactor
 
 		-- outline of subMap in miniMap
 
@@ -45,20 +50,22 @@ ui.draw = function()
 
 		-- all the dudes
 		for _, d in ipairs(dudes) do
+			local miniSize, miniColors
 			if (d:class() == "poor") then
-				love.graphics.setColor(255,0,0)
+				miniColors = {255,0,0}
 				miniSize = 1
 			elseif (d:class() == "middle") then
-				love.graphics.setColor(0,255,0)
+				miniColors = {0,255,0}
 				miniSize = 2
 			elseif (d:class() == "rich") then
-				love.graphics.setColor(0,0,255)
+				miniColors = {0,0,255}
 				miniSize = 2
 			elseif (d:class() == "rich+") then
-				love.graphics.setColor(255,255,255)
+				miniColors = {255,255,255}
 				miniSize = 3
 			end
 
+			love.graphics.setColor(miniColors)
 			love.graphics.rectangle("fill", minimapLength/2 + d.x/minimapXfactor, minimapHeight/2 + d.y/minimapYfactor, miniSize, miniSize)
 		end
 		-- player
@@ -69,11 +76,11 @@ ui.draw = function()
 	end
 
 	-- help
+	local helpText
 	if (not ui.displayHelp) then
-		helpText = "press H to display help"
+		helpText = ui.helpHiddenText
 	else
-		helpText =
-			"Use WASD or ZSQD to move (both work)\nPress, hold and release the Spacebar to attack (you'll figure it out)\nPress Shift to drop money\nRed/Green/Blue squares are poor/average/rich dudes\nWhite squares are billionaire dudes, they do not like you\nYour Goal : make everyone average\nGood Luck!\nPress h to hide this text"
+		helpText = ui.helpText
 	end
 	love.graphics.print(helpText, moneyBarX, moneyBarY + 50)
 end

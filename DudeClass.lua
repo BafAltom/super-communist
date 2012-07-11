@@ -12,20 +12,22 @@ end
 -- CLASS METHODS
 DudeClass.draw = function(dude)
 		-- choose color
+		local dudeColors
 		if (dude:class() == "poor") then
-			love.graphics.setColor(255,0,0)
+			dudeColors = {255,0,0}
 		elseif (dude:class() == "middle") then
-			love.graphics.setColor(0,255,0)
+			dudeColors = {0,255,0}
 		elseif (dude:class() == "rich") then
-			love.graphics.setColor(0,0,255)
+			dudeColors = {0,0,255}
 		elseif (dude:class() == "rich+") then
-			love.graphics.setColor(255,255,255)
+			dudeColors = {255,255,255}
 		end
-
+		love.graphics.setColor(dudeColors)
 
 		---[[ SIMPLE GRAPHICS
 		-- draw shape
-		dudeSize = dude:dudeSize()
+		local dudeSize = dude:dudeSize()
+		local fillage
 		if (dude.invulnTimer <= 0) then
 			fillage = "fill"
 		else
@@ -39,14 +41,15 @@ DudeClass.draw = function(dude)
 		--]]
 
 		--[[ PICTURE GRAPHICS
+		local alpha
 		if (dude.invulnTimer > 0) then
 			alpha = 100
 		else
 			alpha = 255
 		end
-		_r, _g, _b, _a = love.graphics.getColor()
+		local _r, _g, _b, _a = love.graphics.getColor()
 		love.graphics.setColor(_r, _g,_b, alpha)
-		dudePic = dude:getDudePic()
+		local dudePic = dude:getDudePic()
 		love.graphics.draw(dudePic, dude.x, dude.y, 0, dude:dudeSize()/dudePic:getWidth(), 1.5*dude:dudeSize()/dudePic:getHeight(), dude:dudeSize()*1.5, 2*dude:dudeSize(), 0, 0)
 		--love.graphics.circle("line", dude.x, dude.y, dude:dudeSize())
 		--]]
@@ -72,11 +75,12 @@ DudeClass.draw = function(dude)
 end
 
 DudeClass.class  = function(dude)
-	if (dude.money <= moneyMaxPoor) then
+	local dudeMoney = dude.money
+	if (dudeMoney <= moneyMaxPoor) then
 		return "poor"
-	elseif (dude.money <= moneyMaxMiddle) then
+	elseif (dudeMoney <= moneyMaxMiddle) then
 		return "middle"
-	elseif (dude.money < moneyMaxRich) then
+	elseif (dudeMoney < moneyMaxRich) then
 		return "rich"
 	else
 		return "rich+"
@@ -104,7 +108,7 @@ DudeClass.update = function(dude,dt)
 		end
 	else
 		-- attracted by coins
-		closestCoin = dude:findClosestCoin()
+		local closestCoin = dude:findClosestCoin()
 		if (closestCoin ~= nil and dude.state ~= 'fleeing' and (dude:class() ~= "rich+")) then
 			dude.destX = closestCoin.x
 			dude.destY = closestCoin.y
@@ -130,20 +134,14 @@ DudeClass.update = function(dude,dt)
 		dude:calculateSpeed()
 	end
 
-	-- prey on the weak -- TODO: CLEANUP (use findClosest)
-	if (dude:class() == "rich" and not (dude.invulnTimer > 0)) then
-		for _, prey in ipairs(dudes) do
-			if (prey.money < dude.money
-				and distance2Entities(dude, prey) < dude:preyRadius()
-				and not (prey.invulnTimer > 0)
-				and not (dude.attackTimer > 0)
-				and dude.id ~= prey.id)
-			then
-				dude.attacked = prey.id
-				dude.attackTimer = richHitTimer
-				stolenMoney = math.min(prey.money, moneyStolenByHit)
-				prey:isAttacked(dude, stolenMoney)
-			end
+	-- prey on the weak
+	if (dude:class() == "rich" and dude.invulnTimer <= 0 and dude.attackTimer <= 0) then
+		local _prey = dude:findClosestPrey()
+		if (_prey ~= nil) then
+			dude.attacked = _prey.id
+			dude.attackTimer = richHitTimer
+			local _stolenMoney = math.min(_prey.money, moneyStolenByHit)
+			_prey:isAttacked(dude, _stolenMoney)
 		end
 	end
 
@@ -159,21 +157,22 @@ DudeClass.update = function(dude,dt)
 
 	-- flee
 	if (dude.attackedBy ~= -1) then
-		attacker = dudes.find(dude.attackedBy)
-		dude.destX = dude.x + 2*(dude.x - attacker.x)
-		dude.destY = dude.y + 2*(dude.y - attacker.y)
-		dude.destX = math.max(dude.destX, fleeMinX)
-		dude.destX = math.min(dude.destX, fleeMaxX)
-		dude.destY = math.max(dude.destX, fleeMinY)
-		dude.destY = math.min(dude.destX, fleeMaxY)
+		local _attacker = dudes.find(dude.attackedBy)
+		local _destX = dude.x + 2*(dude.x - _attacker.x)
+		local _destY = dude.y + 2*(dude.y - _attacker.y)
+		_destX = math.max(_destX, fleeMinX)
+		_destX = math.min(_destX, fleeMaxX)
+		_destY = math.max(_destY, fleeMinY)
+		_destY = math.min(_destY, fleeMaxY)
+		dude.destX, dude.destY = _destX, _destY
 		dude.attackedBy = -1
 		dude:setState('fleeing')
 	end
 
 	-- push or be pushed by other players
-	closestDude = findClosestOf(dudes, dude, dude:dudeSize())
-	if (closestDude ~= nil) then
-		dude:dudePush(closestDude)
+	local _closestDude = findClosestOf(dudes, dude, dude:dudeSize())
+	if (_closestDude ~= nil) then
+		dude:dudePush(_closestDude)
 	end
 
 	-- timer
@@ -189,9 +188,8 @@ end
 
 DudeClass.dudePush = function(dude, smallerDude)
 	if (not (dude.x == smallerDude.x and dude.y == smallerDude.y)) then
-		-- NEW WAY
-		translationX, translationY = myVector(dude.x, dude.y, smallerDude.x, smallerDude.y, dude:dudeSize())
-		smallerDude.x, smallerDude.y = dude.x + translationX, dude.y + translationY
+		local _translationX, _translationY = myVector(dude.x, dude.y, smallerDude.x, smallerDude.y, dude:dudeSize())
+		smallerDude.x, smallerDude.y = dude.x + _translationX, dude.y + _translationY
 	else -- hotfix
 		smallerDude.x = smallerDude.x + dude:size()
 	end
@@ -203,6 +201,18 @@ DudeClass.preyRadius = function(dude)
 	else
 		return dude.money*moneyRadiusFactor
 	end
+end
+
+DudeClass.findClosestPrey = function(richDude)
+
+	local _filteredDudes = {}
+	for _, d in ipairs(dudes) do
+		if (d.money < richDude.money and not (d.invulnTimer > 0)) then
+			table.insert(_filteredDudes, d)
+		end
+	end
+
+	return findClosestOf(_filteredDudes, richDude, richDude:preyRadius())
 end
 
 DudeClass.findClosestCoin = function(dude)
@@ -231,29 +241,30 @@ DudeClass.findNewDestination = function(dude)
 		dude.destX = math.random(dude.x - dudeNextDestRadius, dude.x + dudeNextDestRadius)
 		dude.destY = math.random(dude.y - dudeNextDestRadius, dude.y + dudeNextDestRadius)
 
+		local _limitMinX, _limitMaxX, _limitMinY, _limitMaxY
 		if (dude:class() == "poor") then
-			limitMinX = subMapMinX
-			limitMaxX = subMapMaxX
-			limitMinY = subMapMinY
-			limitMaxY = subMapMaxY
+			_limitMinX = subMapMinX
+			_limitMaxX = subMapMaxX
+			_limitMinY = subMapMinY
+			_limitMaxY = subMapMaxY
 		else
-			limitMinX = mapMinX
-			limitMaxX = mapMaxX
-			limitMinY = mapMinY
-			limitMaxY = mapMaxY
+			_limitMinX = mapMinX
+			_limitMaxX = mapMaxX
+			_limitMinY = mapMinY
+			_limitMaxY = mapMaxY
 		end
-		dude.destX = math.max(limitMinX, dude.destX)
-		dude.destX = math.min(limitMaxX, dude.destX)
-		dude.destY = math.max(limitMinY, dude.destY)
-		dude.destY = math.min(limitMaxY, dude.destY)
+		dude.destX = math.max(_limitMinX, dude.destX)
+		dude.destX = math.min(_limitMaxX, dude.destX)
+		dude.destY = math.max(_limitMinY, dude.destY)
+		dude.destY = math.min(_limitMaxY, dude.destY)
 		dude:setState('walking')
 	end
 end
 
 DudeClass.calculateSpeed = function(dude)
 
-	actualSpeed = math.sqrt(dude.speedX^2 + dude.speedY^2)
-	if (actualSpeed > dudeMaxSpeed) then
+	local _actualSpeed = math.sqrt(dude.speedX^2 + dude.speedY^2)
+	if (_actualSpeed > dudeMaxSpeed) then
 		dude.speedX, dude.speedY = myVector(0,0,dude.speedX, dude.speedY, dudeMaxSpeed)
 	end
 end
@@ -275,15 +286,19 @@ end
 DudeClass.acceptedStates = {'waiting', 'walking', 'fleeing', 'moneyPursuing', 'playerPursuing'}
 DudeClass.setState = function(dude, newState)
 	for _,s in ipairs(DudeClass.acceptedStates) do
-		if (newState == s) then dude.state = newState end
+		if (newState == s) then
+			dude.state = newState
+			return
+		end
 	end
-	-- TODO error detection
+
+	error('Dude.setState(newState) : newState = '..newState..' was not in accepted states')
 
 end
 
 -- CONSTRUCTOR
 DudeClass.new = function(x, y, money)
-	littleDude = {}
+	local littleDude = {}
 	setmetatable(littleDude, {__index = DudeClass})
 
 	littleDude.id = DudeClass.giveNextID()
@@ -320,30 +335,29 @@ end
 
 dudes = {}
 
-poorCount = 0
-middleCount = 0
-richCount = 0
+local _poorCount, _middleCount , _richCount = 0, 0, 0
 for i=1,numberOfDudes do
-	randomPercent = math.random(100)
-	if (randomPercent < poorPercent) then -- poor
-		poorCount = poorCount + 1
-		dudeX, dudeY = randomPointInSubMapCorners()
-		dudeM = math.random(0, moneyMaxPoor)
+	local _dudeX, _dudeY, _dudeM
+	local _randomPercent = math.random(100)
+	if (_randomPercent < poorPercent) then -- poor
+		_poorCount = _poorCount + 1
+		_dudeX, _dudeY = randomPointInSubMapCorners()
+		_dudeM = math.random(0, moneyMaxPoor)
 	else
-		dudeX = math.random(mapMinX, mapMaxX)
-		dudeY = math.random(mapMinY, mapMaxY)
+		_dudeX = math.random(mapMinX, mapMaxX)
+		_dudeY = math.random(mapMinY, mapMaxY)
 
-		if (randomPercent < poorPercent + middlePercent) then -- middle
-			middleCount = middleCount + 1
-			dudeM = math.random(moneyMaxPoor + 1, moneyMaxMiddle)
+		if (_randomPercent < poorPercent + middlePercent) then -- middle
+			_middleCount = _middleCount + 1
+			_dudeM = math.random(moneyMaxPoor + 1, moneyMaxMiddle)
 		else -- rich
-			richCount = richCount + 1
-			dudeM = math.random(moneyMaxMiddle + 1, moneyMaxRich)
+			_richCount = _richCount + 1
+			_dudeM = math.random(moneyMaxMiddle + 1, moneyMaxRich)
 		end
 	end
-	table.insert(dudes, DudeClass.new(dudeX, dudeY, dudeM))
+	table.insert(dudes, DudeClass.new(_dudeX, _dudeY, _dudeM))
 end
-print("poor/middle/rich : ", poorCount, middleCount, richCount)
+print("poor/middle/rich : ", _poorCount, _middleCount, _richCount)
 
 dudes.find = function(id)
 	if (id == 0) then

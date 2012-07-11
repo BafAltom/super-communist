@@ -20,6 +20,7 @@ setmetatable(player, DudeClass)
 			fillage = "line"
 		end
 
+		local sizeCorruptionFactor
 		if (player.corrupted) then
 			sizeCorruptionFactor = 2
 		else
@@ -38,7 +39,7 @@ setmetatable(player, DudeClass)
 		player.y = player.y + player.speedY*dt
 
 		-- speed update
-		speedFactor = 1
+		local speedFactor = 1
 		if (player.corrupted) then
 			speedFactor = speedFactor*playerCorruptionSpeedFactor
 		end

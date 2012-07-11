@@ -121,8 +121,8 @@
 
 -- FUNCTIONS
 	function distance2Points(x1, y1, x2, y2)
-		dxx = (x2-x1)
-		dyy = (y2-y1)
+		local dxx = (x2-x1)
+		local dyy = (y2-y1)
 		return math.sqrt(dxx^2 + dyy^2)
 	end
 
@@ -147,16 +147,16 @@
 		-- remark(s) :
 		--		if origin is present in entities, it will be ignored
 
-		closestEnt = nil
-		closestDistance = maxDistance
+		local closestEnt = nil
+		local closestDistance = maxDistance
 
 		for _,e in ipairs(entities) do
 			if (maxDistance == 0
-				or math.abs(e.x - origin.x) < closestDistance
+				or math.abs(e.x - origin.x) < closestDistance -- optimization
 				or math.abs(e.y - origin.y) < closestDistance
 				) then
-				temp_distance = distance2Entities(e, origin)
-				if (temp_distance < closestDistance and e ~= origin) then -- previous tests were testing the square rather than the circle (in hope to avoid the sqrt)
+				local temp_distance = distance2Entities(e, origin)
+				if (temp_distance < closestDistance and e ~= origin) then
 					closestEnt = e
 					closestDistance = temp_distance
 				end
@@ -168,9 +168,9 @@
 
 	function myVector(startX, startY, endX, endY, desiredNorm)
 		-- return the (x,y) coordinates of a vector of direction (startX, startY)->(endX, endY) and of norm desiredNorm
-		currentNorm = distance2Points(startX, startY, endX, endY)
-		normFactor = desiredNorm / currentNorm
-		dx = endX - startX
-		dy = endY - startY
+		local currentNorm = distance2Points(startX, startY, endX, endY)
+		local normFactor = desiredNorm / currentNorm
+		local dx = endX - startX
+		local dy = endY - startY
 		return dx*normFactor, dy*normFactor
 	end

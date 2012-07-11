@@ -42,7 +42,7 @@ FireBallClass.draw = function(fb)
 end
 
 FireBallClass.new = function(sender, destX, destY)
-	fb = {}
+	local fb = {}
 	setmetatable(fb, {__index = FireBallClass})
 	fb.id = FireBallClass.getNextID
 	fb.sender = sender

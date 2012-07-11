@@ -37,16 +37,23 @@ CoinClass.update = function(coin, dt)
 
 	if (coin.noCatchTimer <= 0) then
 		-- Find closest Dude (or player)
-		closestDude = coin:findClosestDude()
+		_closestDude = coin:findClosestDude()
 
 		-- Move towards him
-		if (closestDude ~= nil
-			and not (closestDude.invulnTimer > 0)
-			and not (closestDude:class() == "rich+")
+		if (_closestDude ~= nil
+			and not (_closestDude.invulnTimer > 0)
+			and not (_closestDude:class() == "rich+")
 			) then
 
-			coin.speedX = (closestDude.x - coin.x)*10
-			coin.speedY = (closestDude.y - coin.y)*10
+			coin.speedX = (_closestDude.x - coin.x)*10
+			coin.speedY = (_closestDude.y - coin.y)*10
+		end
+		-- Caught by him?
+		if (_closestDude ~= nil and coin.noCatchTimer <= 0 and _closestDude.invulnTimer <= 0 and _closestDude:class() ~= "rich+") then
+			if (distance2Entities(coin, _closestDude) < _closestDude:dudeSize()) then
+				_closestDude:updateMoney(coin.value)
+				coins.removeID(coin.id)
+			end
 		end
 	else
 		coin.noCatchTimer = coin.noCatchTimer - dt
@@ -59,61 +66,53 @@ CoinClass.update = function(coin, dt)
 	-- Speed Update
 	coin.speedX = coin.speedX + coin.accX*dt
 	coin.speedY = coin.speedY + coin.accY*dt
-	actualSpeed = math.sqrt(coin.speedX*coin.speedX + coin.speedY*coin.speedY)
-	if (actualSpeed > coinsMaxSpeed) then
+	local _actualSpeed = math.sqrt(coin.speedX*coin.speedX + coin.speedY*coin.speedY)
+	if (_actualSpeed > coinsMaxSpeed) then
 		coin.speedX, coin.speedY = myVector(0, 0, coin.speedX, coin.speedY, coinsMaxSpeed)
 	end
 
 	-- Pos Update
 	coin.x = coin.x + coin.speedX * dt
 	coin.y = coin.y + coin.speedY * dt
-
-	-- Caught by closest dude?
-	if (closestDude ~= nil and coin.noCatchTimer <= 0 and closestDude.invulnTimer <= 0 and closestDude:class() ~= "rich+") then
-		if (distance2Entities(coin, closestDude) < closestDude:dudeSize()) then
-			closestDude:updateMoney(coin.value)
-			coins.removeID(coin.id)
-		end
-	end
-
 end
 
 CoinClass.findClosestDude = function(coin)
 
-	filteredDudes = {} -- dudes which can attract coins
+	local _filteredDudes = {} -- dudes which can attract coins
 	for _,d in ipairs(dudes) do
 		if (d:class() ~= "rich+" and d.invulnTimer <= 0) then
-			table.insert(filteredDudes, d)
+			table.insert(_filteredDudes, d)
 		end
 	end
-	table.insert(filteredDudes, player)
+	table.insert(_filteredDudes, player)
 
-	closestDude = findClosestOf(filteredDudes, coin, coinsAttractionDistance)
+	local _closestDude = findClosestOf(_filteredDudes, coin, coinsAttractionDistance)
 
-	return closestDude
+	return _closestDude
 
 end
 
-CoinClass.draw = function(coin)
+CoinClass.draw = function(coin) -- TODO clean up a bit?
 	love.graphics.setColor(255,255,0)
-	coinRadius = math.max(1, coin.value/coinsValuePerPx)
+	local _coinRadius = math.max(1, coin.value/coinsValuePerPx)
 	if (coin.lifeTime < coinsFadeTime) then
-		fadeFactor = coin.lifeTime/coinsFadeTime
-		coinRadius = math.max(1, coinRadius*fadeFactor)
-		love.graphics.setColor(255*fadeFactor, 255*fadeFactor, 0)
+		local _fadeFactor = coin.lifeTime/coinsFadeTime
+		_coinRadius = math.max(1, _coinRadius*_fadeFactor)
+		love.graphics.setColor(255*_fadeFactor, 255*_fadeFactor, 0)
 	end
+	local fillage
 	if (coin.noCatchTimer > 0) then
-		fillage = "line"
+		_fillage = "line"
 	else
-		fillage = "fill"
+		_fillage = "fill"
 	end
-	love.graphics.circle(fillage, coin.x, coin.y, coinRadius, coinRadius*4)
+	love.graphics.circle(_fillage, coin.x, coin.y, _coinRadius, _coinRadius*4)
 
 	if (DEBUG) then
 		love.graphics.print(coin.id, coin.x+5, coin.y)
-		closestDude = coin:findClosestDude()
-		if (closestDude ~= nil) then
-			love.graphics.line(coin.x,coin.y,closestDude.x, closestDude.y)
+		local _closestDude = coin:findClosestDude()
+		if (_closestDude ~= nil) then
+			love.graphics.line(coin.x,coin.y,_closestDude.x, _closestDude.y)
 		end
 	end
 end
@@ -121,7 +120,7 @@ end
 -------------------------------------------------------------------
 
 CoinClass.new = function(x,y,value)
-	coin = {}
+	local coin = {}
 	setmetatable(coin, {__index = CoinClass})
 
 	coin.id = CoinClass.getNextID()
