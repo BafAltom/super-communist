@@ -367,7 +367,7 @@ end
 dudes = {}
 
 local _poorCount, _middleCount , _richCount = 0, 0, 0
-for i=1,numberOfDudes do
+for i = 1, numberOfDudes do
 	local _dudeX, _dudeY, _dudeM
 	local _randomPercent = math.random(100)
 	if (_randomPercent < poorPercent) then -- poor

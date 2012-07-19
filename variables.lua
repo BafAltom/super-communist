@@ -74,10 +74,10 @@
 	-- so if x is the total number of money, we have :
 	-- moneyMaxPoor*numberOfDudes < x < moneyMaxMiddle*numberOfDudes
 	-- Let's say (numberOfDudes*(moneyMaxPoor+moneyMaxMiddle)/2)
-	totalMoney = numberOfDudes*(moneyMaxPoor+moneyMaxMiddle)/2
+	totalMoney = numberOfDudes*(moneyMaxPoor+moneyMaxMiddle)/2 -- not used right now TODO
 	poorPercent = 30
-	middlePercent = 50
-	richPercent = 20
+	middlePercent = 40
+	richPercent = 30
 
 -- COINS CONSTANTS
 	coinsValuePerPx = 5

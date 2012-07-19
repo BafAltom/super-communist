@@ -26,14 +26,14 @@ ui.draw = function()
 
 	-- health
 	love.graphics.setColor(255,0,0)
-	local fillage
+	local _fillage
 	for i=1,3 do
 		if (i <= player.life) then
-			fillage = "fill"
+			_fillage = "fill"
 		else
-			fillage = "line"
+			_fillage = "line"
 		end
-		love.graphics.circle(fillage, moneyBarLength + i*30, moneyBarY + 10, 10, 15)
+		love.graphics.circle(_fillage, moneyBarLength + i*30, moneyBarY + 10, 10, 15)
 	end
 
 	if (ui.displayMinimap) then
