@@ -28,87 +28,93 @@ function love.load()
 
 
 	require "variables"
+	require "menu"
 	require "DudeClass"
 	require "CoinClass"
 	require "FireBallClass"
 	require "ui"
 	require "player"
+	require "bafaltom2D"
 	-- Note : each class handle its initialization
 
+	displayMenu = true
 
 end
 
 function love.draw()
+	if (displayMenu) then
+		menu.draw()
+	else
+		local _offsetX = -player.x + wScr/2
+		local _offsetY = -player.y + hScr/2
 
-	offsetX = -player.x + wScr/2
-	offsetY = -player.y + hScr/2
+		-- playerSpeed = math.sqrt(player.speedX^2 + player.speedY^2)
+		-- scaleFactor = 1 - (playerSpeed / playerMaxSpeed) / 10 -- the idea was that the "camera" zoomed out while the player speed went up, but this doesn't work (probably because of floating points)
+		local _scaleFactor = 1
+		love.graphics.scale(_scaleFactor, _scaleFactor)
+		love.graphics.translate(_offsetX*_scaleFactor, _offsetY*_scaleFactor)
 
-	-- playerSpeed = math.sqrt(player.speedX^2 + player.speedY^2)
-	-- scaleFactor = 1 - (playerSpeed / playerMaxSpeed) / 10 -- the idea was that the "camera" zoomed out while the player speed went up, but this doesn't work (probably because of floating points)
-	scaleFactor = 1
-	love.graphics.scale(scaleFactor, scaleFactor)
-	love.graphics.translate(offsetX*scaleFactor, offsetY*scaleFactor)
+		-- draw map grid
+			-- suburbs
+		love.graphics.setColor(20,10,10)
+		love.graphics.rectangle("fill", subMapMinX, subMapMinY, subMapMaxX - subMapMinX, subMapMaxY - subMapMinY)
+			-- maps
+		love.graphics.setColor(10,20,10)
+		love.graphics.rectangle("fill", mapMinX, mapMinY, mapMaxX - mapMinX, mapMaxY - mapMinY)
 
-	-- draw map grid
-		-- suburbs
-	love.graphics.setColor(20,10,10)
-	love.graphics.rectangle("fill", subMapMinX, subMapMinY, subMapMaxX - subMapMinX, subMapMaxY - subMapMinY)
-		-- maps
-	love.graphics.setColor(10,20,10)
-	love.graphics.rectangle("fill", mapMinX, mapMinY, mapMaxX - mapMinX, mapMaxY - mapMinY)
-
-		-- columns
-	love.graphics.setColor(100,100,100)
-	for i=0,gridColumns do
-		love.graphics.line((i*(mapMaxX-mapMinX)/gridColumns+mapMinX), mapMinY, (i*(mapMaxX-mapMinX)/gridColumns+mapMinX), mapMaxY)
-	end
-		-- rows
-	for i=0,gridRows do
-		love.graphics.line(mapMinX, (i*(mapMaxY-mapMinY)/gridRows+mapMinY), mapMaxX, (i*(mapMaxY-mapMinY)/gridRows+mapMinY))
-	end
+			-- columns
+		love.graphics.setColor(100,100,100)
+		for i=0,gridColumns do
+			love.graphics.line((i*(mapMaxX-mapMinX)/gridColumns+mapMinX), mapMinY, (i*(mapMaxX-mapMinX)/gridColumns+mapMinX), mapMaxY)
+		end
+			-- rows
+		for i=0,gridRows do
+			love.graphics.line(mapMinX, (i*(mapMaxY-mapMinY)/gridRows+mapMinY), mapMaxX, (i*(mapMaxY-mapMinY)/gridRows+mapMinY))
+		end
 
 
-	for dudeN,dude in ipairs(dudes) do
-		dude:draw()
-	end
+		for dudeN,dude in ipairs(dudes) do
+			dude:draw()
+		end
 
-	for coinN, coin in ipairs(coins) do
-		coin:draw()
-	end
+		for coinN, coin in ipairs(coins) do
+			coin:draw()
+		end
 
-	for fbN, fb in ipairs(fireballs) do
-		fb:draw()
-	end
+		for fbN, fb in ipairs(fireballs) do
+			fb:draw()
+		end
 
-	player.draw()
+		player.draw()
 
-	love.graphics.translate(-offsetX*scaleFactor,-offsetY*scaleFactor)
-	love.graphics.scale(1/scaleFactor, 1/scaleFactor)
+		love.graphics.translate(-_offsetX*_scaleFactor,-_offsetY*_scaleFactor)
+		love.graphics.scale(1/_scaleFactor, 1/_scaleFactor)
 
-	ui:draw()
+		ui:draw()
 
-	-- WIN
-	if (dudes.allMiddle()) then
-		love.graphics.setColor(0,0,0)
-		love.graphics.rectangle("fill", 0,0,wScr,hScr)
-		love.graphics.setColor(255,255,255)
-		love.graphics.print("YOU WIN", wScr/2, hScr/2)
-	end
+		-- WIN
+		if (dudes.allMiddle()) then
+			love.graphics.setColor(0,0,0)
+			love.graphics.rectangle("fill", 0,0,wScr,hScr)
+			love.graphics.setColor(255,255,255)
+			love.graphics.print("YOU WIN", wScr/2, hScr/2)
+		end
 
-	-- LOOSE
-	if (player.life <= 0) then
-		love.graphics.setColor(0,0,0)
-		love.graphics.rectangle("fill", 0,0,wScr,hScr)
-		love.graphics.setColor(255,255,255)
-		love.graphics.print("YOU LOOSE", wScr/2, hScr/2)
-	end
+		-- LOOSE
+		if (player.life <= 0) then
+			love.graphics.setColor(0,0,0)
+			love.graphics.rectangle("fill", 0,0,wScr,hScr)
+			love.graphics.setColor(255,255,255)
+			love.graphics.print("YOU LOOSE", wScr/2, hScr/2)
+		end
 
-	-- PAUSE
-	if (PAUSE) then
-		love.graphics.setColor(0,0,0)
-		love.graphics.rectangle("fill", wScr/2-22, hScr/2-15, 44, 30)
-		love.graphics.setColor(255,255,255)
-		love.graphics.print("PAUSE", wScr/2- 20, hScr/2)
+		-- PAUSE
+		if (PAUSE) then
+			love.graphics.setColor(0,0,0)
+			love.graphics.rectangle("fill", wScr/2-22, hScr/2-15, 44, 30)
+			love.graphics.setColor(255,255,255)
+			love.graphics.print("PAUSE", wScr/2- 20, hScr/2)
+		end
 	end
 
 	-- FPS
@@ -140,15 +146,19 @@ function love.update(dt)
 end
 
 function love.keypressed(k)
-	-- player actions must be in player.keypressed (in player.lua)
-	if (k == "o") then
-		DEBUG = not DEBUG
-	elseif (k == "p") then
-		PAUSE = not PAUSE
-	elseif (k == "escape") then
-		love.event.push("quit")
+	if (displayMenu) then
+		menu.keypressed(k)
 	else
-		player.keypressed(k)
-		ui.keypressed(k)
+		-- player actions must be in player.keypressed (in player.lua)
+		if (k == "o") then
+			DEBUG = not DEBUG
+		elseif (k == "p") then
+			PAUSE = not PAUSE
+		elseif (k == "escape") then
+			love.event.push("quit")
+		else
+			player.keypressed(k)
+			ui.keypressed(k)
+		end
 	end
 end
