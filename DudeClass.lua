@@ -43,18 +43,10 @@ DudeClass.draw = function(dude)
 		end
 		--]]
 
-		--[[ PICTURE GRAPHICS
-		local alpha
-		if (dude.invulnTimer > 0) then
-			alpha = 100
-		else
-			alpha = 255
+		---[[ PICTURE GRAPHICS
+		if (dude.dudeAnim and dude.dudePic) then
+			dude.dudeAnim:draw(dude.dudePic, dude.x, dude.y)
 		end
-		local _r, _g, _b, _a = love.graphics.getColor()
-		love.graphics.setColor(_r, _g,_b, alpha)
-		local dudePic = dude:getDudePic()
-		love.graphics.draw(dudePic, dude.x, dude.y, 0, _dudeSize/dudePic:getWidth(), 1.5*_dudeSize()/dudePic:getHeight(), _dudeSize()*1.5, 2*_dudeSize(), 0, 0)
-		--love.graphics.circle("line", dude.x, dude.y, _dudeSize())
 		--]]
 
 	-- draw prey circle
@@ -194,9 +186,14 @@ DudeClass.update = function(dude,dt)
 		dude:dudePush(_closestDude)
 	end
 
+	-- animation
+	if (dude.dudeAnim ~= nil) then
+		dude.dudeAnim:update(dt)
+	end
+
 	-- timer
-		if (dude.invulnTimer > 0) then dude.invulnTimer = dude.invulnTimer - dt end
-		if (dude:class() == "rich+" and dude.attackTimer > 0) then dude.attackTimer = dude.attackTimer - dt end
+	if (dude.invulnTimer > 0) then dude.invulnTimer = dude.invulnTimer - dt end
+	if (dude:class() == "rich+" and dude.attackTimer > 0) then dude.attackTimer = dude.attackTimer - dt end
 end
 
 DudeClass.updateMoney = function(dude, amount) -- negative/positive amount : take/give money
@@ -299,18 +296,17 @@ DudeClass.calculateSpeed = function(dude)
 	end
 end
 
-DudeClass.getDudePic = function(dude)
-
+DudeClass.refreshDudeAnimation = function(dude)
+-- update the dudePic and dudeAnim attributes of dude
+	local _dudeP, _dudeA = nil, nil
 	if (dude:class() == "poor") then
-		return picPoor
-	elseif (dude:class() == "middle") then
-		return picMiddle
-	elseif (dude:class() == "rich") then
-		return picRich
-	else
-		return picRichPlus
+		if (dude.state == "waiting") then
+			_dudeP, _dudeA =  picPoorIdle, anim8.newAnimation("loop", dudeGrid('1,1-4'), 0.3)
+
+		end
 	end
 
+	dude.dudePic, dude.dudeAnim = _dudeP, _dudeA
 end
 
 DudeClass.acceptedStates = {'waiting', 'walking', 'fleeing', 'moneyPursuing', 'playerPursuing'}
@@ -318,6 +314,7 @@ DudeClass.setState = function(dude, newState)
 	for _,s in ipairs(DudeClass.acceptedStates) do
 		if (newState == s) then
 			dude.state = newState
+			dude:refreshDudeAnimation()
 			return
 		end
 	end
@@ -356,6 +353,8 @@ DudeClass.new = function(x, y, money)
 	littleDude.attackedBy = -1 -- id of attacking dude (-1 if void)
 	littleDude.attackTimer = 0 -- beware : used by rich and rich+ but behave differently (increase for rich, decrease for rich+) (this is obviously stupid and should be refactored -> TODO)
 	littleDude.state = ''
+	littleDude.dudePic = nil
+	littleDude.dudeAnim = nil
 	littleDude:findNewDestination()
 	littleDude:setState('walking')
 

@@ -10,5 +10,6 @@ end
 function menu.keypressed(k)
 	if (k == "return") then
 		displayMenu = false
+		PAUSE = false
 	end
 end

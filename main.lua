@@ -23,14 +23,10 @@ function love.load()
 	end
 	math.randomseed(seed)
 	math.random();math.random();math.random()
-	print("Working Directory : ")
-	for k,v in ipairs(love.filesystem.enumerate("lib")) do
-		print (k, v)
-	end
 	love.mouse.setVisible(false)
 
 	-- External libraries
-	require "lib/anim8.lua"
+	anim8 = require "anim8"
 
 	-- custom libraries
 	require "variables"

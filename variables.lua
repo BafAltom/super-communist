@@ -3,7 +3,7 @@
 	xOffset = 0
 	yOffset = 0
 	DEBUG = false
-	PAUSE = false
+	PAUSE = true
 
 --[[ RESSOURCES
 	picPoor = love.graphics.newImage("res/poor.png")
@@ -11,6 +11,12 @@
 	picRich = love.graphics.newImage("res/rich.png")
 	picRichPlus = love.graphics.newImage("res/richPlus.png")
 	--]]
+	dudeGrid = anim8.newGrid(32,64,32,256)
+	-- default : anim8.newAnimation("loop", dudeGrid('1,1-4'), 0.3)
+
+	picPoorIdle = love.graphics.newImage("poor_idle.png")
+	picPoorWalking = love.graphics.newImage("poor_walking.png")
+	picPoorRunning = love.graphics.newImage("poor_running.png")
 
 -- MAPS CONSTANTS
 	-- TODO : Change all of those with two variables "mapSize" and "subMapSize" (easier)
