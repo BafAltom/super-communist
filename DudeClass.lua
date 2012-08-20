@@ -45,7 +45,13 @@ DudeClass.draw = function(dude)
 
 		---[[ PICTURE GRAPHICS
 		if (dude.dudeAnim and dude.dudePic) then
-			dude.dudeAnim:draw(dude.dudePic, dude.x, dude.y)
+			love.graphics.setColorMode("replace")
+			local _directionIsLeft = 1
+			if (dude.speedX > 0) then
+				_directionIsLeft = -1
+			end
+			dude.dudeAnim:draw(dude.dudePic, dude.x, dude.y, 0, _directionIsLeft, 1, dude.dudePic:getWidth()/2)
+			love.graphics.setColorMode("modulate")
 		end
 		--]]
 
@@ -298,11 +304,23 @@ end
 
 DudeClass.refreshDudeAnimation = function(dude)
 -- update the dudePic and dudeAnim attributes of dude
+-- there's probably a clever way to do it (with less copypaste)
 	local _dudeP, _dudeA = nil, nil
 	if (dude:class() == "poor") then
 		if (dude.state == "waiting") then
 			_dudeP, _dudeA =  picPoorIdle, anim8.newAnimation("loop", dudeGrid('1,1-4'), 0.3)
-
+		elseif (dude.state == "walking") then
+			_dudeP, _dudeA = picPoorWalking, anim8.newAnimation("loop", dudeGrid('1,1-4'), 0.2)
+		elseif (dude.state == "fleeing") then
+			_dudeP, _dudeA = picPoorRunning, anim8.newAnimation("loop", dudeGrid('1,1-4'), 0.15)
+		end
+	elseif (dude:class() == "middle") then
+		if (dude.state == "waiting") then
+			_dudeP, _dudeA =  picMiddleIdle, anim8.newAnimation("loop", dudeGrid('1,1-4'), 0.3)
+		elseif (dude.state == "walking") then
+			_dudeP, _dudeA = picMiddleWalking, anim8.newAnimation("loop", dudeGrid('1,1-4'), 0.2)
+		elseif (dude.state == "fleeing") then
+			_dudeP, _dudeA = picMiddleRunning, anim8.newAnimation("loop", dudeGrid('1,1-4'), 0.15)
 		end
 	end
 

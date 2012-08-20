@@ -17,6 +17,9 @@
 	picPoorIdle = love.graphics.newImage("poor_idle.png")
 	picPoorWalking = love.graphics.newImage("poor_walking.png")
 	picPoorRunning = love.graphics.newImage("poor_running.png")
+	picMiddleIdle = love.graphics.newImage("middle_idle.png")
+	picMiddleWalking = love.graphics.newImage("middle_walking.png")
+	picMiddleRunning = love.graphics.newImage("middle_running.png")
 
 -- MAPS CONSTANTS
 	-- TODO : Change all of those with two variables "mapSize" and "subMapSize" (easier)
