@@ -45,13 +45,15 @@ DudeClass.draw = function(dude)
 
 		---[[ PICTURE GRAPHICS
 		if (dude.dudeAnim and dude.dudePic) then
-			love.graphics.setColorMode("replace")
-			local _directionIsLeft = 1
+			local _directionIsLeft, _alpha = 1, 255
 			if (dude.speedX > 0) then
 				_directionIsLeft = -1
 			end
+			if (dude.invulnTimer > 0) then
+				_alpha = 100
+			end
+			love.graphics.setColor(255,255,255, _alpha)
 			dude.dudeAnim:draw(dude.dudePic, dude.x, dude.y, 0, _directionIsLeft, 1, dude.dudePic:getWidth()/2, 32)
-			love.graphics.setColorMode("modulate")
 		end
 		--]]
 

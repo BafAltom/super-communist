@@ -19,7 +19,7 @@ function love.load()
 	if (DEBUG) then
 		seed = "I think it's better to have deterministic tests"
 	else
-		seed = os.time()
+		seed = os.time() -- apparently this is done by default in love.run...
 	end
 	math.randomseed(seed)
 	math.random();math.random();math.random()

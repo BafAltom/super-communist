@@ -111,8 +111,8 @@
 
 -- FIREBALL CONSTANTS
 
-	fireballSpeed = 30
-	fireBallAttackTimer = 0.2
+	fireballSpeed = 70
+	fireBallAttackTimer = 0.1
 	fireballLifeTime = 10
 	fireballFadeTimer = 0.5
 
