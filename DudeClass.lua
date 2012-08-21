@@ -50,7 +50,7 @@ DudeClass.draw = function(dude)
 			if (dude.speedX > 0) then
 				_directionIsLeft = -1
 			end
-			dude.dudeAnim:draw(dude.dudePic, dude.x, dude.y, 0, _directionIsLeft, 1, dude.dudePic:getWidth()/2)
+			dude.dudeAnim:draw(dude.dudePic, dude.x, dude.y, 0, _directionIsLeft, 1, dude.dudePic:getWidth()/2, 32)
 			love.graphics.setColorMode("modulate")
 		end
 		--]]
@@ -217,6 +217,7 @@ DudeClass.changeClass = function(dude, previousClass)
 	end
 	dude.waitingTime = invulnTimeByClassChange
 	dude:setState("waiting")
+	dude:refreshDudeAnimation()
 end
 
 DudeClass.dudePush = function(dude, smallerDude)
@@ -325,6 +326,16 @@ DudeClass.refreshDudeAnimation = function(dude)
 			_dudeP, _dudeA = picMiddleRunning, anim8.newAnimation("loop", dudeGrid('1,1-4'), 0.15)
 		elseif (dude.state == "moneyPursuing") then
 			_dudeP, _dudeA = picMiddleMoney, anim8.newAnimation("loop", dudeGrid('1,1-4'), 0.15)
+		end
+	elseif (dude:class() == "rich") then
+		if (dude.state == "waiting") then
+			_dudeP, _dudeA =  picRichIdle, anim8.newAnimation("loop", dudeGrid('1,1-4'), 0.3)
+		elseif (dude.state == "walking") then
+			_dudeP, _dudeA = picRichWalking, anim8.newAnimation("loop", dudeGrid('1,1-4'), 0.2)
+		elseif (dude.state == "fleeing") then
+			_dudeP, _dudeA = picRichRunning, anim8.newAnimation("loop", dudeGrid('1,1-4'), 0.15)
+		elseif (dude.state == "moneyPursuing") then
+			_dudeP, _dudeA = picRichMoney, anim8.newAnimation("loop", dudeGrid('1,1-4'), 0.15)
 		end
 	end
 
