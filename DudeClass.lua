@@ -313,6 +313,8 @@ DudeClass.refreshDudeAnimation = function(dude)
 			_dudeP, _dudeA = picPoorWalking, anim8.newAnimation("loop", dudeGrid('1,1-4'), 0.2)
 		elseif (dude.state == "fleeing") then
 			_dudeP, _dudeA = picPoorRunning, anim8.newAnimation("loop", dudeGrid('1,1-4'), 0.15)
+		elseif (dude.state == "moneyPursuing") then
+			_dudeP, _dudeA = picPoorMoney, anim8.newAnimation("loop", dudeGrid('1,1-4'), 0.15)
 		end
 	elseif (dude:class() == "middle") then
 		if (dude.state == "waiting") then
@@ -321,6 +323,8 @@ DudeClass.refreshDudeAnimation = function(dude)
 			_dudeP, _dudeA = picMiddleWalking, anim8.newAnimation("loop", dudeGrid('1,1-4'), 0.2)
 		elseif (dude.state == "fleeing") then
 			_dudeP, _dudeA = picMiddleRunning, anim8.newAnimation("loop", dudeGrid('1,1-4'), 0.15)
+		elseif (dude.state == "moneyPursuing") then
+			_dudeP, _dudeA = picMiddleMoney, anim8.newAnimation("loop", dudeGrid('1,1-4'), 0.15)
 		end
 	end
 
