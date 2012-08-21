@@ -73,7 +73,7 @@
 	moneyMaxRich = 400
 	moneyRadiusFactor = 0.3
 	moneyStolenByHit = 10
-	superRichHitDistance = 100
+	superRichHitDistance = 150
 	richHitTimer = 2.5
 	invulnTimeByHit = 6
 	invulnTimeByClassChange = 1
