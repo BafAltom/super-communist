@@ -38,13 +38,16 @@ ui.draw = function()
 
 	if (ui.displayMinimap) then
 		love.graphics.translate(minimapX, minimapY)
-		love.graphics.setColor(0,0,0)
+		love.graphics.setColor(20,10,10)
 		love.graphics.rectangle("fill", 0,0, minimapLength, minimapHeight)
+		love.graphics.setColor(10,20,10)
+		love.graphics.rectangle("fill", (mapMinX - subMapMinX)/ minimapXfactor, (mapMinY - subMapMinY) / minimapYfactor, (mapMaxX - mapMinX) / minimapXfactor, (mapMaxY - mapMinY) / minimapYfactor)
 		-- small optimization (or is it?)
 		local minimapXfactor, minimapYfactor = minimapXfactor, minimapYfactor
 
-		-- outline of subMap in miniMap
-
+		-- outlines
+		love.graphics.setColor(0,0,0)
+		love.graphics.rectangle("line", 0,0, minimapLength, minimapHeight)
 		love.graphics.setColor(100,100,100)
 		love.graphics.rectangle("line", (mapMinX - subMapMinX)/ minimapXfactor, (mapMinY - subMapMinY) / minimapYfactor, (mapMaxX - mapMinX) / minimapXfactor, (mapMaxY - mapMinY) / minimapYfactor)
 
@@ -52,13 +55,13 @@ ui.draw = function()
 		for _, d in ipairs(dudes) do
 			local miniSize, miniColors
 			if (d:class() == "poor") then
-				miniColors = {255,0,0}
+				miniColors = {153,99,67}
 				miniSize = 3
 			elseif (d:class() == "middle") then
-				miniColors = {0,255,0}
+				miniColors = {139,200,130}
 				miniSize = 1
 			elseif (d:class() == "rich") then
-				miniColors = {0,0,255}
+				miniColors = {255,0,0}
 				miniSize = 3
 			elseif (d:class() == "rich+") then
 				miniColors = {255,255,255}
