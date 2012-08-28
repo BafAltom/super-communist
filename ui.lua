@@ -1,7 +1,7 @@
 ui = {}
 ui.displayHelp = false
 ui.helpHiddenText = "press H to display help"
-ui.helpText = "Use WASD or ZSQD to move (both work)\nPress, hold and release the Spacebar to attack (you'll figure it out)\nPress Shift to drop money\nRed/Green/Blue squares are poor/average/rich dudes\nWhite squares are billionaire dudes, they do not like you\nYour Goal : make everyone average\nGood Luck!\nPress h to hide this text"
+ui.helpText = "You are the turquoise square\nUse WASD or ZSQD to move (both work)\nPress, hold and release the Spacebar to attack (you'll figure it out)\nPress Shift to drop money\nThere are poor, average and rich dudes walking around\nWhite squares are billionaire dudes, they do not like you\nYour Goal : make everyone average\nGood Luck!\nPress h to hide this text"
 ui.displayMinimap = true
 
 ui.update = function(dt)
