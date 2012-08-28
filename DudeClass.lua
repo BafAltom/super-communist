@@ -400,29 +400,34 @@ end
 
 dudes = {}
 
-local _poorCount, _middleCount , _richCount = 0, 0, 0
-for i = 1, numberOfDudes do
-	local _dudeX, _dudeY, _dudeM
-	local _randomPercent = math.random(100)
-	if (_randomPercent < poorPercent) then -- poor
-		_poorCount = _poorCount + 1
-		_dudeX, _dudeY = randomPointInSubMapCorners()
-		_dudeM = math.random(0, moneyMaxPoor)
-	else
-		_dudeX = math.random(mapMinX, mapMaxX)
-		_dudeY = math.random(mapMinY, mapMaxY)
-
-		if (_randomPercent < poorPercent + middlePercent) then -- middle
-			_middleCount = _middleCount + 1
-			_dudeM = math.random(moneyMaxPoor + 1, moneyMaxMiddle)
-		else -- rich
-			_richCount = _richCount + 1
-			_dudeM = math.random(moneyMaxMiddle + 1, moneyMaxRich)
-		end
+dudes.initialize = function()
+	while (table.getn(dudes) > 0) do
+		table.remove(dudes)
 	end
-	table.insert(dudes, DudeClass.new(_dudeX, _dudeY, _dudeM))
+	local _poorCount, _middleCount , _richCount = 0, 0, 0
+	for i = 1, numberOfDudes do
+		local _dudeX, _dudeY, _dudeM
+		local _randomPercent = math.random(100)
+		if (_randomPercent < poorPercent) then -- poor
+			_poorCount = _poorCount + 1
+			_dudeX, _dudeY = randomPointInSubMapCorners()
+			_dudeM = math.random(0, moneyMaxPoor)
+		else
+			_dudeX = math.random(mapMinX, mapMaxX)
+			_dudeY = math.random(mapMinY, mapMaxY)
+
+			if (_randomPercent < poorPercent + middlePercent) then -- middle
+				_middleCount = _middleCount + 1
+			_dudeM = math.random(moneyMaxPoor + 1, moneyMaxMiddle)
+			else -- rich
+				_richCount = _richCount + 1
+				_dudeM = math.random(moneyMaxMiddle + 1, moneyMaxRich)
+			end
+		end
+		table.insert(dudes, DudeClass.new(_dudeX, _dudeY, _dudeM))
+	end
 end
-print("poor/middle/rich : ", _poorCount, _middleCount, _richCount)
+dudes.initialize()
 
 if (DEBUG) then
 	table.insert(dudes, DudeClass.new(0,0, moneyMaxRich + 1))

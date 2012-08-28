@@ -96,26 +96,15 @@ function love.draw()
 
 		-- WIN
 		if (dudes.allMiddle()) then
-			love.graphics.setColor(0,0,0)
-			love.graphics.rectangle("fill", 0,0,wScr,hScr)
-			love.graphics.setColor(255,255,255)
-			love.graphics.print("YOU WIN", wScr/2, hScr/2)
+			menu.setState("won")
+			displayMenu = true
 		end
 
 		-- LOOSE
 		if (player.life <= 0) then
-			love.graphics.setColor(0,0,0)
-			love.graphics.rectangle("fill", 0,0,wScr,hScr)
-			love.graphics.setColor(255,255,255)
-			love.graphics.print("YOU LOOSE", wScr/2, hScr/2)
-		end
-
-		-- PAUSE
-		if (PAUSE) then
-			love.graphics.setColor(0,0,0)
-			love.graphics.rectangle("fill", wScr/2-22, hScr/2-15, 44, 30)
-			love.graphics.setColor(255,255,255)
-			love.graphics.print("PAUSE", wScr/2- 20, hScr/2)
+			menu.setState("lost")
+			PAUSE = true
+			displayMenu = true
 		end
 	end
 
@@ -129,7 +118,7 @@ end
 
 function love.update(dt)
 
-	if (not PAUSE) then
+	if (not PAUSE and not displayMenu) then
 		player.update(dt)
 		ui.update(dt)
 		for dudeN,dude in ipairs(dudes) do
@@ -157,7 +146,9 @@ function love.keypressed(k)
 		elseif (k == "p") then
 			PAUSE = not PAUSE
 		elseif (k == "escape") then
-			love.event.push("quit")
+			menu.setState("pause")
+			PAUSE = true
+			displayMenu = true
 		else
 			player.keypressed(k)
 			ui.keypressed(k)
