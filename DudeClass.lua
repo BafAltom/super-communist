@@ -26,19 +26,21 @@ DudeClass.draw = function(dude)
 
 		---[[ SIMPLE GRAPHICS
 		-- draw shape
-		local _dudeSize = dude:dudeSize()
-		local _fillage
-		if (dude.invulnTimer <= 0) then
-			_fillage = "fill"
-		else
-			_fillage = "line"
-		end
-		love.graphics.rectangle(_fillage, dude.x - _dudeSize/2, dude.y - _dudeSize/2, _dudeSize, _dudeSize)
-		if (DEBUG) then
-			love.graphics.print(dude.id, dude.x + _dudeSize + 5, dude.y)
-			love.graphics.print(dude.state, dude.x + _dudeSize + 5, dude.y + 10)
-			if (dude:class() == 'rich') then
-				love.graphics.print(dude.attackTimer, dude.x + _dudeSize + 5, dude.y + 20)
+		if (dude:class() == "rich+") then
+			local _dudeSize = dude:dudeSize()
+			local _fillage
+			if (dude.invulnTimer <= 0) then
+				_fillage = "fill"
+			else
+				_fillage = "line"
+			end
+			love.graphics.rectangle(_fillage, dude.x - _dudeSize/2, dude.y - _dudeSize/2, _dudeSize, _dudeSize)
+			if (DEBUG) then
+				love.graphics.print(dude.id, dude.x + _dudeSize + 5, dude.y)
+				love.graphics.print(dude.state, dude.x + _dudeSize + 5, dude.y + 10)
+				if (dude:class() == 'rich') then
+					love.graphics.print(dude.attackTimer, dude.x + _dudeSize + 5, dude.y + 20)
+				end
 			end
 		end
 		--]]
