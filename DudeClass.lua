@@ -66,6 +66,31 @@ DudeClass.draw = function(dude)
 	end
 	--]]
 
+	-- draw moneyBar
+	if (dude.moneyDisplayTimer > 0) then
+		local dudeM = math.ceil(dude.money)
+		local moneyMin, moneyMax
+		if (dudeM <= moneyMaxPoor) then
+			moneyMin, moneyMax = 0, moneyMaxPoor
+		elseif (dudeM <= moneyMaxMiddle) then
+			moneyMin, moneyMax = moneyMaxPoor, moneyMaxMiddle
+		elseif (dudeM <= moneyMaxRich) then
+			moneyMin, moneyMax = moneyMaxMiddle, moneyMaxRich
+		end
+		if (moneyMax ~= nil) then
+			local relativeMoney = (dudeM - moneyMin)/(moneyMax-moneyMin)
+			local colorAlpha = 255
+			if (dude.moneyDisplayTimer < dudeMoneyFade) then
+				colorAlpha = 255*(dude.moneyDisplayTimer/dudeMoneyFade)
+			end
+			--love.graphics.print(moneyMin.." < "..dudeM.." < "..moneyMax, dude.x, dude.y)
+			love.graphics.setColor(0,0,0, colorAlpha)
+			love.graphics.rectangle("line", dude.x - 20, dude.y - 40, 40, 10) -- magic numbers!
+			love.graphics.setColor(255,255,0, colorAlpha)
+			love.graphics.rectangle("fill", dude.x - 19, dude.y - 39, math.floor(relativeMoney*38), 8) -- magic numbers!
+		end
+	end
+
 	-- draw lightning
 	if (dude.currentPrey ~= nil and not (dude:class() == "rich+")) then
 		local _attackedDude = dude.currentPrey
@@ -204,6 +229,7 @@ DudeClass.update = function(dude,dt)
 	-- timer
 	if (dude.invulnTimer > 0) then dude.invulnTimer = dude.invulnTimer - dt end
 	if (dude:class() == "rich+" and dude.attackTimer > 0) then dude.attackTimer = dude.attackTimer - dt end
+	if (dude.moneyDisplayTimer > 0) then dude.moneyDisplayTimer = dude.moneyDisplayTimer - dt end
 end
 
 DudeClass.updateMoney = function(dude, amount) -- negative/positive amount : take/give money
@@ -212,7 +238,7 @@ DudeClass.updateMoney = function(dude, amount) -- negative/positive amount : tak
 	if (dude:class() ~= _previousClass) then
 		dude:changeClass(_previousClass)
 	end
-
+	dude.moneyDisplayTimer = dudeMoneyTimer
 end
 
 DudeClass.changeClass = function(dude, previousClass)
@@ -389,6 +415,7 @@ DudeClass.new = function(x, y, money)
 	littleDude.attacked = -1 -- id of attacked dude (-1 if void)
 	littleDude.attackedBy = -1 -- id of attacking dude (-1 if void)
 	littleDude.attackTimer = 0 -- beware : used by rich and rich+ but behave differently (increase for rich, decrease for rich+) (this is obviously stupid and should be refactored -> TODO)
+	littleDude.moneyDisplayTimer = 0
 	littleDude.state = ''
 	littleDude.dudePic = nil
 	littleDude.dudeAnim = nil

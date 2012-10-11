@@ -73,6 +73,8 @@
 	moneyMaxRich = 400
 	moneyRadiusFactor = 0.3
 	moneyStolenByHit = 10
+	dudeMoneyTimer = 2
+	dudeMoneyFade = 0.3 --s
 	superRichHitDistance = 150
 	richHitTimer = 2.5
 	invulnTimeByHit = 6
