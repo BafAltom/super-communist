@@ -97,7 +97,7 @@ DudeClass.draw = function(dude)
 		local _attackBuildUpFactor = dude.attackTimer/richHitTimer
 		local _distance = distance2Entities(dude, _attackedDude)
 		local _endX, _endY = myVector(dude.x, dude.y, _attackedDude.x, _attackedDude.y, _distance*_attackBuildUpFactor)
-		love.graphics.setColor(255,255,0, 255*_attackBuildUpFactor)
+		love.graphics.setColor(255,0,0, 255*_attackBuildUpFactor)
 		love.graphics.line(dude.x, dude.y, dude.x + _endX, dude.y + _endY)
 	end
 

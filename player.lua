@@ -10,7 +10,7 @@ player.initialize = function()
 	player.speedX = 0
 	player.speedY = 0
 	player.invulnTimer =  0
-	player.life = 3
+	player.life = playerLives
 
 	player.weaponRadius = 0
 end

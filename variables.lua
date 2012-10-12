@@ -26,6 +26,8 @@
 	picRichWalking = love.graphics.newImage("rich_walking.png")
 	picRichRunning = love.graphics.newImage("rich_running.png")
 	picRichMoney = love.graphics.newImage("rich_moneyPursuing.png")
+	picHeartFull = love.graphics.newImage("heart_full.png")
+	picHeartEmpty = love.graphics.newImage("heart_empty.png")
 
 -- MAPS CONSTANTS
 	-- TODO : Change all of those with two variables "mapSize" and "subMapSize" (easier)
@@ -54,6 +56,7 @@
 	playerMaxSpeed = 300 -- px/s
 	playerSpeedKeyDownIncrease = 300 --px/s^2
 	playerSpeedKeyUpDecrease = 600 -- px/s^2
+	playerLives = 3
 	playerMaxMoney = 2000
 	playerWeaponRadiusSpeed = 60
 	playerWeaponRadiusMax = 100
@@ -115,7 +118,7 @@
 
 	fireballSpeed = 70
 	fireBallAttackTimer = 0.1
-	fireballLifeTime = 10
+	fireballLifeTime = 1.5
 	fireballFadeTimer = 0.5
 
 -- GRID CONSTANTS

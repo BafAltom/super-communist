@@ -31,14 +31,12 @@ FireBallClass.update = function(fb,dt)
 
 	-- Timer decrease
 	fb.lifeTime = fb.lifeTime - dt
-
 end
 
 FireBallClass.draw = function(fb)
-	local _fadeFactor = math.min(1,fb.lifeTime/fireballFadeTimer)
-	love.graphics.setColor(_fadeFactor*255,_fadeFactor*100,0) -- create "firework" look when fading. Unintended but pretty cool!
+	local _fadeFactor = 255*math.max(0, math.min(1, fb.lifeTime/fireballFadeTimer))
+	love.graphics.setColor(255,100,0, _fadeFactor) -- create "firework" look when fading. Unintended but pretty cool!
 	love.graphics.circle("fill", fb.x, fb.y, 5, 20)
-
 end
 
 FireBallClass.new = function(sender, destX, destY)

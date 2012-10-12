@@ -25,15 +25,17 @@ ui.draw = function()
 	love.graphics.rectangle("fill", moneyBarX+1 + barLength, moneyBarY+1, moneyBarLength-2-barLength, moneyBarHeight-2)
 
 	-- health
-	love.graphics.setColor(255,0,0)
-	local _fillage
-	for i=1,3 do
+	local _pic, _alpha
+	for i=1,playerLives do
 		if (i <= player.life) then
-			_fillage = "fill"
+			_pic = picHeartFull
+			_alpha = 255
 		else
-			_fillage = "line"
+			_pic = picHeartEmpty
+			_alpha = 100
 		end
-		love.graphics.circle(_fillage, moneyBarLength + i*30, moneyBarY + 10, 10, 15)
+		love.graphics.setColor(255,255,255, _alpha)
+		love.graphics.draw(_pic, moneyBarLength + i*30, moneyBarY)
 	end
 
 	if (ui.displayMinimap) then
