@@ -57,7 +57,7 @@
 	playerSpeedKeyDownIncrease = 300 --px/s^2
 	playerSpeedKeyUpDecrease = 600 -- px/s^2
 	playerLives = 3
-	playerMaxMoney = 2000
+	playerMaxMoney = 1000
 	playerWeaponRadiusSpeed = 60
 	playerWeaponRadiusMax = 100
 	playerNumberOfCoinsByDrop = 100
@@ -65,7 +65,7 @@
 	playerCorruptionSpeedFactor = 0.25
 
 -- DUDES CONSTANTS
-	numberOfDudes = 60
+	numberOfDudes = 50
 	dudeMaxSpeed = 20
 	destAcceptanceRadius = 10
 	dudeNextDestRadius = 50
@@ -95,9 +95,9 @@
 	-- moneyMaxPoor*numberOfDudes < x < moneyMaxMiddle*numberOfDudes
 	-- Let's say (numberOfDudes*(moneyMaxPoor+moneyMaxMiddle)/2)
 	totalMoney = numberOfDudes*(moneyMaxPoor+moneyMaxMiddle)/2 -- not used right now TODO
-	poorPercent = 25
-	middlePercent = 60
-	richPercent = 15
+	poorPercent = 20
+	middlePercent = 50
+	richPercent = 30
 
 	poorColor = {153,99,67}
 	middleColor = {139,200,130}
