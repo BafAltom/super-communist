@@ -23,7 +23,7 @@ FireBallClass.update = function(fb,dt)
 	-- Hit detection
 
 		-- player
-	if (distance2Entities(player,fb) < player:dudeSize() and player.invulnTimer <= 0) then
+	if (distance2Entities(player,fb) < player:dudeSize() and player.invulnTimer <= 0 and not (fb.lifeTime < fireballFadeTimer)) then
 		player.isAttacked()
 		fb.lifeTime = 0
 	end

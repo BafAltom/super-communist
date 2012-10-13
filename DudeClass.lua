@@ -11,52 +11,53 @@ end
 
 -- CLASS METHODS
 DudeClass.draw = function(dude)
-		-- choose color
-		local _dudeColors
-		if (dude:class() == "poor") then
-			_dudeColors = {255,0,0}
-		elseif (dude:class() == "middle") then
-			_dudeColors = {0,255,0}
-		elseif (dude:class() == "rich") then
-			_dudeColors = {0,0,255}
-		elseif (dude:class() == "rich+") then
-			_dudeColors = {255,255,255}
-		end
-		love.graphics.setColor(_dudeColors)
+	-- choose color
+	local _dudeColors
+	if (dude:class() == "poor") then
+		_dudeColors = poorColor
+	elseif (dude:class() == "middle") then
+		_dudeColors = middleColor
+	elseif (dude:class() == "rich") then
+		_dudeColors = richColor
+	elseif (dude:class() == "rich+") then
+		_dudeColors = richPlusColor
+	end
+	love.graphics.setColor(_dudeColors)
 
-		---[[ SIMPLE GRAPHICS
-		-- draw shape
-		if (dude:class() == "rich+") then
-			local _dudeSize = dude:dudeSize()
-			local _fillage
-			if (dude.invulnTimer <= 0) then
-				_fillage = "fill"
-			else
-				_fillage = "line"
-			end
-			love.graphics.rectangle(_fillage, dude.x - _dudeSize/2, dude.y - _dudeSize/2, _dudeSize, _dudeSize)
-			if (DEBUG) then
-				love.graphics.print(dude.id, dude.x + _dudeSize + 5, dude.y)
-				love.graphics.print(dude.state, dude.x + _dudeSize + 5, dude.y + 10)
-				if (dude:class() == 'rich') then
-					love.graphics.print(dude.attackTimer, dude.x + _dudeSize + 5, dude.y + 20)
-				end
-			end
+	local _dudeSize = dude:dudeSize()
+	---[[ SIMPLE GRAPHICS
+	-- draw shape
+	if (dude:class() == "rich+") then
+		local _fillage
+		if (dude.invulnTimer <= 0) then
+			_fillage = "fill"
+		else
+			_fillage = "line"
 		end
-		--]]
+		love.graphics.rectangle(_fillage, dude.x - _dudeSize/2, dude.y - _dudeSize/2, _dudeSize, _dudeSize)
+	end
+	--]]
 
-		---[[ PICTURE GRAPHICS
-		if (dude.dudeAnim and dude.dudePic) then
-			local _directionIsLeft, _alpha = 1, 255
-			if (dude.speedX > 0) then
-				_directionIsLeft = -1
-			end
-			if (dude.invulnTimer > 0) then
-				_alpha = 100
-			end
-			love.graphics.setColor(255,255,255, _alpha)
-			dude.dudeAnim:draw(dude.dudePic, dude.x, dude.y, 0, _directionIsLeft, 1, dude.dudePic:getWidth()/2, 32)
+	---[[ PICTURE GRAPHICS
+	if (dude.dudeAnim and dude.dudePic) then
+		local _directionIsLeft, _alpha = 1, 255
+		if (dude.speedX > 0) then
+			_directionIsLeft = -1
 		end
+		if (dude.invulnTimer > 0) then
+			_alpha = 100
+		end
+		love.graphics.setColor(255,255,255, _alpha)
+		dude.dudeAnim:draw(dude.dudePic, dude.x, dude.y, 0, _directionIsLeft, 1, dude.dudePic:getWidth()/2, 32)
+	end
+	if (DEBUG) then
+		love.graphics.print(dude.id, dude.x + _dudeSize + 5, dude.y)
+		love.graphics.print(dude.state, dude.x + _dudeSize + 5, dude.y + 10)
+		if (dude:class() == 'rich') then
+			love.graphics.print(dude.attackTimer, dude.x + _dudeSize + 5, dude.y + 20)
+		end
+	end
+
 		--]]
 
 	-- draw prey circle
@@ -94,10 +95,10 @@ DudeClass.draw = function(dude)
 	-- draw lightning
 	if (dude.currentPrey ~= nil and not (dude:class() == "rich+")) then
 		local _attackedDude = dude.currentPrey
-		local _attackBuildUpFactor = dude.attackTimer/richHitTimer
+		local _attackBuildUpFactor = 1-(dude.attackTimer/richHitTimer)
 		local _distance = distance2Entities(dude, _attackedDude)
 		local _endX, _endY = myVector(dude.x, dude.y, _attackedDude.x, _attackedDude.y, _distance*_attackBuildUpFactor)
-		love.graphics.setColor(255,0,0, 255*_attackBuildUpFactor)
+		love.graphics.setColor(255,69,0, 255*_attackBuildUpFactor)
 		love.graphics.line(dude.x, dude.y, dude.x + _endX, dude.y + _endY)
 	end
 
@@ -173,21 +174,21 @@ DudeClass.update = function(dude,dt)
 		if (dude.invulnTimer <= 0 and dude.state == "walking" or dude.state == "waiting") then
 			local _prey = dude:findClosestPrey()
 			if (_prey ~= nil) then
-				if (dude.attackTimer > richHitTimer) then
-					dude.attackTimer = 0
+				if (dude.attackTimer < 0) then
+					dude.attackTimer = richHitTimer
 					dude.attacked = _prey.id
 					dude.attackTimer = richHitTimer
 					local _stolenMoney = math.min(_prey.money, moneyStolenByHit)
 					_prey:isAttacked(dude, _stolenMoney)
 				else
-					dude.attackTimer = dude.attackTimer + dt
+					dude.attackTimer = dude.attackTimer - dt
 				end
 			else
-				dude.attackTimer = 0
+				dude.attackTimer = richHitTimer
 			end
 			dude.currentPrey = _prey
 		else
-			dude.attackTimer = 0
+			dude.attackTimer = richHitTimer
 		end
 	end
 
@@ -216,9 +217,10 @@ DudeClass.update = function(dude,dt)
 	end
 
 	-- push or be pushed by other players
-	local _closestDude = findClosestOf(dudes, dude, dude:dudeSize())
+	local _closestDude = findClosestOf(dudes, dude, dude:dudeSize()*2)
 	if (_closestDude ~= nil) then
 		dude:dudePush(_closestDude)
+		_closestDude = findClosestOf(dudes, dude, dude:dudeSize()*2)
 	end
 
 	-- animation
@@ -245,6 +247,7 @@ DudeClass.changeClass = function(dude, previousClass)
 	if (previousClass == "rich") then
 		dude.currentPrey = nil
 	end
+	dude.attackTimer = 0
 	dude.waitingTime = invulnTimeByClassChange
 	dude:setState("waiting")
 	dude:refreshDudeAnimation()
@@ -252,10 +255,10 @@ end
 
 DudeClass.dudePush = function(dude, smallerDude)
 	if (not (dude.x == smallerDude.x and dude.y == smallerDude.y)) then
-		local _translationX, _translationY = myVector(dude.x, dude.y, smallerDude.x, smallerDude.y, dude:dudeSize())
+		local _translationX, _translationY = myVector(dude.x, dude.y, smallerDude.x, smallerDude.y, dude:dudeSize()*2)
 		smallerDude.x, smallerDude.y = dude.x + _translationX, dude.y + _translationY
 	else -- hotfix
-		smallerDude.x = smallerDude.x + dude:size()
+		smallerDude.x = smallerDude.x + dude:size()*2
 	end
 end
 
@@ -414,7 +417,7 @@ DudeClass.new = function(x, y, money)
 	littleDude.currentPrey = nil -- current target dude
 	littleDude.attacked = -1 -- id of attacked dude (-1 if void)
 	littleDude.attackedBy = -1 -- id of attacking dude (-1 if void)
-	littleDude.attackTimer = 0 -- beware : used by rich and rich+ but behave differently (increase for rich, decrease for rich+) (this is obviously stupid and should be refactored -> TODO)
+	littleDude.attackTimer = 0
 	littleDude.moneyDisplayTimer = 0
 	littleDude.state = ''
 	littleDude.dudePic = nil
@@ -450,7 +453,7 @@ dudes.initialize = function()
 			_dudeM = math.random(moneyMaxPoor + 1, moneyMaxMiddle)
 			else -- rich
 				_richCount = _richCount + 1
-				_dudeM = math.random(moneyMaxMiddle + 1, moneyMaxRich)
+				_dudeM = math.random(moneyMaxRich - (moneyMaxRich-moneyMaxMiddle)*0.75, moneyMaxRich)
 			end
 		end
 		table.insert(dudes, DudeClass.new(_dudeX, _dudeY, _dudeM))

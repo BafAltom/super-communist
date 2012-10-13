@@ -57,16 +57,16 @@ ui.draw = function()
 		for _, d in ipairs(dudes) do
 			local miniSize, miniColors
 			if (d:class() == "poor") then
-				miniColors = {153,99,67}
+				miniColors = poorColor
 				miniSize = 3
 			elseif (d:class() == "middle") then
-				miniColors = {139,200,130}
+				miniColors = middleColor
 				miniSize = 1
 			elseif (d:class() == "rich") then
-				miniColors = {255,0,0}
+				miniColors = richColor
 				miniSize = 3
 			elseif (d:class() == "rich+") then
-				miniColors = {255,255,255}
+				miniColors = richPlusColor
 				miniSize = 5
 			end
 

@@ -95,9 +95,14 @@
 	-- moneyMaxPoor*numberOfDudes < x < moneyMaxMiddle*numberOfDudes
 	-- Let's say (numberOfDudes*(moneyMaxPoor+moneyMaxMiddle)/2)
 	totalMoney = numberOfDudes*(moneyMaxPoor+moneyMaxMiddle)/2 -- not used right now TODO
-	poorPercent = 30
-	middlePercent = 40
-	richPercent = 30
+	poorPercent = 25
+	middlePercent = 60
+	richPercent = 15
+
+	poorColor = {153,99,67}
+	middleColor = {139,200,130}
+	richColor = {255,0,0}
+	richPlusColor = {255,255,255}
 
 -- COINS CONSTANTS
 	coinsValuePerPx = 5
@@ -118,7 +123,7 @@
 
 	fireballSpeed = 70
 	fireBallAttackTimer = 0.1
-	fireballLifeTime = 1.5
+	fireballLifeTime = 2.5
 	fireballFadeTimer = 0.5
 
 -- GRID CONSTANTS
