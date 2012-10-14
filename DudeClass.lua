@@ -293,7 +293,7 @@ end
 
 DudeClass.isAttacked = function(dude, predator, moneyStolen)
 	dude:updateMoney(-1*moneyStolen)
-	CoinClass.createCoinBatch(dude.x, dude.y, moneyStolen)
+	CoinClass.createCoinBatchWithDirection(dude.x, dude.y, moneyStolen, predator.x - dude.x, predator.y - dude.y)
 	dude.attackedBy = predator.id
 	dude.invulnTimer = invulnTimeByHit
 
@@ -453,7 +453,7 @@ dudes.initialize = function()
 			_dudeM = math.random(moneyMaxPoor + 1, moneyMaxMiddle)
 			else -- rich
 				_richCount = _richCount + 1
-				_dudeM = math.random(moneyMaxRich - (moneyMaxRich-moneyMaxMiddle)*0.75, moneyMaxRich)
+				_dudeM = math.random(moneyMaxRich - (moneyMaxRich-moneyMaxMiddle)*0.5, moneyMaxRich - (moneyMaxRich-moneyMaxMiddle)*0.25)
 			end
 		end
 		table.insert(dudes, DudeClass.new(_dudeX, _dudeY, _dudeM))

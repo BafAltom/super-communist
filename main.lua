@@ -13,12 +13,13 @@ RANDOM IDEAS:
 
 
 function love.load()
+	local _seed
 	if (DEBUG) then
-		seed = "I think it's better to have deterministic tests"
+		_seed = "I think it's better to have deterministic tests"
 	else
-		seed = os.time() -- apparently this is done by default in love.run...
+		_seed = os.time() -- apparently this is done by default in love.run...
 	end
-	math.randomseed(seed)
+	math.randomseed(_seed)
 	math.random();math.random();math.random()
 	love.mouse.setVisible(false)
 

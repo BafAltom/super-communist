@@ -13,17 +13,24 @@ CoinClass.getNextID = function()
 
 end
 
+CoinClass.normalizeSpeed = function(coin, speed)
+	coin.speedX, coin.speedY = myVector(0, 0, coin.speedX, coin.speedY, speed)
+end
+
 CoinClass.createCoinBatch = function(x, y, totalValue)
+	CoinClass.createCoinBatchWithDirection(x, y, totalValue, 0, 0)
+end
+
+CoinClass.createCoinBatchWithDirection = function(x, y, totalValue, vx, vy)
 	value = totalValue
 	while (value > 0) do
 		choice = math.random(1,coinsChoiceNumber)
 		while (coinsAcceptedValue[choice] > value and choice > 1) do
 			choice = choice - 1
 		end
-		table.insert(coins, CoinClass.new(x,y,coinsAcceptedValue[choice]))
+		table.insert(coins, CoinClass.new(x,y,coinsAcceptedValue[choice], vx, vy))
 		value = value - coinsAcceptedValue[choice]
 	end
-
 end
 
 -- CLASS METHODS
@@ -45,9 +52,14 @@ CoinClass.update = function(coin, dt)
 			and not (_closestDude:class() == "rich+")
 			) then
 
-			coin.speedX = (_closestDude.x - coin.x)*10
-			coin.speedY = (_closestDude.y - coin.y)*10
+			-- magic numbers
+			coin.accX = (_closestDude.x - coin.x)*20
+			coin.accY = (_closestDude.y - coin.y)*20
+		else
+			coin.accX = -coin.speedX
+			coin.accY = -coin.speedY
 		end
+
 		-- Caught by him?
 		if (_closestDude ~= nil and coin.noCatchTimer <= 0 and _closestDude.invulnTimer <= 0 and _closestDude:class() ~= "rich+") then
 			if (distance2Entities(coin, _closestDude) < _closestDude:dudeSize()) then
@@ -58,10 +70,6 @@ CoinClass.update = function(coin, dt)
 	else
 		coin.noCatchTimer = coin.noCatchTimer - dt
 	end
-
-	-- speed must decrease
-	coin.accX = -coin.speedX
-	coin.accY = -coin.speedY
 
 	-- Speed Update
 	coin.speedX = coin.speedX + coin.accX*dt
@@ -119,7 +127,7 @@ end
 
 -------------------------------------------------------------------
 
-CoinClass.new = function(x,y,value)
+CoinClass.new = function(x,y,value,sx,sy)
 	local coin = {}
 	setmetatable(coin, {__index = CoinClass})
 
@@ -127,11 +135,25 @@ CoinClass.new = function(x,y,value)
 	coin.x = x
 	coin.y = y
 	coin.value = value
-	-- Random direction
-	coin.speedX = math.random(coinsMinRandSpeedX, coinsMaxRandSpeedX)
-	coin.speedY = math.random(coinsMinRandSpeedY, coinsMaxRandSpeedY)
-	coin.accX = - coin.speedX
-	coin.accY = - coin.speedY
+	if (sx ~= 0 and sy ~= 0) then
+		-- need refactoring :(
+		if (sx > 0) then
+			coin.speedX = math.random(0, sx*10)
+		else
+			coin.speedX = math.random(sx*10, 0)
+		end
+		if (sy > 0) then
+			coin.speedY = math.random(0, sy*10)
+		else
+			coin.speedY = math.random(sy*10, 0)
+		end
+	else -- Random direction
+		coin.speedX = math.random(-100, 100)/100
+		coin.speedY = math.random(-100, 100)/100
+	end
+	coin:normalizeSpeed(math.random(coinsMaxSpeed*0.5, coinsMaxSpeed))
+	coin.accX = 0
+	coin.accY = 0
 	coin.noCatchTimer = coinsNoCatchTime
 	coin.lifeTime = coinsLifeTime
 

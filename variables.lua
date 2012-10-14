@@ -95,8 +95,8 @@
 	-- moneyMaxPoor*numberOfDudes < x < moneyMaxMiddle*numberOfDudes
 	-- Let's say (numberOfDudes*(moneyMaxPoor+moneyMaxMiddle)/2)
 	totalMoney = numberOfDudes*(moneyMaxPoor+moneyMaxMiddle)/2 -- not used right now TODO
-	poorPercent = 20
-	middlePercent = 50
+	poorPercent = 30
+	middlePercent = 40
 	richPercent = 30
 
 	poorColor = {153,99,67}
@@ -106,16 +106,12 @@
 
 -- COINS CONSTANTS
 	coinsValuePerPx = 5
-	coinsMinRandSpeedX = -200
-	coinsMaxRandSpeedX = 200
-	coinsMinRandSpeedY = -200
-	coinsMaxRandSpeedY = 200
-	coinsMaxSpeed = 50
+	coinsMaxSpeed = 75
 	coinsAcceptedValue = {1,5,10,20}
 	coinsChoiceNumber = #coinsAcceptedValue
 	coinsAttractionDistance = 100
 	coinsCatchDistance = 10
-	coinsNoCatchTime = 1
+	coinsNoCatchTime = 0.5
 	coinsLifeTime = 10
 	coinsFadeTime = 1
 
