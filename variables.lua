@@ -63,6 +63,8 @@
 	playerNumberOfCoinsByDrop = 100
 	playerInvulnTimeByHit = 0.5
 	playerCorruptionSpeedFactor = 0.25
+	playerCorruptionSpurtTimer = 1
+	playerCorruptionSpurtValue = 50
 
 -- DUDES CONSTANTS
 	numberOfDudes = 50
