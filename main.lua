@@ -3,15 +3,12 @@
 SUPER CÖMMUNIST
 A game by Altom for the March 2012 Experimental Gameplay Project (Theme: ECONOMY)
 
-Begun : Sunday March 4th (supposed delay: 7 days)
-
-TODO:
-- "attract the poor" button
-- coherent corruption effect (fat sprite, cannot attract poor, cannot pick coins up, cannot attack, must go under threshold to regain uncorrupted state)
+Begun : Sunday March 4th (supposed worktime: 7 days, delay: still counting)
 
 RANDOM IDEAS:
+- "Godly events" : Economy crash, Oil pit, Technology : try to rebalance the economy inline
+- Shop : for heart containers and "communist-like" power-ups (shield for poor, )
 - rich+ indicator (point to it on the edge of the screen, L4D2/Portal2-like)
-- short invulnerability during class transformation
 ]]--
 
 
