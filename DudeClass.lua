@@ -53,6 +53,7 @@ DudeClass.draw = function(dude)
 	if (DEBUG) then
 		love.graphics.print(dude.id, dude.x + _dudeSize + 5, dude.y)
 		love.graphics.print(dude.state, dude.x + _dudeSize + 5, dude.y + 10)
+		love.graphics.print('w:'..dude.waitingTime, dude.x + _dudeSize + 5, dude.y + 30)
 		if (dude:class() == 'rich') then
 			love.graphics.print(dude.attackTimer, dude.x + _dudeSize + 5, dude.y + 20)
 		end
@@ -131,8 +132,8 @@ DudeClass.update = function(dude,dt)
 	-- arrived at destination?
 	if(distance2Points(dude.x,dude.y,dude.destX,dude.destY) <= destAcceptanceRadius) then
 		if (dude.state ~= 'waiting') then
-			dude.speedX = 0
-			dude.speedY = 0
+			dude.destX = dude.x
+			dude.destY = dude.y
 			dude:setState('waiting')
 			dude.waitingTime = math.random(dudeNextDestWaitTimeMin,dudeNextDestWaitTimeMax)
 		elseif (dude.waitingTime > 0) then
@@ -141,33 +142,32 @@ DudeClass.update = function(dude,dt)
 			dude:findNewDestination()
 			dude:setState('walking')
 		end
-	else
-		-- attracted by coins
-		local closestCoin = dude:findClosestCoin()
-		if (closestCoin ~= nil and dude.state ~= 'fleeing' and (dude:class() ~= "rich+")) then
-			dude.destX = closestCoin.x
-			dude.destY = closestCoin.y
-			dude:setState('moneyPursuing')
-		end
-		if (closestCoin == nil and dude.state == 'moneyPursuing') then
-			-- the dude was previously attracted by a coin but it doesn't exist
-			dude.destX = dude.x
-			dude.destY = dude.y
-		end
-
-		-- rich+ dudes are attracted to player
-		if (dude:class() == "rich+" and distance2Entities(dude, player) > richPlusStalkDistance) then
-			dude.destX = player.x
-			dude.destY = player.y
-			dude:setState('playerPursuing')
-		end
-
-		-- no distraction --> go to destination
-		dude.speedX = (dude.destX - dude.x)
-		dude.speedY = (dude.destY - dude.y)
-
-		dude:calculateSpeed()
 	end
+	-- attracted by coins
+	local closestCoin = dude:findClosestCoin()
+	if (closestCoin ~= nil and dude.state ~= 'fleeing' and (dude:class() ~= "rich+")) then
+		dude.destX = closestCoin.x
+		dude.destY = closestCoin.y
+		dude:setState('moneyPursuing')
+	end
+	if (closestCoin == nil and dude.state == 'moneyPursuing') then
+		-- the dude was previously attracted by a coin but it doesn't exist anymore
+		dude.destX = dude.x
+		dude.destY = dude.y
+	end
+
+	-- rich+ dudes are attracted to player
+	if (dude:class() == "rich+" and distance2Entities(dude, player) > richPlusStalkDistance) then
+		dude.destX = player.x
+		dude.destY = player.y
+		dude:setState('playerPursuing')
+	end
+
+	-- no distraction --> go to destination
+	dude.speedX = (dude.destX - dude.x)
+	dude.speedY = (dude.destY - dude.y)
+
+	dude:calculateSpeed()
 
 	-- prey on the weak
 	if (dude:class() == "rich") then
@@ -293,7 +293,7 @@ end
 
 DudeClass.isAttacked = function(dude, predator, moneyStolen)
 	dude:updateMoney(-1*moneyStolen)
-	CoinClass.createCoinBatchWithDirection(dude.x, dude.y, moneyStolen, predator.x - dude.x, predator.y - dude.y)
+	CoinClass.createCoinBatchWithDirection(dude.x, dude.y, moneyStolen, 0,0)
 	dude.attackedBy = predator.id
 	dude.invulnTimer = invulnTimeByHit
 

@@ -52,7 +52,7 @@
 	end
 
 -- PLAYER CONSTANTS
-	playerSize = 10
+	playerSize = 20
 	playerMaxSpeed = 300 -- px/s
 	playerSpeedKeyDownIncrease = 300 --px/s^2
 	playerSpeedKeyUpDecrease = 600 -- px/s^2
@@ -109,12 +109,12 @@
 -- COINS CONSTANTS
 	coinsValuePerPx = 5
 	coinsMaxSpeed = 75
-	coinsAcceptedValue = {1,5,10,20}
+	coinsAcceptedValue = {1,10,20} -- increasing order, smallest value must be "1"
 	coinsChoiceNumber = #coinsAcceptedValue
-	coinsAttractionDistance = 100
+	coinsAttractionDistance = 50
 	coinsCatchDistance = 10
 	coinsNoCatchTime = 0.5
-	coinsLifeTime = 10
+	coinsLifeTime = 60
 	coinsFadeTime = 1
 
 -- FIREBALL CONSTANTS
