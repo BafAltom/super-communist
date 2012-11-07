@@ -39,45 +39,14 @@ ui.draw = function()
 	end
 
 	if (ui.displayMinimap) then
-		love.graphics.translate(minimapX, minimapY)
-		love.graphics.setColor(20,10,10)
-		love.graphics.rectangle("fill", 0,0, minimapLength, minimapHeight)
-		love.graphics.setColor(10,20,10)
-		love.graphics.rectangle("fill", (mapMinX - subMapMinX)/ minimapXfactor, (mapMinY - subMapMinY) / minimapYfactor, (mapMaxX - mapMinX) / minimapXfactor, (mapMaxY - mapMinY) / minimapYfactor)
-		-- small optimization (or is it?)
-		local minimapXfactor, minimapYfactor = minimapXfactor, minimapYfactor
+		ui.drawMinimap()
 
-		-- outlines
-		love.graphics.setColor(0,0,0)
-		love.graphics.rectangle("line", 0,0, minimapLength, minimapHeight)
-		love.graphics.setColor(100,100,100)
-		love.graphics.rectangle("line", (mapMinX - subMapMinX)/ minimapXfactor, (mapMinY - subMapMinY) / minimapYfactor, (mapMaxX - mapMinX) / minimapXfactor, (mapMaxY - mapMinY) / minimapYfactor)
-
-		-- all the dudes
-		for _, d in ipairs(dudes) do
-			local miniSize, miniColors
-			if (d:class() == "poor") then
-				miniColors = poorColor
-				miniSize = 3
-			elseif (d:class() == "middle") then
-				miniColors = middleColor
-				miniSize = 1
-			elseif (d:class() == "rich") then
-				miniColors = richColor
-				miniSize = 3
-			elseif (d:class() == "rich+") then
-				miniColors = richPlusColor
-				miniSize = 5
-			end
-
-			love.graphics.setColor(miniColors)
-			love.graphics.rectangle("fill", minimapLength/2 + d.x/minimapXfactor, minimapHeight/2 + d.y/minimapYfactor, miniSize, miniSize)
-		end
-		-- player
-		love.graphics.setColor(0,255,255)
-		love.graphics.rectangle("fill", minimapLength/2 + player.x/minimapXfactor, minimapHeight/2 + player.y/minimapYfactor, 4, 4)
-		love.graphics.translate(-minimapX, -minimapY)
+	-- FPS
+	if (true) then -- if(DEBUG) ?
 		love.graphics.setColor(255,255,255)
+		love.graphics.print("FPS : "..love.timer.getFPS(), wScr-100, 10)
+	end
+
 	end
 
 	-- help
@@ -88,4 +57,46 @@ ui.draw = function()
 		helpText = ui.helpText
 	end
 	love.graphics.print(helpText, moneyBarX, moneyBarY + 50)
+end
+
+ui.drawMinimap = function()
+	love.graphics.translate(minimapX, minimapY)
+	love.graphics.setColor(20,10,10)
+	love.graphics.rectangle("fill", 0,0, minimapLength, minimapHeight)
+	love.graphics.setColor(10,20,10)
+	love.graphics.rectangle("fill", (mapMinX - subMapMinX)/ minimapXfactor, (mapMinY - subMapMinY) / minimapYfactor, (mapMaxX - mapMinX) / minimapXfactor, (mapMaxY - mapMinY) / minimapYfactor)
+	-- small optimization (or is it?)
+	local minimapXfactor, minimapYfactor = minimapXfactor, minimapYfactor
+
+	-- outlines
+	love.graphics.setColor(0,0,0)
+	love.graphics.rectangle("line", 0,0, minimapLength, minimapHeight)
+	love.graphics.setColor(100,100,100)
+	love.graphics.rectangle("line", (mapMinX - subMapMinX)/ minimapXfactor, (mapMinY - subMapMinY) / minimapYfactor, (mapMaxX - mapMinX) / minimapXfactor, (mapMaxY - mapMinY) / minimapYfactor)
+
+	-- all the dudes
+	for _, d in ipairs(dudes) do
+		local miniSize, miniColors
+		if (d:class() == "poor") then
+			miniColors = poorColor
+			miniSize = 3
+		elseif (d:class() == "middle") then
+			miniColors = middleColor
+			miniSize = 1
+		elseif (d:class() == "rich") then
+			miniColors = richColor
+			miniSize = 3
+		elseif (d:class() == "rich+") then
+			miniColors = richPlusColor
+			miniSize = 5
+		end
+
+		love.graphics.setColor(miniColors)
+		love.graphics.rectangle("fill", minimapLength/2 + d.x/minimapXfactor, minimapHeight/2 + d.y/minimapYfactor, miniSize, miniSize)
+	end
+	-- player
+	love.graphics.setColor(0,255,255)
+	love.graphics.rectangle("fill", minimapLength/2 + player.x/minimapXfactor, minimapHeight/2 + player.y/minimapYfactor, 4, 4)
+	love.graphics.translate(-minimapX, -minimapY)
+	love.graphics.setColor(255,255,255)
 end
