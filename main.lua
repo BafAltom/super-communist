@@ -88,7 +88,7 @@ function love.keypressed(k)
 			PAUSE = true
 			displayMenu = true
 		else
-			player.keypressed(k)
+			world.keypressed(k)
 			ui.keypressed(k)
 		end
 	end

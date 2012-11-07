@@ -62,3 +62,7 @@ world.draw = function()
 	love.graphics.translate(-_offsetX*_scaleFactor,-_offsetY*_scaleFactor)
 	love.graphics.scale(1/_scaleFactor, 1/_scaleFactor)
 end
+
+world.keypressed = function(k)
+	player.keypressed(k)
+end
