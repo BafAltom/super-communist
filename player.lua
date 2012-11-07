@@ -7,7 +7,7 @@ player.initialize = function()
 	player.y = (mapMinY + mapMaxY)/2
 	player.money = 0
 	player.corrupted = false
-	player.corruptSpurtTimer = 0
+	player.corruptLeakTimer = 0
 	player.speedX = 0
 	player.speedY = 0
 	player.invulnTimer =  0
@@ -88,17 +88,17 @@ player.update = function(dt)
 		if (player.money < 3*playerMaxMoney/4) then
 			player.corrupted = false
 		end
-		if (player.corruptSpurtTimer <= 0) then
-			player.corruptSpurtTimer = playerCorruptionSpurtTimer
-			player:updateMoney(-playerCorruptionSpurtValue)
+		if (player.corruptLeakTimer <= 0) then
+			player.corruptLeakTimer = playerCorruptionLeakTimer
+			player:updateMoney(-playerCorruptionLeakValue)
 			local _dirX, _dirY = math.random(-100,100)/100, math.random(-100,100)/100
-			CoinClass.createCoinBatchWithDirection(player.x, player.y, playerCorruptionSpurtValue, _dirX, _dirY)
+			CoinClass.createCoinBatchWithDirection(player.x, player.y, playerCorruptionLeakValue, _dirX, _dirY)
 		end
 	end
 
 	-- timer
 	if (player.invulnTimer > 0) then player.invulnTimer = player.invulnTimer - dt end
-	if (player.corruptSpurtTimer > 0) then player.corruptSpurtTimer = player.corruptSpurtTimer - dt end
+	if (player.corruptLeakTimer > 0) then player.corruptLeakTimer = player.corruptLeakTimer - dt end
 end
 
 player.attack = function(weaponRadius)
@@ -137,9 +137,9 @@ end
 
 player.keypressed = function(k)
 	if (k == "lshift") then
-		player.moneyDrop(playerDropAmount)
+		player.moneyDrop(playerMegaDropAmount)
 	elseif (k == "e") then
-		player.moneyDrop(playerMinidropAmount)
+		player.moneyDrop(playerMiniDropAmount)
 	end
 end
 

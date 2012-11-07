@@ -63,12 +63,12 @@
 	playerMaxMoney = 1000
 	playerWeaponRadiusSpeed = 60
 	playerWeaponRadiusMax = 100
-	playerDropAmount = 100
-	playerMinidropAmount = 10
+	playerMegaDropAmount = 100
+	playerMiniDropAmount = 30
 	playerInvulnTimeByHit = 0.5
 	playerCorruptionSpeedFactor = 0.25
-	playerCorruptionSpurtTimer = 1
-	playerCorruptionSpurtValue = 50
+	playerCorruptionLeakTimer = 1
+	playerCorruptionLeakValue = 50
 
 -- DUDES CONSTANTS
 	numberOfDudes = 50
