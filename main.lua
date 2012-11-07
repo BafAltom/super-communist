@@ -39,7 +39,6 @@ function love.load()
 	-- Note : each class handle its initialization
 
 	displayMenu = true
-
 end
 
 function love.draw()
@@ -62,16 +61,12 @@ function love.draw()
 			displayMenu = true
 		end
 	end
-
-
 end
 
 function love.update(dt)
-
 	if (not PAUSE and not displayMenu) then
 		world.update(dt)
 	end
-
 end
 
 function love.keypressed(k)

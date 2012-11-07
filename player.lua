@@ -129,11 +129,17 @@ player.updateMoney = function(player, amount)
 	end
 end
 
+player.moneyDrop = function(amount)
+	droppedAmount = math.min(player.money, amount)
+	CoinClass.createCoinBatch(player.x, player.y, droppedAmount)
+	player.money = player.money - droppedAmount
+end
+
 player.keypressed = function(k)
-	if (k == "lshift") then -- money drop
-		droppedAmount = math.min(player.money, playerNumberOfCoinsByDrop)
-		CoinClass.createCoinBatch(player.x, player.y, droppedAmount)
-		player.money = player.money - droppedAmount
+	if (k == "lshift") then
+		player.moneyDrop(playerDropAmount)
+	elseif (k == "e") then
+		player.moneyDrop(playerMinidropAmount)
 	end
 end
 

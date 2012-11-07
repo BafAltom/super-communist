@@ -40,7 +40,11 @@
 	subMapMinX = -1000
 	subMapMaxY = 1000
 	subMapMinY = -1000
-	function isInSubMap(x,y)	return (x < mapMinX or x > mapMaxX or y < mapMinY or y > mapMaxY) end
+
+	function isInSubMap(x,y)
+		return (x < mapMinX or x > mapMaxX or y < mapMinY or y > mapMaxY)
+	end
+
 	function randomPointInSubMapCorners()
 		isDown = math.random(0,1) -- up/down?
 		isRight = math.random(0,1) -- left/right?
@@ -48,7 +52,6 @@
 		cornerY = math.random(0, subMapMaxY - mapMaxY)
 
 		return (-subMapMaxX + isRight*(subMapMaxX + mapMaxX) + cornerX), (-subMapMaxY + isDown*(subMapMaxY + mapMaxY) + cornerY)
-
 	end
 
 -- PLAYER CONSTANTS
@@ -60,7 +63,8 @@
 	playerMaxMoney = 1000
 	playerWeaponRadiusSpeed = 60
 	playerWeaponRadiusMax = 100
-	playerNumberOfCoinsByDrop = 100
+	playerDropAmount = 100
+	playerMinidropAmount = 10
 	playerInvulnTimeByHit = 0.5
 	playerCorruptionSpeedFactor = 0.25
 	playerCorruptionSpurtTimer = 1
