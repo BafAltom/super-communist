@@ -7,7 +7,7 @@ end
 	--[[
 	assert(distance2Points(0,0,3,4) == 5)
 	assert(distance2Points(1,2,1,2) == 0)
-	assert(distance2Points(5,5,6,6) == math.sqrt(2))
+	assert(distance2Points(-1,-1,1,1) == 2*math.sqrt(2))
 	--]]
 
 function distance2Entities(ent1, ent2)
@@ -15,8 +15,9 @@ function distance2Entities(ent1, ent2)
 end
 
 findClosestOf = function(entities, origin, maxDistance)
+	--[[
 	-- parameters :
-	--		entities		a list of entities (e.g. "dudes" or "coins")
+	--		entities		a list of entities (e.g. 'dudes' or 'coins')
 	--		origin			the entity which we want the closest of (that can't be correct English)
 	--		maxDistance		0 to disable
 	-- return :
@@ -24,6 +25,7 @@ findClosestOf = function(entities, origin, maxDistance)
 	--		nil				if the list is empty or maxDistance was provided and too restrictive
 	-- remark(s) :
 	--		if origin is present in entities, it will be ignored
+	]]
 
 	local closestEnt = nil
 	local closestDistance = maxDistance

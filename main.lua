@@ -49,7 +49,7 @@ function love.draw()
 		ui:draw()
 
 		-- WIN
-		if (dudes.allMiddle()) then
+		if (dudes.areAllMiddle()) then
 			menu.setState("won")
 			displayMenu = true
 		end

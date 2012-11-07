@@ -476,11 +476,21 @@ dudes.find = function(id)
 	return nil
 end
 
-dudes.allMiddle = function()
+dudes.areAllMiddle = function()
 	for _, d in ipairs(dudes) do
 		if (d:class() ~= "middle") then
 			return false
 		end
 	end
 	return true
+end
+
+dudes.getAllRichPlus = function()
+	correspondingDudes = {}
+	for _,d in ipairs(dudes) do
+		if (d:class() == "rich+") then
+			table.insert(correspondingDudes, d)
+		end
+	end
+	return correspondingDudes
 end

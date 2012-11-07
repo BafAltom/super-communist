@@ -18,6 +18,7 @@ world.update = function(dt)
 	for fbN,fb in ipairs(fireballs) do
 		fb:update(dt)
 	end
+
 end
 
 world.draw = function()
@@ -27,6 +28,15 @@ world.draw = function()
 
 	for dudeN,dude in ipairs(dudes) do
 		dude:draw()
+	end
+
+	local _richesPlus = dudes.getAllRichPlus()
+	for rdN, rd in ipairs(_richesPlus) do
+		if (not world.isEntityInScreen(rd, 0)) then
+			local _richPlusDirX, _richPlusDirY = myVector(player.x, player.y, rd.x, rd.y, 50)
+			love.graphics.setColor(255,255,255)
+			love.graphics.line(player.x, player.y, player.x + _richPlusDirX, player.y + _richPlusDirY)
+		end
 	end
 
 	for coinN, coin in ipairs(coins) do
@@ -80,4 +90,11 @@ end
 world.inverseTranslateAxes = function()
 	love.graphics.translate(-world.offsetX * world.scaleFactor, -world.offsetY * world.scaleFactor)
 	love.graphics.scale(1/world.scaleFactor, 1/world.scaleFactor)
+end
+
+world.isEntityInScreen = function(entity, tolerance)
+--tolerance : allow the entity to be outside (> 0) or inside (< 0) the screen by that amount of pixels
+	local _outByX = math.abs(entity.x - player.x) > wScr/2 + tolerance
+	local _outByY = math.abs(entity.y - player.y) > hScr/2 + tolerance
+	return not (_outByX or _outByY)
 end
