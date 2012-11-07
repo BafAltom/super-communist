@@ -94,6 +94,7 @@ end
 
 world.isEntityInScreen = function(entity, tolerance)
 --tolerance : allow the entity to be outside (> 0) or inside (< 0) the screen by that amount of pixels
+-- remark : this suppose that the screen is centered on the player
 	local _outByX = math.abs(entity.x - player.x) > wScr/2 + tolerance
 	local _outByY = math.abs(entity.y - player.y) > hScr/2 + tolerance
 	return not (_outByX or _outByY)
