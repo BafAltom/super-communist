@@ -125,6 +125,7 @@ player.updateMoney = function(player, amount)
 	player.money = player.money + amount
 
 	if (player.money > playerMaxMoney) then
+		player.life = player.life - 1
 		player.corrupted = true
 	end
 end

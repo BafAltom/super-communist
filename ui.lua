@@ -3,6 +3,7 @@ ui.displayHelp = false
 ui.helpHiddenText = "press H to display help"
 ui.helpText = "Use WASD or ZSQD to move (both work)\nUse the Spacebar to attack (you'll figure it out)\nPress Shift to drop money and e to drop less money\nYour Goal : Remove all inegalities!\nGood Luck!\n\nPress h to hide this text"
 ui.displayMinimap = true
+ui.displayShop = false
 
 ui.update = function(dt)
 
@@ -15,6 +16,23 @@ ui.keypressed = function(k)
 end
 
 ui.draw = function()
+
+	-- rich+ indicator
+	local _richesPlus = dudes.getAllRichPlus()
+	for rdN, rd in ipairs(_richesPlus) do
+		if (not world.isEntityInScreen(rd, 0)) then
+			local _richPlusDirX, _richPlusDirY = myVector(player.x, player.y, rd.x, rd.y, 50)
+			love.graphics.setColor(255,255,255)
+			local _d = player.dudeSize()*2
+			love.graphics.circle("line", wScr/2, hScr/2, _d)
+			local _cos = (rd.y - player.y) / (1.0*distance2Entities(player, rd))
+			local _sin = (rd.x - player.x) / (1.0*distance2Entities(player, rd))
+			local _indicX = wScr/2 + _sin*_d
+			local _indicY = hScr/2 + _cos*_d
+			love.graphics.line(_indicX, _indicY, _indicX + _richPlusDirX, _indicY + _richPlusDirY)
+		end
+	end
+
 	-- money bar
 	local barLength = math.min(moneyBarLength-2, player.money/moneyBar_moneyByPx)
 	love.graphics.setColor(255,255,255)

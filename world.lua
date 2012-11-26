@@ -30,15 +30,6 @@ world.draw = function()
 		dude:draw()
 	end
 
-	local _richesPlus = dudes.getAllRichPlus()
-	for rdN, rd in ipairs(_richesPlus) do
-		if (not world.isEntityInScreen(rd, 0)) then
-			local _richPlusDirX, _richPlusDirY = myVector(player.x, player.y, rd.x, rd.y, 50)
-			love.graphics.setColor(255,255,255)
-			love.graphics.line(player.x, player.y, player.x + _richPlusDirX, player.y + _richPlusDirY)
-		end
-	end
-
 	for coinN, coin in ipairs(coins) do
 		coin:draw()
 	end

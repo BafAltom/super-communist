@@ -8,7 +8,6 @@ Begun : Sunday March 4th (supposed worktime: 7 days, delay: still counting)
 RANDOM IDEAS:
 - "Godly events" : Economy crash, Oil pit, Technology : try to rebalance the economy inline
 - Shop : for heart containers and "communist-like" power-ups (shield for poor, )
-- rich+ indicator (point to it on the edge of the screen, L4D2/Portal2-like)
 ]]--
 
 
@@ -17,7 +16,7 @@ function love.load()
 	if (DEBUG) then
 		_seed = "I think it's better to have deterministic tests"
 	else
-		_seed = os.time() -- apparently this is done by default in love.run...
+		_seed = os.time()
 	end
 	math.randomseed(_seed)
 	math.random();math.random();math.random()
