@@ -92,7 +92,10 @@ CoinClass.findClosestDude = function(coin)
 			table.insert(_filteredDudes, d)
 		end
 	end
-	table.insert(_filteredDudes, player)
+	-- add player to the table, except if he's corrupted
+	if (not player.corrupted) then
+		table.insert(_filteredDudes, player)
+	end
 
 	local _closestDude = findClosestOf(_filteredDudes, coin, coinsAttractionDistance)
 
