@@ -14,7 +14,7 @@ CoinClass.getNextID = function()
 end
 
 CoinClass.normalizeSpeed = function(coin, speed)
-	coin.speedX, coin.speedY = myVector(0, 0, coin.speedX, coin.speedY, speed)
+	coin.speedX, coin.speedY = bafaltomVector(0, 0, coin.speedX, coin.speedY, speed)
 end
 
 CoinClass.createCoinBatch = function(x, y, totalValue)
@@ -76,7 +76,7 @@ CoinClass.update = function(coin, dt)
 	coin.speedY = coin.speedY + coin.accY*dt
 	local _actualSpeed = math.sqrt(coin.speedX*coin.speedX + coin.speedY*coin.speedY)
 	if (_actualSpeed > coinsMaxSpeed) then
-		coin.speedX, coin.speedY = myVector(0, 0, coin.speedX, coin.speedY, coinsMaxSpeed)
+		coin.speedX, coin.speedY = bafaltomVector(0, 0, coin.speedX, coin.speedY, coinsMaxSpeed)
 	end
 
 	-- Pos Update
@@ -126,6 +126,14 @@ CoinClass.draw = function(coin) -- TODO clean up a bit?
 			love.graphics.line(coin.x,coin.y,_closestDude.x, _closestDude.y)
 		end
 	end
+end
+
+CoinClass.getX = function(coin)
+	return coin.x
+end
+
+CoinClass.getY = function(coin)
+	return coin.y
 end
 
 -------------------------------------------------------------------

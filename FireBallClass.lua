@@ -39,6 +39,14 @@ FireBallClass.draw = function(fb)
 	love.graphics.circle("fill", fb.x, fb.y, 5, 20)
 end
 
+FireBallClass.getX = function(fb)
+	return fb.x
+end
+
+FireBallClass.getY = function(fb)
+	return fb.y
+end
+
 FireBallClass.new = function(sender, destX, destY)
 	local fb = {}
 	setmetatable(fb, {__index = FireBallClass})
@@ -47,7 +55,7 @@ FireBallClass.new = function(sender, destX, destY)
 	fb.x = sender.x
 	fb.y = sender.y
 
-	fb.speedX, fb.speedY = myVector(sender.x, sender.y, destX, destY, fireballSpeed)
+	fb.speedX, fb.speedY = bafaltomVector(sender.x, sender.y, destX, destY, fireballSpeed)
 
 	fb.lifeTime = fireballLifeTime
 

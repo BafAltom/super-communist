@@ -1,23 +1,28 @@
+--[[
+##############
+# BAFALTOM2D #	v1.0
+##############
+
+A "good enough" and simple-to-use graphic library for the LOVE framework
+
+Deal with "Entities", i.e. any objects with getX() and getY() methods.
+
+]]
+
 function distance2Points(x1, y1, x2, y2)
 	local dxx = (x2-x1)
 	local dyy = (y2-y1)
 	return math.sqrt(dxx^2 + dyy^2)
 end
 
-	--[[
-	assert(distance2Points(0,0,3,4) == 5)
-	assert(distance2Points(1,2,1,2) == 0)
-	assert(distance2Points(-1,-1,1,1) == 2*math.sqrt(2))
-	--]]
-
 function distance2Entities(ent1, ent2)
-	return distance2Points(ent1.x, ent1.y, ent2.x, ent2.y)
+	return distance2Points(ent1:getX(), ent1:getY(), ent2:getX(), ent2:getY())
 end
 
 findClosestOf = function(entities, origin, maxDistance)
 	--[[
 	-- parameters :
-	--		entities		a list of entities (e.g. 'dudes' or 'coins')
+	--		entities		a list of entities
 	--		origin			the entity which we want the closest of (that can't be correct English)
 	--		maxDistance		0 to disable
 	-- return :
@@ -32,8 +37,8 @@ findClosestOf = function(entities, origin, maxDistance)
 
 	for _,e in ipairs(entities) do
 		if (maxDistance == 0
-			or math.abs(e.x - origin.x) < closestDistance -- optimization
-			or math.abs(e.y - origin.y) < closestDistance
+			or math.abs(e:getX() - origin:getX()) < closestDistance -- optimization
+			or math.abs(e:getY() - origin:getY()) < closestDistance
 			) then
 			local temp_distance = distance2Entities(e, origin)
 			if (temp_distance < closestDistance and e ~= origin) then
@@ -46,7 +51,7 @@ findClosestOf = function(entities, origin, maxDistance)
 	return closestEnt
 end
 
-function myVector(startX, startY, endX, endY, desiredNorm)
+function bafaltomVector(startX, startY, endX, endY, desiredNorm)
 	-- return the (x,y) coordinates of a vector of direction (startX, startY)->(endX, endY) and of norm desiredNorm
 	local _currentNorm = distance2Points(startX, startY, endX, endY)
 	local _normFactor = desiredNorm / _currentNorm

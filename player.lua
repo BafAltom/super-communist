@@ -119,6 +119,8 @@ end
 
 player.dudeSize = function() return playerSize end
 player.class = function() return "player" end
+player.getX = function() return player.x end
+player.getY = function() return player.y end
 
 player.updateMoney = function(player, amount)
 	-- negative/positive amount : take/give money

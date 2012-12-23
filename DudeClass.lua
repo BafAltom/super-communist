@@ -98,7 +98,7 @@ DudeClass.draw = function(dude)
 		local _attackedDude = dude.currentPrey
 		local _attackBuildUpFactor = 1-(dude.attackTimer/richHitTimer)
 		local _distance = distance2Entities(dude, _attackedDude)
-		local _endX, _endY = myVector(dude.x, dude.y, _attackedDude.x, _attackedDude.y, _distance*_attackBuildUpFactor)
+		local _endX, _endY = bafaltomVector(dude.x, dude.y, _attackedDude.x, _attackedDude.y, _distance*_attackBuildUpFactor)
 		love.graphics.setColor(255,69,0, 255*_attackBuildUpFactor)
 		love.graphics.line(dude.x, dude.y, dude.x + _endX, dude.y + _endY)
 	end
@@ -255,7 +255,7 @@ end
 
 DudeClass.dudePush = function(dude, smallerDude)
 	if (not (dude.x == smallerDude.x and dude.y == smallerDude.y)) then
-		local _translationX, _translationY = myVector(dude.x, dude.y, smallerDude.x, smallerDude.y, dude:dudeSize()*2)
+		local _translationX, _translationY = bafaltomVector(dude.x, dude.y, smallerDude.x, smallerDude.y, dude:dudeSize()*2)
 		smallerDude.x, smallerDude.y = dude.x + _translationX, dude.y + _translationY
 	else -- hotfix
 		smallerDude.x = smallerDude.x + dude:size()*2
@@ -286,6 +286,13 @@ DudeClass.findClosestCoin = function(dude)
 	return findClosestOf(coins, dude, dudeAttractionDistance)
 end
 
+DudeClass.getX = function(dude)
+	return dude.x
+end
+
+DudeClass.getY = function(dude)
+	return dude.y
+end
 
 DudeClass.dudeSize = function(dude)
 	return math.max(5, dude.money/10)
@@ -332,7 +339,7 @@ DudeClass.calculateSpeed = function(dude)
 
 	local _actualSpeed = math.sqrt(dude.speedX^2 + dude.speedY^2)
 	if (_actualSpeed > dudeMaxSpeed) then
-		dude.speedX, dude.speedY = myVector(0,0,dude.speedX, dude.speedY, dudeMaxSpeed)
+		dude.speedX, dude.speedY = bafaltomVector(0,0,dude.speedX, dude.speedY, dudeMaxSpeed)
 	end
 end
 

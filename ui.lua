@@ -21,7 +21,7 @@ ui.draw = function()
 	local _richesPlus = dudes.getAllRichPlus()
 	for rdN, rd in ipairs(_richesPlus) do
 		if (not world.isEntityInScreen(rd, 0)) then
-			local _richPlusDirX, _richPlusDirY = myVector(player.x, player.y, rd.x, rd.y, 50)
+			local _richPlusDirX, _richPlusDirY = bafaltomVector(player.x, player.y, rd.x, rd.y, 50)
 			love.graphics.setColor(255,255,255)
 			local _d = player.dudeSize()*2
 			love.graphics.circle("line", wScr/2, hScr/2, _d)
