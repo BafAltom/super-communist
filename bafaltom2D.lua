@@ -1,6 +1,6 @@
 --[[
 ##############
-# BAFALTOM2D #	v1.0
+# BAFALTOM2D #
 ##############
 
 A "good enough" and simple-to-use graphic library for the LOVE framework
@@ -58,4 +58,13 @@ function bafaltomVector(startX, startY, endX, endY, desiredNorm)
 	local _dx = endX - startX
 	local _dy = endY - startY
 	return _dx*_normFactor, _dy*_normFactor
+end
+
+function bafaltomAngle(x1, y1, x2, y2)
+	-- return the angle between the line ((x1, y1),(x2,y2)) and the horizontal line in (x1,y1)
+	return math.atan2(y2-y1,x2-x1)
+end
+
+function bafaltomAngle2Entities(e1, e2)
+	return bafaltomAngle(e1:getX(), e1:getY(), e2:getX(), e2:getY())
 end
