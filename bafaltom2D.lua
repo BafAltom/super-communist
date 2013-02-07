@@ -19,36 +19,40 @@ function distance2Entities(ent1, ent2)
 	return distance2Points(ent1:getX(), ent1:getY(), ent2:getX(), ent2:getY())
 end
 
-findClosestOf = function(entities, origin, maxDistance)
+function findClosestOf(entities, origin, maxDistance)
 	--[[
 	-- parameters :
-	--		entities		a list of entities
-	--		origin			the entity which we want the closest of (that can't be correct English)
-	--		maxDistance		0 to disable
+	--		entities				a list of entities
+	--		origin					the entity which we want the closest of (that can't be correct English)
+	--		maxDistance				nil to disable
 	-- return :
-	--		an entity		which is the closest in the list
-	--		nil				if the list is empty or maxDistance was provided and too restrictive
+	--		the closest entity		(nil if the list is empty or maxDistance was provided and too restrictive)
+	--		the	distance			(nil if the list is empty or maxDistance was provided and too restrictive)
 	-- remark(s) :
 	--		if origin is present in entities, it will be ignored
 	]]
+
+	if #entities == 0 then
+		return nil, nil
+	end
+
+	if (not maxDistance) then
+		maxDistance = distance2Entities(entities[0], origin)
+	end
 
 	local closestEnt = nil
 	local closestDistance = maxDistance
 
 	for _,e in ipairs(entities) do
-		if (maxDistance == 0
-			or math.abs(e:getX() - origin:getX()) < closestDistance -- optimization
-			or math.abs(e:getY() - origin:getY()) < closestDistance
-			) then
-			local temp_distance = distance2Entities(e, origin)
-			if (temp_distance < closestDistance and e ~= origin) then
+		if e~= origin and math.abs(e:getX() - origin:getX()) < closestDistance and math.abs(e:getY() - origin:getY()) < closestDistance then
+			local _distance = distance2Entities(e, origin)
+			if (_distance < closestDistance) then
 				closestEnt = e
-				closestDistance = temp_distance
+				closestDistance = _distance
 			end
 		end
 	end
-
-	return closestEnt
+	return closestEnt, closestDistance
 end
 
 function bafaltomVector(startX, startY, endX, endY, desiredNorm)
@@ -58,6 +62,14 @@ function bafaltomVector(startX, startY, endX, endY, desiredNorm)
 	local _dx = endX - startX
 	local _dy = endY - startY
 	return _dx*_normFactor, _dy*_normFactor
+end
+
+function bafaltomAddVectors(...)
+	local x,y = 0,0
+	for i = 1,#args,2 do
+		x, y = x + args[i], y + args[i+1]
+	end
+	return x, y
 end
 
 function bafaltomAngle(x1, y1, x2, y2)
