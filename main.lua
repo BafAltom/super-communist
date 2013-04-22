@@ -8,6 +8,7 @@ Begun : Sunday March 4th (supposed worktime: 7 days, delay: still counting)
 RANDOM IDEAS:
 - "Godly events" : Economy crash, Oil pit, Technology : try to rebalance the economy inline
 - Shop : for heart containers and "communist-like" power-ups (shield for poor, )
+- Refactor : make methods in player, ui, world, etc? use the standard "inst.foo(inst, param)" to be called with "inst:foo(param)"
 ]]--
 
 
@@ -33,6 +34,7 @@ function love.load()
 	require "FireBallClass"
 	require "world"
 	require "ui"
+	require "shop"
 	require "player"
 	require "bafaltom2D"
 	-- Note : each class handle its initialization
@@ -46,6 +48,13 @@ function love.draw()
 	else
 		world:draw()
 		ui:draw()
+		shop:draw()
+	end
+end
+
+function love.update(dt)
+	if (not PAUSE and not displayMenu) then
+		world.update(dt)
 
 		-- WIN
 		if (dudes.areAllMiddle()) then
@@ -59,12 +68,6 @@ function love.draw()
 			PAUSE = true
 			displayMenu = true
 		end
-	end
-end
-
-function love.update(dt)
-	if (not PAUSE and not displayMenu) then
-		world.update(dt)
 	end
 end
 
@@ -82,8 +85,8 @@ function love.keypressed(k)
 			PAUSE = true
 			displayMenu = true
 		else
-			world.keypressed(k)
-			ui.keypressed(k)
+			world:keypressed(k)
+			ui:keypressed(k)
 		end
 	end
 end

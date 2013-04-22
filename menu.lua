@@ -18,6 +18,7 @@ function menu.update(dt)
 end
 
 function menu.draw()
+	love.graphics.setColor(255,255,255,255)
 	love.graphics.print(menu.text[menu.state], wScr/2, hScr/2)
 	love.graphics.print("Press enter to start a new game", wScr/2, hScr/2+10)
 	if (menu.state == "pause") then love.graphics.print("Press space to resume", wScr/2, hScr/2+20) end

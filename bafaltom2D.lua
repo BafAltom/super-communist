@@ -37,7 +37,7 @@ function findClosestOf(entities, origin, maxDistance)
 	end
 
 	if (not maxDistance) then
-		maxDistance = distance2Entities(entities[0], origin)
+		maxDistance = 2*distance2Entities(entities[1], origin)
 	end
 
 	local closestEnt = nil
@@ -70,6 +70,10 @@ function bafaltomAddVectors(...)
 		x, y = x + args[i], y + args[i+1]
 	end
 	return x, y
+end
+
+function dotProduct(v1x, v1y, v2x, v2y)
+	return v1x*v2x + v1y + v2y
 end
 
 function bafaltomAngle(x1, y1, x2, y2)

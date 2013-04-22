@@ -9,7 +9,7 @@ ui.update = function(dt)
 
 end
 
-ui.keypressed = function(k)
+ui.keypressed = function(ui, k)
 	if (k == "h") then
 		ui.displayHelp = not ui.displayHelp
 	end

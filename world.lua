@@ -1,3 +1,5 @@
+require "shop"
+
 world = {}
 
 world.offsetX = 0
@@ -7,6 +9,7 @@ world.scaleFactor = 1
 world.update = function(dt)
 	player.update(dt)
 	ui.update(dt)
+	shop:update(dt)
 	for dudeN,dude in ipairs(dudes) do
 		dude:update(dt)
 	end
@@ -43,8 +46,13 @@ world.draw = function()
 	world.inverseTranslateAxes()
 end
 
-world.keypressed = function(k)
-	player.keypressed(k)
+world.keypressed = function(world, k)
+	if (k == "tab" and not shop.opened) then
+		shop:open()
+	elseif shop.opened then
+		shop:keypressed(k)
+	end
+	player:keypressed(k)
 end
 
 world.drawMapGrid = function()

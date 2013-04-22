@@ -28,6 +28,7 @@
 	picRichMoney = love.graphics.newImage("rich_moneyPursuing.png")
 	picHeartFull = love.graphics.newImage("heart_full.png")
 	picHeartEmpty = love.graphics.newImage("heart_empty.png")
+	picItemPlaceHolder = love.graphics.newImage("item_placeholder.png")
 
 -- MAPS CONSTANTS
 	-- TODO : Change all of those with two variables "mapSize" and "subMapSize" (easier)
@@ -147,3 +148,10 @@
 	minimapHeight = 150
 	minimapXfactor = (subMapMaxX - subMapMinX)/minimapLength
 	minimapYfactor = (subMapMaxY - subMapMinY)/minimapHeight
+
+-- SHOP CONSTANTS
+	shopRectangle = {0, hScr/5, 4*wScr/5, 3*hScr/4}
+	shopItemSize = {150, 150}
+	shopItemMargin = 10
+	shopFadeTime = 0.5
+	shopItemPerRow = math.floor(shopRectangle[3]/(shopItemSize[1] + shopItemMargin))

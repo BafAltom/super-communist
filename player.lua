@@ -139,7 +139,7 @@ player.moneyDrop = function(amount)
 	player.money = player.money - droppedAmount
 end
 
-player.keypressed = function(k)
+player.keypressed = function(player, k)
 	if (k == "lshift") then
 		player.moneyDrop(playerMegaDropAmount)
 	elseif (k == "e") then

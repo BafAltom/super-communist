@@ -27,7 +27,7 @@ DudeClass.draw = function(dude)
 	local _dudeSize = dude:dudeSize()
 	---[[ SIMPLE GRAPHICS
 	-- draw shape
-	if (dude:class() == "rich+") then
+	if (true or dude:class() == "rich+") then
 		local _fillage
 		if (dude.invulnTimer <= 0) then
 			_fillage = "fill"
@@ -39,7 +39,7 @@ DudeClass.draw = function(dude)
 	--]]
 
 	---[[ PICTURE GRAPHICS
-	if (dude.dudeAnim and dude.dudePic) then
+	if (false and dude.dudeAnim and dude.dudePic) then
 		local _directionIsLeft, _alpha = 1, 255
 		if (dude.speedX > 0) then
 			_directionIsLeft = -1
