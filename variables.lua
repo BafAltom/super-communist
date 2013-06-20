@@ -155,3 +155,4 @@
 	shopItemMargin = 10
 	shopFadeTime = 0.5
 	shopItemPerRow = math.floor(shopRectangle[3]/(shopItemSize[1] + shopItemMargin))
+

@@ -16,18 +16,35 @@ shop.active = false
 
 table.insert(shop.items, newItem("YOU WIN", picItemPlaceHolder, "That is totally OP!", 10))
 table.insert(shop.items, newItem("YOU LOOSE", picItemPlaceHolder, "Why would I buy this?", 10))
+table.insert(shop.items, newItem("YOU WIN", picItemPlaceHolder, "That is totally OP!", 10))
+table.insert(shop.items, newItem("YOU LOOSE", picItemPlaceHolder, "Why would I buy this?", 10))
+table.insert(shop.items, newItem("YOU WIN", picItemPlaceHolder, "That is totally OP!", 10))
+table.insert(shop.items, newItem("YOU LOOSE", picItemPlaceHolder, "Why would I buy this?", 10))
+
+function shop.rowCount(shop)
+	return math.floor(#shop.items / shopItemPerRow)
+end
+function shop.itemCntInRow(shop, rowNumber)
+	assert(0 <= rowNumber, "itemNbrInShopRow: rowNumber must be > 0")
+	assert(rowNumber <= shop:rowCount(), "itemNbrInShopRow: rowNumber must be < shopRowCount ("..shop:rowCount()..")")
+	if (rowNumber < shop:rowCount()) then
+		return shopItemPerRow
+	else
+		return #shop.items % shopItemPerRow
+	end
+end
 
 function shop.draw(shop)
 	if shop.opened then
-		fade = math.max(0, math.min(1, shop.fadeTimer))/shopFadeTime
-		love.graphics.translate(-shopRectangle[3]*(1-fade), 0)
+		fadeFactor = math.max(0, math.min(1, shop.fadeTimer))/shopFadeTime
+		love.graphics.translate(-shopRectangle[3]*(1-fadeFactor), 0)
 		love.graphics.setColor(0,0,0, 100)
 		love.graphics.rectangle("fill", shopRectangle[1], shopRectangle[2], shopRectangle[3], shopRectangle[4])
 		for i, item in ipairs(shop.items) do
 			local _column = (i-1) % shopItemPerRow
 			local _row = math.floor((i-1) / shopItemPerRow)
 			local _x = shopRectangle[1] + shopItemMargin + (shopItemSize[1] + shopItemMargin)*_column
-			local _y = shopRectangle[2] + shopItemMargin + shopItemSize[2]*_row
+			local _y = shopRectangle[2] + shopItemMargin + (shopItemMargin + shopItemSize[2])*_row
 
 			love.graphics.setColor(0,0,0,255)
 			if (_column == shop.currentCol and _row == shop.currentRow) then
@@ -42,7 +59,7 @@ function shop.draw(shop)
 			love.graphics.print(item.price, _x + shopItemSize[1] - 15, _y)  -- price
 			love.graphics.setColor(255,255,255,255)
 		end
-		love.graphics.translate(shopRectangle[3]*fade, 0)
+		love.graphics.translate(shopRectangle[3]*fadeFactor, 0)
 	end
 end
 
@@ -55,7 +72,7 @@ function shop.update(shop, dt)
 			shop.fadeOut = false
 		end
 	elseif shop.fadeIn then
-		if shop.fadeTimer <= shopFadeTime then
+		if shop.fadeTimer < shopFadeTime then
 			shop.fadeTimer = shop.fadeTimer + dt
 		else
 			shop.active = true
@@ -83,10 +100,11 @@ function shop.keypressed(shop, k)
 	elseif (k == "left") then
 		shop.currentCol = math.max(0,shop.currentCol - 1)
 	elseif (k == "right") then
-		shop.currentCol = math.min(shopItemPerRow,shop.currentCol + 1)
+		shop.currentCol = math.min(shop:itemCntInRow(shop.currentRow)-1,shop.currentCol + 1)
+		print("shop.currentCol: "..shop.currentCol)
 	elseif (k == "up") then
 		shop.currentRow = math.max(0, shop.currentRow - 1)
 	elseif (k == "down") then
-		shop.currentRow = math.min(#shop.items % shopItemPerRow, shop.currentRow + 1)
+		shop.currentRow = math.min(shop:rowCount(), shop.currentRow + 1)
 	end
 end
