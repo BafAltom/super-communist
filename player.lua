@@ -1,6 +1,8 @@
 player = {}
 setmetatable(player, DudeClass)
 
+player.items = {}
+
 player.initialize = function()
 	player.id = 0
 	player.x = (mapMinX + mapMaxX)/2
@@ -124,6 +126,8 @@ player.getY = function() return player.y end
 
 player.updateMoney = function(player, amount)
 	-- negative/positive amount : take/give money
+	assert(player.money + amount >= 0, "player.updateMoney: player.money is "..player.money.." and amount is "..amount)
+
 	player.money = player.money + amount
 
 	if (player.money > playerMaxMoney) then
@@ -137,6 +141,18 @@ player.moneyDrop = function(amount)
 	droppedAmount = math.min(player.money, amount)
 	CoinClass.createCoinBatch(player.x, player.y, droppedAmount)
 	player.money = player.money - droppedAmount
+end
+
+player.getItem = function(item)
+	table.insert(player.items, item)
+	if (item.name == "YOU LOOSE") then
+		player.life = 0
+	elseif (item.name == "YOU WIN") then
+		print("cheater!")
+		player.life = 0
+	elseif (item.name == "Useless") then
+		assert(true == true, "42")
+	end
 end
 
 player.keypressed = function(player, k)

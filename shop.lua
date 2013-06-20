@@ -16,7 +16,7 @@ shop.active = false
 
 table.insert(shop.items, newItem("YOU WIN", picItemPlaceHolder, "That is totally OP!", 10))
 table.insert(shop.items, newItem("YOU LOOSE", picItemPlaceHolder, "Why would I buy this?", 10))
-table.insert(shop.items, newItem("YOU WIN", picItemPlaceHolder, "That is totally OP!", 10))
+table.insert(shop.items, newItem("Useless", picItemPlaceHolder, "I have too much money", 10))
 table.insert(shop.items, newItem("YOU LOOSE", picItemPlaceHolder, "Why would I buy this?", 10))
 table.insert(shop.items, newItem("YOU WIN", picItemPlaceHolder, "That is totally OP!", 10))
 table.insert(shop.items, newItem("YOU LOOSE", picItemPlaceHolder, "Why would I buy this?", 10))
@@ -24,6 +24,7 @@ table.insert(shop.items, newItem("YOU LOOSE", picItemPlaceHolder, "Why would I b
 function shop.rowCount(shop)
 	return math.floor(#shop.items / shopItemPerRow)
 end
+
 function shop.itemCntInRow(shop, rowNumber)
 	assert(0 <= rowNumber, "itemNbrInShopRow: rowNumber must be > 0")
 	assert(rowNumber <= shop:rowCount(), "itemNbrInShopRow: rowNumber must be < shopRowCount ("..shop:rowCount()..")")
@@ -32,6 +33,10 @@ function shop.itemCntInRow(shop, rowNumber)
 	else
 		return #shop.items % shopItemPerRow
 	end
+end
+
+function shop.itemNbr(shop, row, col)
+	return row*shopItemPerRow + col + 1
 end
 
 function shop.draw(shop)
@@ -48,7 +53,11 @@ function shop.draw(shop)
 
 			love.graphics.setColor(0,0,0,255)
 			if (_column == shop.currentCol and _row == shop.currentRow) then
-				love.graphics.setColor(255,255,255,255)
+				if (item.price > player.money) then
+					love.graphics.setColor(255,0,0,255)
+				else
+					love.graphics.setColor(255,255,255,255)
+				end
 			end
 			love.graphics.rectangle("line", _x, _y, shopItemSize[1], shopItemSize[2])
 			love.graphics.setColor(255,255,255,200)
@@ -101,10 +110,22 @@ function shop.keypressed(shop, k)
 		shop.currentCol = math.max(0,shop.currentCol - 1)
 	elseif (k == "right") then
 		shop.currentCol = math.min(shop:itemCntInRow(shop.currentRow)-1,shop.currentCol + 1)
-		print("shop.currentCol: "..shop.currentCol)
 	elseif (k == "up") then
 		shop.currentRow = math.max(0, shop.currentRow - 1)
 	elseif (k == "down") then
 		shop.currentRow = math.min(shop:rowCount(), shop.currentRow + 1)
+	elseif (k == "return") then
+		chosenItemNbr = shop:itemNbr(shop.currentRow, shop.currentCol)
+		print("chosenItemNbr :"..chosenItemNbr)
+		chosenItem = shop.items[chosenItemNbr]
+		print("chosenItem name : "..chosenItem.name)
+		if (player.money > chosenItem.price) then
+			player:updateMoney(-chosenItem.price)
+			player.getItem(chosenItem)
+			table.remove(shop.items, chosenItemNbr)
+		else
+			print("You cannot buy this, not enough money")
+			-- TODO: error sound or flash or something
+		end
 	end
 end
