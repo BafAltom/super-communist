@@ -4,10 +4,11 @@ super-communist
 In a nutshell
 -------------
 
-A LÖVE by Altom game about supernatural Robin Hood-ism, class struggle and optimal economic systems.
+A LÖVE game by Altom game about supernatural Robin Hood-ism, class struggle and optimal economic systems.
 Initially done for the March 2012 Experimental Gameplay Project (Theme: ECONOMY)
 
 More info about developing or running LÖVE games : https://love2d.org/ (it's easy and fun!)
+
 More info about Experimental Gameplay Project : http://experimentalgameplay.com/
 
 What's working now?
