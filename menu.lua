@@ -39,6 +39,7 @@ function menu.keypressed(k)
 end
 
 function menu.restart_game()
+	shop:initialize()
 	dudes.initialize()
 	player.initialize()
 end

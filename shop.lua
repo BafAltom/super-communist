@@ -3,23 +3,25 @@ require("item")
 
 shop = {}
 
-shop.items = {}
-shop.currentCol = 0
-shop.currentRow = 0
+function shop.initialize(shop)
+	shop.items = {}
+	shop.currentCol = 0
+	shop.currentRow = 0
 
-shop.fadeTimer = 0
-shop.fadeIn = false
-shop.fadeOut = false
+	shop.fadeTimer = 0
+	shop.fadeIn = false
+	shop.fadeOut = false
 
-shop.opened = false
-shop.active = false
+	shop.opened = false
+	shop.active = false
 
-table.insert(shop.items, newItem("YOU WIN", picItemPlaceHolder, "That is totally OP!", 10))
-table.insert(shop.items, newItem("YOU LOOSE", picItemPlaceHolder, "Why would I buy this?", 10))
-table.insert(shop.items, newItem("Useless", picItemPlaceHolder, "I have too much money", 10))
-table.insert(shop.items, newItem("YOU LOOSE", picItemPlaceHolder, "Why would I buy this?", 10))
-table.insert(shop.items, newItem("YOU WIN", picItemPlaceHolder, "That is totally OP!", 10))
-table.insert(shop.items, newItem("YOU LOOSE", picItemPlaceHolder, "Why would I buy this?", 10))
+	table.insert(shop.items, newItem("YOU WIN", picItemPlaceHolder, "That is totally OP!", 10))
+	table.insert(shop.items, newItem("YOU LOOSE", picItemPlaceHolder, "Why would I buy this?", 10))
+	table.insert(shop.items, newItem("Useless", picItemPlaceHolder, "I have too much money", 10))
+	table.insert(shop.items, newItem("YOU LOOSE", picItemPlaceHolder, "Why would I buy this?", 10))
+	table.insert(shop.items, newItem("YOU WIN", picItemPlaceHolder, "That is totally OP!", 10))
+	table.insert(shop.items, newItem("YOU LOOSE", picItemPlaceHolder, "Why would I buy this?", 10))
+end
 
 function shop.rowCount(shop)
 	return math.floor(#shop.items / shopItemPerRow)
@@ -114,6 +116,7 @@ function shop.keypressed(shop, k)
 		shop.currentRow = math.max(0, shop.currentRow - 1)
 	elseif (k == "down") then
 		shop.currentRow = math.min(shop:rowCount(), shop.currentRow + 1)
+		shop.currentCol = math.min(shop.currentCol, shop:itemCntInRow(shop.currentRow) - 1)
 	elseif (k == "return") then
 		chosenItemNbr = shop:itemNbr(shop.currentRow, shop.currentCol)
 		print("chosenItemNbr :"..chosenItemNbr)
@@ -129,3 +132,5 @@ function shop.keypressed(shop, k)
 		end
 	end
 end
+
+shop:initialize()
