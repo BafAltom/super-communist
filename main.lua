@@ -6,8 +6,8 @@ A game by Altom for the March 2012 Experimental Gameplay Project (Theme: ECONOMY
 Begun : Sunday March 4th (supposed worktime: 7 days, delay: still counting)
 
 RANDOM IDEAS:
-- "Godly events" : Economy crash, Oil pit, Technology : try to rebalance the economy inline
-- Shop : for heart containers and "communist-like" power-ups (shield for poor, )
+- "Godly events" : Economy crash, Oil pit, Technology : try to balance the economy online
+- Shop : for heart containers and "communist-like" power-ups (shield for poor, ...)
 - Refactor : make methods in player, ui, world, etc? use the standard "inst.foo(inst, param)" to be called with "inst:foo(param)"
 ]]--
 
