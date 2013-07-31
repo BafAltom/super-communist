@@ -2,6 +2,7 @@
 
 *.love
 *.exe
+*.sublime-*
 
 #################
 ## Eclipse
