@@ -123,7 +123,7 @@ DudeClass.class  = function(dude)
 	end
 end
 
-DudeClass.update = function(dude,dt)
+DudeClass.update = function(dude, dt)
 	-- dude movement
 	dude.x = dude.x + dude.speedX*dt
 	dude.y = dude.y + dude.speedY*dt
@@ -168,6 +168,12 @@ DudeClass.update = function(dude,dt)
 	dude.speedY = (dude.destY - dude.y)
 
 	dude:calculateSpeed()
+
+		-- push or be pushed by other players
+	local _closestDude = findClosestOf(dudes, dude, dude:dudeSize()*2)
+	if (_closestDude ~= nil) then
+		dude:dudePush(_closestDude)
+	end
 
 	-- prey on the weak
 	if (dude:class() == "rich") then
@@ -216,13 +222,6 @@ DudeClass.update = function(dude,dt)
 		dude:setState('fleeing')
 	end
 
-	-- push or be pushed by other players
-	local _closestDude = findClosestOf(dudes, dude, dude:dudeSize()*2)
-	if (_closestDude ~= nil) then
-		dude:dudePush(_closestDude)
-		_closestDude = findClosestOf(dudes, dude, dude:dudeSize()*2)
-	end
-
 	-- animation
 	if (dude.dudeAnim ~= nil) then
 		dude.dudeAnim:update(dt)
@@ -256,7 +255,7 @@ end
 DudeClass.dudePush = function(dude, smallerDude)
 	if (not (dude.x == smallerDude.x and dude.y == smallerDude.y)) then
 		local _translationX, _translationY = bafaltomVector(dude.x, dude.y, smallerDude.x, smallerDude.y, dude:dudeSize()*2)
-		smallerDude.x, smallerDude.y = dude.x + _translationX, dude.y + _translationY
+		smallerDude.destX, smallerDude.destY = smallerDude.x + _translationX, smallerDude.y + _translationY
 	else -- hotfix
 		smallerDude.x = smallerDude.x + dude:size()*2
 	end
