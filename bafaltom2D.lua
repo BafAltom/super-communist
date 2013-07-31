@@ -65,6 +65,7 @@ function bafaltomVector(startX, startY, endX, endY, desiredNorm)
 end
 
 function bafaltomAddVectors(...)
+	-- args: vx1, vy1, vx2, vy2, ...
 	local x,y = 0,0
 	for i = 1,#args,2 do
 		x, y = x + args[i], y + args[i+1]
