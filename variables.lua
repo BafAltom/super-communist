@@ -72,7 +72,7 @@
 	playerCorruptionLeakValue = 50
 
 -- DUDES CONSTANTS
-	numberOfDudes = 50
+	numberOfDudes = 100
 	dudeMaxSpeed = 20
 	destAcceptanceRadius = 10
 	dudeNextDestRadius = 50
