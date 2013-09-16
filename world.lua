@@ -79,8 +79,6 @@ world.translateAxes = function()
 	world.offsetX = -player.x + wScr/2
 	world.offsetY = -player.y + hScr/2
 
-	-- local _playerSpeed = math.sqrt(player.speedX^2 + player.speedY^2)
-	-- world.scaleFactor = 1 - (_playerSpeed / playerMaxSpeed) / 10 -- the idea was that the "camera" zoomed out while the player speed went up, but this doesn't work (probably because of floating points or something)
 	world.scaleFactor = 1
 	love.graphics.scale(world.scaleFactor, world.scaleFactor)
 	love.graphics.translate(world.offsetX * world.scaleFactor, world.offsetY * world.scaleFactor)
