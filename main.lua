@@ -17,7 +17,7 @@ RANDOM IDEAS:
 
 function love.load()
 	local _seed
-	if (DEBUG) then
+	if DEBUG then
 		_seed = "I think it's better to have deterministic tests"
 	else
 		_seed = os.time()
