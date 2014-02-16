@@ -1,7 +1,7 @@
 ui = {}
 ui.displayHelp = false
 ui.helpHiddenText = "press H to display help"
-ui.helpText = "Use WASD or ZSQD to move (both work)\nUse the Spacebar to attack (you'll figure it out)\nPress Shift to drop money and e to drop less money\nYour Goal : Remove all inegalities!\nGood Luck!\n\nPress h to hide this text"
+ui.helpText = "Use WASD or ZSQD to move (both work)\nUse the Spacebar to attack (you'll figure it out)\nPress Shift to drop money and e to drop less money\nYour Goal : Remove all inequalities!\nGood Luck!\n\nPress h to hide this text"
 ui.displayMinimap = true
 ui.displayShop = false
 
