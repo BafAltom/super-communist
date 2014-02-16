@@ -1,3 +1,5 @@
+require "bafaltom2D"
+
 class DudeList
     new: =>
         @dudeList = {}
@@ -48,12 +50,13 @@ class DudeList
                 table.insert correspondingDudes, d
         return correspondingDudes
 
-class Dude
+class Dude extends Entity
     currentID = 0
     giveNextID = ->
         currentID += 1
 
-    new: (@x, @y, @money) =>
+    new: (x, y, @money) =>
+        super x, y
         @id = Dude.giveNextID!
         if @class! ~= "poor" then
             @x = math.random mapMinX, mapMaxX

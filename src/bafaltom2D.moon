@@ -6,6 +6,16 @@
 
 -- Deal with "Entities", i.e. any objects with getX() and getY() methods.
 
+export *
+
+class Entity
+    new: (@x, @y) =>
+
+    getX: =>
+        @x
+
+    getY: =>
+        @y
 
 distance2Points = (x1, y1, x2, y2) ->
     dxx = (x2-x1)
