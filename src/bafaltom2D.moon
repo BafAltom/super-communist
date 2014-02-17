@@ -25,7 +25,7 @@ distance2Points = (x1, y1, x2, y2) ->
 distance2Entities = (ent1, ent2) ->
     distance2Points ent1\getX!, ent1\getY!, ent2\getX!, ent2\getY!
 
-findClosestOf = entities, origin, maxDistance ->
+findClosestOf = (entities, origin, maxDistance) ->
     -- parameters :
     --      entities                a list of entities
     --      origin                  the entity which we want the closest of (that can't be correct English)
@@ -57,7 +57,7 @@ findClosestOf = entities, origin, maxDistance ->
                     closestDistance = distance
     return closestEnt, closestDistance
 
-bafaltomVector = startX, startY, endX, endY, desiredNorm ->
+bafaltomVector = (startX, startY, endX, endY, desiredNorm) ->
     -- return the (x,y) coordinates of a vector of direction (startX, startY)->(endX, endY) and of norm desiredNorm
     currentNorm = distance2Points startX, startY, endX, endY
     normFactor = desiredNorm / currentNorm
@@ -72,7 +72,7 @@ bafaltomAddVectors = (...) ->
         x, y = x + args[i], y + args[i + 1]
     return x, y
 
-dotProduct = v1x, v1y, v2x, v2y ->
+dotProduct = (v1x, v1y, v2x, v2y) ->
     v1x * v2x + v1y + v2y
 
 bafaltomAngle = (x1, y1, x2, y2) ->
