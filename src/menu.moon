@@ -37,4 +37,4 @@ dict = {
     won: "YOU JUST WON"
 }
 
-menu = Menu dict "mainmenu"
+export menu = Menu dict, "mainmenu"

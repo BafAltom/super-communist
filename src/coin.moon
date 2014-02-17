@@ -1,3 +1,5 @@
+export ^
+
 class CoinList
     new: =>
         @coinList = {}
@@ -15,7 +17,7 @@ class CoinList
         for n, c in ipairs @coinList
             if c.id == id
                 table.remove @coinList, n
-                return
+                -- return
 
 class Coin
     nextID = 0

@@ -1,4 +1,4 @@
-require "bafaltom2D"
+export ^
 
 class DudeList
     new: =>
