@@ -18,6 +18,7 @@ class Menu
         switch k
             when "return"
                 @restart_game!
+                --FIXME: should not use global variables this way
                 export displayMenu = false
                 export PAUSE = false
             when " "
