@@ -19,11 +19,13 @@ class Entity
         @y
 
 class EntityList
-    @currentID = 0
-    @nextID = -> @currentID += 1
-
     new: =>
+        @currentID = 0
         @entList = {}
+
+    nextID: =>
+        @currentID += 1
+        return @currentID
 
     iter: =>
         i = 1
