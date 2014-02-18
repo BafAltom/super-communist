@@ -1,3 +1,5 @@
+export ^
+
 class Menu
     new: (@textDict, initialState) =>
         @state = initialState
@@ -16,18 +18,18 @@ class Menu
         switch k
             when "return"
                 @restart_game!
-                displayMenu = false
-                PAUSE = false
+                export displayMenu = false
+                export PAUSE = false
             when " "
-                displayMenu = false
-                PAUSE = false
+                export displayMenu = false
+                export PAUSE = false
             when "escape"
                 love.event.push("quit")
 
     restart_game: =>
-        shop:initialize()
-        dudes.initialize()
-        player.initialize()
+        world = World!
+        dudeList = DudeList!
+        player = Player!
 
 
 dict = {

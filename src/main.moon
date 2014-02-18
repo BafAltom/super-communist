@@ -14,6 +14,25 @@
 -- - Refactor : make methods in player, ui, world, etc? use the standard "inst.foo(inst, param)" to be called with "inst:foo(param)"
 --
 
+-- this is to enable live console output in Sublime Text
+io.stdout\setvbuf'no'
+
+
+-- External libraries
+export anim8 = require "lib/anim8"
+
+-- custom libraries
+require "bafaltom2D"
+require "variables"
+require "menu"
+require "dude"
+require "coin"
+require "fireball"
+require "world"
+require "ui"
+require "shop"
+require "player"
+
 export world, player, dudeList, coinList, fireballList
 
 love.load = ->
@@ -24,20 +43,6 @@ love.load = ->
     math.random!
     love.mouse.setVisible false
 
-    -- External libraries
-    export anim8 = require "lib/anim8"
-
-    -- custom libraries
-    require "bafaltom2D"
-    require "variables"
-    require "menu"
-    require "dude"
-    require "coin"
-    require "fireball"
-    require "world"
-    require "ui"
-    require "shop"
-    require "player"
     world = World!
     player = Player!
     dudeList = DudeList!
