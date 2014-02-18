@@ -33,7 +33,7 @@ class DudeList extends EntityList
 
     getAllRichPlus: =>
         correspondingDudes = {}
-        for _,d in ipairs(@entList)
+        for d in *@entList
             if d\class! == "rich+"
                 table.insert correspondingDudes, d
         return correspondingDudes
@@ -304,7 +304,7 @@ class Dude extends Entity
 
     isAttacked: (predator, moneyStolen) =>
         @updateMoney -1 * moneyStolen
-        CoinClass.createCoinBatchWithDirection @getX!, @getY!, moneyStolen, 0, 0
+        coinList\createCoinBatchWithDirection @getX!, @getY!, moneyStolen, 0, 0
         @attackedBy = predator.id
         @invulnTimer = invulnTimeByHit
 

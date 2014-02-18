@@ -1,13 +1,6 @@
 export ^
 
 class CoinList extends EntityList
-
-
-class Coin
-    nextID = 0
-    getNextID = ->
-        Coin.nextID += 1
-
     createCoinBatch: (x, y, totalValue) =>
         createCoinBatchWithDirection x, y, totalValue, 0, 0
 
@@ -17,11 +10,11 @@ class Coin
             choice = math.random(1,coinsChoiceNumber)
             while coinsAcceptedValue[choice] > value and choice > 1
                 choice -= 1
-            table.insert coins, Coin x, y, coinsAcceptedValue[choice], vx, vy
+            @add Coin x, y, coinsAcceptedValue[choice], vx, vy
             value -= coinsAcceptedValue[choice]
 
+class Coin
     new: (@x, @y, @value, sx, sy) =>
-        @id = Coin.getNextID!
         if sx ~= 0 and sy ~= 0 then
             -- need refactoring :(
             if (sx > 0) then
