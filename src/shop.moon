@@ -13,12 +13,12 @@ class Shop
         @opened = false
         @active = false
 
-        table.insert shop.items, Item("YOU WIN", picItemPlaceHolder, "That is totally OP!", 10)
-        table.insert shop.items, Item("YOU LOOSE", picItemPlaceHolder, "Why would I buy this?", 10)
-        table.insert shop.items, Item("Useless", picItemPlaceHolder, "I have too much money", 10)
-        table.insert shop.items, Item("YOU LOOSE", picItemPlaceHolder, "Why would I buy this?", 10)
-        table.insert shop.items, Item("YOU WIN", picItemPlaceHolder, "That is totally OP!", 10)
-        table.insert shop.items, Item("YOU LOOSE", picItemPlaceHolder, "Why would I buy this?", 10)
+        table.insert @items, Item("YOU WIN", picItemPlaceHolder, "That is totally OP!", 10)
+        table.insert @items, Item("YOU LOOSE", picItemPlaceHolder, "Why would I buy this?", 10)
+        table.insert @items, Item("Useless", picItemPlaceHolder, "I have too much money", 10)
+        table.insert @items, Item("YOU LOOSE", picItemPlaceHolder, "Why would I buy this?", 10)
+        table.insert @items, Item("YOU WIN", picItemPlaceHolder, "That is totally OP!", 10)
+        table.insert @items, Item("YOU LOOSE", picItemPlaceHolder, "Why would I buy this?", 10)
 
     rowCount: =>
         math.floor #@items / shopItemPerRow
