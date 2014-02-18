@@ -42,7 +42,7 @@ love.load = ->
     player = Player!
     dudeList = DudeList!
     coinList = CoinList!
-    fireballList = FireballList!
+    fireballList = FireBallList!
 
     export displayMenu = true
 
