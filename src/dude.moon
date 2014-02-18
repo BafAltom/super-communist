@@ -251,9 +251,9 @@ class Dude extends Entity
             @dudeAnim\update dt
 
         -- timers
-        dude.invulnTimer -= dt if dude.invulnTimer > 0
-        dude.moneyDisplayTimer -= dt if dude.moneyDisplayTimer > 0
-        dude.attackTimer -= dt if @class! == "rich+" and @attackTimer > 0
+        @invulnTimer -= dt if @invulnTimer > 0
+        @moneyDisplayTimer -= dt if @moneyDisplayTimer > 0
+        @attackTimer -= dt if @class! == "rich+" and @attackTimer > 0
 
     updateMoney: (amount) => -- negative/positive amount : take/give money
         previousClass = @class!
