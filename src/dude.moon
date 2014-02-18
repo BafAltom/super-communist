@@ -82,8 +82,8 @@ class Dude extends Entity
         @state = ''
         @dudePic = nil
         @dudeAnim = nil
-        @littleDude\findNewDestination!
-        @littleDude\setState 'walking'
+        @findNewDestination!
+        @setState 'walking'
 
 
     draw: =>
