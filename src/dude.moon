@@ -203,7 +203,7 @@ class Dude extends Entity
         @calculateSpeed!
 
         -- push or be pushed by other players
-        closestDude = findClosestOf dudes, dude, @dudeSize! * 2
+        closestDude = findClosestOf dudeList\as_list!, @, @dudeSize! * 2
         if closestDude ~= nil
             @dudePush closestDude
 
@@ -272,7 +272,7 @@ class Dude extends Entity
     dudePush: (smallerDude) =>
         if @getX! == smallerDude\getX! and @getY! == smallerDude\getY!
              -- hotfix
-             smallerDude.x = smallerDude.x + @size! * 2
+             smallerDude.x = smallerDude.x + @dudeSize! * 2
         else
             translationX, translationY = bafaltomVector @x, @y,
                 smallerDude.x, smallerDude.y, @dudeSize! * 2
@@ -284,13 +284,13 @@ class Dude extends Entity
 
     findClosestPrey: =>
         filteredDudes = {}
-        for _, d in ipairs(dudes)
+        for d in dudeList\iter!
             if d.money < @money and not d.invulnTimer > 0
                 table.insert filteredDudes, d
         findClosestOf filteredDudes, @, @preyRadius!
 
     findClosestCoin: =>
-        findClosestOf coinList, @, dudeAttractionDistance
+        findClosestOf coinList\as_list!, @, dudeAttractionDistance
 
     getX: =>
         @x

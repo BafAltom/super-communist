@@ -10,7 +10,7 @@ class World
         player\update dt
         ui\update dt
         shop\update dt
-        for dude in #dudes
+        for dude in dudeList\iter!
             dude\update dt
 
         for coin in #coins
