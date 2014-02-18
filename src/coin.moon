@@ -98,7 +98,7 @@ class Coin
             love.graphics.print @id, @getX! + 5, @getY!
             closestDude = @findClosestDude!
             if closestDude ~= nil
-                love.graphics.line @getX!, @getY!, closestDude.getX!, closestDude.getY!
+                love.graphics.line @getX!, @getY!, closestDude\getX!, closestDude\getY!
 
     getX: =>
         return @x
