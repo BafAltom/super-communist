@@ -12,7 +12,7 @@ PAUSE = true
 -- picMiddle = love.graphics.newImage("res/middle.png")
 -- picRich = love.graphics.newImage("res/rich.png")
 -- picRichPlus = love.graphics.newImage("res/richPlus.png")
--- dudeGrid = anim8.newGrid(32,64,32,256)
+dudeGrid = anim8.newGrid(32,64,32,256)
 -- default : anim8.newAnimation("loop", dudeGrid('1,1-4'), 0.3)
 
 picPoorIdle = love.graphics.newImage("res/poor_idle.png")
