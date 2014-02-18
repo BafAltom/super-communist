@@ -51,9 +51,9 @@ class DudeList
         return correspondingDudes
 
 class Dude extends Entity
-    currentID = 0
-    giveNextID = ->
-        currentID += 1
+    @currentID = 0
+    @giveNextID = ->
+        @currentID += 1
 
     new: (x, y, @money) =>
         super x, y
