@@ -25,13 +25,13 @@ class World
 
         @drawMapGrid!
 
-        for dude in #dudes
+        for dude in dudeList\iter!
             dude\draw!
 
-        for coin in #coins
+        for coin in coinList\iter!
             coin\draw!
 
-        for fb in #fireballs
+        for fb in fireballList\iter!
             fb\draw!
 
         player\draw!
@@ -57,9 +57,9 @@ class World
         -- columns
         love.graphics.setColor(100,100,100)
         for i = 0, gridColumns
-            love.graphics.line mainMinX + (i * (mapMaxX - mapMinX) / gridColumns),
+            love.graphics.line mapMinX + (i * (mapMaxX - mapMinX) / gridColumns),
                 mapMinY,
-                mainMinX + (i*(mapMaxX - mapMinX)/gridColumns+mapMinX),
+                mapMinX + (i*(mapMaxX - mapMinX)/gridColumns+mapMinX),
                 mapMaxY
         -- rows
         for i = 0, gridRows
