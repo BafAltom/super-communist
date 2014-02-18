@@ -72,7 +72,7 @@ class Dude extends Entity
 
     draw: =>
         dudeColors = nil
-        switch dude\class!
+        switch @class!
             when "poor"
                 dudeColors = poorColor
             when "middle"
