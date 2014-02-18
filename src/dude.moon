@@ -189,6 +189,7 @@ class Dude extends Entity
             @destX = @x
             @destY = @y
 
+
         -- rich+ dudes are attracted to player
         if @class! == "rich+"
             if distance2Entities(dude, player) > richPlusStalkDistance
@@ -209,7 +210,7 @@ class Dude extends Entity
 
         -- prey on the weak
         if @class! == "rich"
-            if @invulnTimer <= 0 and (@state == "walking" or @state == "waiting")
+            if (@invulnTimer <= 0) and (@state == "walking" or @state == "waiting")
                 prey = @findClosestPrey!
                 if prey ~= nil
                     if @attackTimer < 0
@@ -285,7 +286,7 @@ class Dude extends Entity
     findClosestPrey: =>
         filteredDudes = {}
         for d in dudeList\iter!
-            if d.money < @money and not d.invulnTimer > 0
+            if (d.money < @money) and not (d.invulnTimer > 0)
                 table.insert filteredDudes, d
         findClosestOf filteredDudes, @, @preyRadius!
 
