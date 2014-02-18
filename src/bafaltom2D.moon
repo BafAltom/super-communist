@@ -10,12 +10,41 @@ export *
 
 class Entity
     new: (@x, @y) =>
+        @id = nil
 
     getX: =>
         @x
 
     getY: =>
         @y
+
+class EntityList
+    @currentID = 0
+    @nextID = -> @currentID += 1
+
+    new: =>
+        @entList = {}
+
+    iter: =>
+        i = 1
+        return ->
+            return @entList[i] if i <= #@entList
+
+    add: (ent) =>
+        ent.id = @nextID!
+        table.insert @entList, ent
+
+    find: (id) =>
+        for _, e in ipairs @entList
+            if e.id == id
+                return e
+        return nil
+
+    removeID: (id) =>
+        for n, e in ipairs @entList
+            if e.id == id
+                table.remove @entList, n
+                return
 
 distance2Points = (x1, y1, x2, y2) ->
     dxx = (x2-x1)

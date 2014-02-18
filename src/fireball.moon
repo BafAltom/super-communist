@@ -1,34 +1,14 @@
 export ^
 
-class FireBallList
-    new: =>
-        @fireballList = {}
-
-    add: (fb) =>
-        table.insert @fireballList, fb
-
-    remove: (id) =>
-
+class FireBallList extends EntityList
     createFireBall: (x, y, destX, destY) =>
         @add Fireball x, y, destX, destY
 
     update: (dt) =>
-        for fb in #@fireballList
+        for fb in #@entList
             fb\update dt
             if fb.lifeTime <= 0
                 @remove fb.id
-
-    findID: (id) =>
-        for fb in #@fireballList
-            if @id == id
-                return fb
-        return nil
-
-    removeID: (id) =>
-        for n, fb in ipairs fireballs
-            if fb.id == i
-                table.remove @fireballList, n
-                return
 
 class FireBall
     nextID = 0

@@ -1,8 +1,8 @@
 export ^
 
-class DudeList
+class DudeList extends EntityList
     new: =>
-        @dudeList = {}
+        super!
         poorCount, middleCount , richCount = 0, 0, 0
         for i = 1, numberOfDudes
             dudeX, dudeY, dudeM = nil, nil, nil
@@ -25,44 +25,23 @@ class DudeList
                     dudeM = math.random(moneyMin, moneyMax)
             @add Dude dudeX, dudeY, dudeM
 
-    iter: =>
-        i = 1
-        return ->
-            return @dudeList[i] if i <= #@dudeList
-
-    add: (dude) =>
-        table.insert @dudeList, dude
-
-    find: (id) =>
-        if id == 0
-            return player
-
-        for _, d in ipairs @dudeList
-            if d.id == id
-                return d
-        return nil
-
     areAllMiddle: =>
-        for _, d in ipairs @dudeList
+        for _, d in ipairs @entList
             if d\class! ~= "middle"
                 return false
         return true
 
     getAllRichPlus: =>
         correspondingDudes = {}
-        for _,d in ipairs(@dudeList)
+        for _,d in ipairs(@entList)
             if d\class! == "rich+"
                 table.insert correspondingDudes, d
         return correspondingDudes
 
-class Dude extends Entity
-    @currentID = 0
-    @giveNextID = ->
-        @currentID += 1
 
+class Dude extends Entity
     new: (x, y, @money) =>
         super x, y
-        @id = Dude.giveNextID!
         if @class! ~= "poor" then
             @x = math.random mapMinX, mapMaxX
             @y = math.random mapMinY, mapMaxY

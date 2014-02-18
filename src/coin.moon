@@ -1,23 +1,7 @@
 export ^
 
-class CoinList
-    new: =>
-        @coinList = {}
+class CoinList extends EntityList
 
-    add: (c) =>
-        table.insert @coinList, c
-
-    getID: (id) =>
-        for _, c in ipairs @coinList
-            if c.id == id
-                return c
-        return nil
-
-    removeID: (id) =>
-        for n, c in ipairs @coinList
-            if c.id == id
-                table.remove @coinList, n
-                -- return
 
 class Coin
     nextID = 0
