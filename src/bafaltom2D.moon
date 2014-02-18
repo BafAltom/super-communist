@@ -25,37 +25,46 @@ distance2Points = (x1, y1, x2, y2) ->
 distance2Entities = (ent1, ent2) ->
     distance2Points ent1\getX!, ent1\getY!, ent2\getX!, ent2\getY!
 
-findClosestOf = (entities, origin, maxDistance) ->
-    -- parameters :
-    --      entities                a list of entities
-    --      origin                  the entity which we want the closest of (that can't be correct English)
-    --      maxDistance             nil to disable
-    -- return :
-    --      the closest entity      (nil if the list is empty or maxDistance was provided and too restrictive)
-    --      the distance            (nil if the list is empty or maxDistance was provided and too restrictive)
-    -- remark(s) :
+findClosestOf = (candidates, origin, maxDistance) ->
+    -- Returns the entity from entities closest to origin with a distance less
+    --  than maxDistance (if specified)
+    -- parameters:
+    --      candidates:  Entity
+    --      origin:      Entity
+    --      maxDistance: number (or nil)
+    -- return:
+    --      two values: closest entity, distance
+    --      (or nil, nil if there are no acceptable candidates)
+    -- remark:
     --      if origin is present in entities, it will be ignored
 
-    if #entities == 0
+    if #candidates == 0
         return nil, nil
 
-    if (not maxDistance)
-        maxDistance = 2*distance2Entities(entities[1], origin)
+    if maxDistance = nil
+        -- make sure the first candidate is not the origin
+        while candidates[1] == origin
+            table.remove candidates, 1
+        if #candidates == 0
+            return nil, nil
+        -- set maxDistance to the first distance
+        maxDistance = distance2Entities origin, candidates[1]
 
-    closestEnt = nil
+    closestCandidate = candidates[1]
     closestDistance = maxDistance
 
-    for _,e in ipairs(entities)
+    for _,e in ipairs(candidates)
         if e ~= origin
             -- filtering with rectangular bounding box
             dx = math.abs(e\getX! - origin\getX!)
             dy = math.abs(e\getY! - origin\getY!)
             if dx < closestDistance and dy < closestDistance
+                -- if the bbox check passes, perform actual distance check
                 distance = distance2Entities e, origin
                 if distance < closestDistance
-                    closestEnt = e
+                    closestCandidate = e
                     closestDistance = distance
-    return closestEnt, closestDistance
+    return closestCandidate, closestDistance
 
 bafaltomVector = (startX, startY, endX, endY, desiredNorm) ->
     -- return the (x,y) coordinates of a vector of direction (startX, startY)->(endX, endY) and of norm desiredNorm
