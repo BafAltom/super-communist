@@ -32,6 +32,9 @@ class EntityList
         return ->
             return @entList[i] if i <= #@entList
 
+    as_list: =>
+        return @entList
+
     add: (ent) =>
         ent.id = @nextID!
         table.insert @entList, ent
