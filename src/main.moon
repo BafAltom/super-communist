@@ -63,17 +63,18 @@ love.draw = ->
         shop\draw!
 
 love.update =  (dt) ->
+    print "#{player.id}"
     unless PAUSE or displayMenu
         world\update dt
 
         -- WIN
         if dudeList\areAllMiddle!
-            menu\setState "won"
+            menu.state = "won"
             displayMenu = true
 
         -- LOOSE
         if player.life <= 0
-            menu\setState "lost"
+            menu.state = "lost"
             PAUSE = true
             displayMenu = true
 
@@ -88,7 +89,7 @@ love.keypressed = (k) ->
             when "p"
                 PAUSE = not PAUSE
             when "escape"
-                menu\setState "pause"
+                menu.state = "pause"
                 PAUSE = true
                 displayMenu = true
             else
