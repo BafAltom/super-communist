@@ -13,10 +13,10 @@ class World
         for dude in dudeList\iter!
             dude\update dt
 
-        for coin in #coins
+        for coin in coinList\iter!
             coin\update dt
 
-        for fb in #fireballs
+        for fb in fireballList\iter!
             fb\update dt
 
 
