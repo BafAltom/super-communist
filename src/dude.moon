@@ -25,6 +25,11 @@ class DudeList extends EntityList
                     dudeM = math.random(moneyMin, moneyMax)
             @add Dude dudeX, dudeY, dudeM
 
+    find: (id) =>
+        if id == 0
+            return player
+        super id
+
     areAllMiddle: =>
         for _, d in ipairs @entList
             if d\class! ~= "middle"
@@ -88,7 +93,7 @@ class Dude extends Entity
         dudeSize = @dudeSize!
         --- SIMPLE GRAPHICS
         if true or @class! == "rich+"
-            fillage = "fill" if @invulnTimer <= 0 else "line"
+            fillage = if @invulnTimer <= 0 then "fill" else "line"
             love.graphics.rectangle fillage,
                 @x - dudeSize / 2, @y - dudeSize / 2, dudeSize, dudeSize
 
@@ -133,7 +138,7 @@ class Dude extends Entity
                 love.graphics.setColor 255, 255, 0, colorAlpha
                 love.graphics.rectangle "fill",
                     @getX! - 19, @getY! - 39,
-                    math.floor relativeMoney * 38, 8 -- magic numbers!
+                    math.floor(relativeMoney * 38), 8 -- magic numbers!
 
         -- draw lightning
         if @currentPrey ~= nil and not @class! == "rich+"
@@ -218,7 +223,7 @@ class Dude extends Entity
                         @attacked = prey.id
                         @attackTimer = richHitTimer
                         stolenMoney = math.min prey.money, moneyStolenByHit
-                        prey\isAttacked dude, stolenMoney
+                        prey\isAttacked @, stolenMoney
                     else
                         @attackTimer -= dt
                 else
@@ -235,7 +240,7 @@ class Dude extends Entity
 
         -- flee
         if @attackedBy ~= -1
-            attacker = dudes.find(dude.attackedBy)
+            attacker = dudeList\find(@attackedBy)
             destX = @getX! + 2 * (@getX! - attacker\getX!)
             destY = @getY! + 2 * (@getY! - attacker\getY!)
             destX = math.max destX, fleeMinX
