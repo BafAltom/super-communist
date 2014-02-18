@@ -75,7 +75,7 @@ findClosestOf = (candidates, origin, maxDistance) ->
     if #candidates == 0
         return nil, nil
 
-    if maxDistance = nil
+    if maxDistance == nil
         -- make sure the first candidate is not the origin
         while candidates[1] == origin
             table.remove candidates, 1
