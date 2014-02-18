@@ -25,6 +25,11 @@ class DudeList
                     dudeM = math.random(moneyMin, moneyMax)
             @add Dude dudeX, dudeY, dudeM
 
+    iter: =>
+        i = 1
+        return ->
+            return @dudeList[i] if i <= #@dudeList
+
     add: (dude) =>
         table.insert @dudeList, dude
 
