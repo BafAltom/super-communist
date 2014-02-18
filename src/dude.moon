@@ -9,7 +9,7 @@ class DudeList
             randomPercent = math.random 100
             if randomPercent < poorPercent -- poor
                 poorCount += 1
-                {dudeX, dudeY} = randomPointInSubMapCorners!
+                dudeX, dudeY = randomPointInSubMapCorners!
                 dudeM = math.random 0, moneyMaxPoor
             else
                 dudeX = math.random mapMinX, mapMaxX
