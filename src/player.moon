@@ -40,28 +40,28 @@ class Player extends Dude
         speedFactor = 1 if not @corrupted else playerCorruptionSpeedFactor
 
         -- key Presses
-        if love.keyboard.isDown "z" or love.keyboard.isDown "w"
+        if (love.keyboard.isDown "z") or (love.keyboard.isDown "w")
             @speedY -= speedFactor * playerSpeedKeyDownIncrease * dt
         elseif @speedY < 0
             @speedY = math.min 0, @speedY + playerSpeedKeyUpDecrease * dt
 
-        if love.keyboard.isDown "s"
+        if (love.keyboard.isDown "s")
             @speedY += speedFactor * playerSpeedKeyDownIncrease * dt
         elseif @speedY > 0
             @speedY = math.max 0, @speedY - playerSpeedKeyUpDecrease * dt
 
-        if love.keyboard.isDown "a" or love.keyboard.isDown "q"
+        if (love.keyboard.isDown "a") or (love.keyboard.isDown "q")
             @speedX -= speedFactor * playerSpeedKeyDownIncrease * dt
         elseif @speedX < 0
             @speedX = math.min 0, @speedX + playerSpeedKeyUpDecrease * dt
 
-        if love.keyboard.isDown"d"
+        if (love.keyboard.isDown "d")
             @speedX += speedFactor * playerSpeedKeyDownIncrease * dt
         elseif @speedX > 0
             @speedX = math.max 0, @speedX - playerSpeedKeyUpDecrease * dt
 
         -- attack
-        if love.keyboard.isDown " " and @invulnTimer <= 0
+        if (love.keyboard.isDown " ") and @invulnTimer <= 0
             if not @corrupted
                 weaponRadius = @weaponRadius + playerWeaponRadiusSpeed * dt
                 @weaponRadius = math.min weaponRadius, playerWeaponRadiusMax
