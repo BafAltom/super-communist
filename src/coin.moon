@@ -40,9 +40,6 @@ class Coin
     update: (dt) =>
         @lifeTime -= dt
 
-        if @lifeTime < 0
-            Coins.removeID(coin.id)
-
         if @noCatchTimer <= 0
             -- Find closest Dude (or player)
             closestDude = @findClosestDude!
@@ -59,9 +56,9 @@ class Coin
 
             -- Caught by him?
             if closestDude ~= nil and @noCatchTimer <= 0 and closestDude.invulnTimer <= 0 and closestDude\class! ~= "rich+"
-                    if (distance2Entities coin, closestDude) < closestDude\dudeSize!
-                        closestDude\updateMoney coin.value
-                        Coins.removeID coin.id
+                    if (distance2Entities @, closestDude) < closestDude\dudeSize!
+                        closestDude\updateMoney @value
+                        coinList\removeID @id
         else
             @noCatchTimer -= dt
 
@@ -78,12 +75,12 @@ class Coin
 
     findClosestDude: =>
         filteredDudes = {} -- dudes which can attract coins
-        for _,d in ipairs(dudes)
+        for d in dudeList\iter!
             if d\class! ~= "rich+" and d.invulnTimer <= 0
                 table.insert filteredDudes, d
         if not player.corrupted
             table.insert filteredDudes, player
-        return findClosestOf filteredDudes, coin, coinsAttractionDistance
+        return findClosestOf filteredDudes, @, coinsAttractionDistance
 
     draw: => -- TODO clean up a bit?
         love.graphics.setColor 255,255,0
