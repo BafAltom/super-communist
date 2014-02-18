@@ -1,3 +1,5 @@
+export ^
+
 class Player extends Dude
     new: =>
         @items = {}

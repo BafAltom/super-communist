@@ -1,4 +1,4 @@
-require "shop"
+export ^
 
 class World
     new: =>
