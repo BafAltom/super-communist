@@ -11,7 +11,7 @@ class CoinList
         for _, c in ipairs @coinList
             if c.id == id
                 return c
-    return nil
+        return nil
 
     removeID: (id) =>
         for n, c in ipairs @coinList
@@ -28,13 +28,13 @@ class Coin
         createCoinBatchWithDirection x, y, totalValue, 0, 0
 
     createCoinBatchWithDirection: (x, y, totalValue, vx, vy) =>
-    value = totalValue
-    while value > 0
-        choice = math.random(1,coinsChoiceNumber)
-        while coinsAcceptedValue[choice] > value and choice > 1
-            choice -= 1
-        table.insert coins, Coin x, y, coinsAcceptedValue[choice], vx, vy
-        value -= coinsAcceptedValue[choice]
+        value = totalValue
+        while value > 0
+            choice = math.random(1,coinsChoiceNumber)
+            while coinsAcceptedValue[choice] > value and choice > 1
+                choice -= 1
+            table.insert coins, Coin x, y, coinsAcceptedValue[choice], vx, vy
+            value -= coinsAcceptedValue[choice]
 
     new: (@x, @y, @value, sx, sy) =>
         @id = Coin.getNextID!
