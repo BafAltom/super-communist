@@ -10,7 +10,6 @@ class UI
 
     update: (dt) =>
 
-
     keypressed: (k) =>
         switch k
             when "h"
@@ -19,7 +18,8 @@ class UI
     draw: =>
         -- rich+ indicator
         richesPlus = dudeList\getAllRichPlus!
-        for rdN, rd in ipairs(richesPlus)
+
+        for rd in *richesPlus
             if not world.isEntityInScreen(rd, 0)
                 richPlusDirX, richPlusDirY = bafaltomVector player.x, player.y,
                     @getX!, @getY!, 50
@@ -67,8 +67,8 @@ class UI
 
         -- help
         local helpText
-        helpText = @helpText if @displayHelp else @helpHiddenText
-        love.graphics.print helpText, moneyBarX, moneyBarY + 50
+        displayText = if @displayHelp then @helpText else @helpHiddenText
+        love.graphics.print displayText, moneyBarX, moneyBarY + 50
 
     drawMinimap: =>
         love.graphics.translate minimapX, minimapY
