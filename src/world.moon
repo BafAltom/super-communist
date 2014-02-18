@@ -59,7 +59,7 @@ class World
         for i = 0, gridColumns
             love.graphics.line mapMinX + (i * (mapMaxX - mapMinX) / gridColumns),
                 mapMinY,
-                mapMinX + (i*(mapMaxX - mapMinX)/gridColumns+mapMinX),
+                mapMinX + (i * (mapMaxX - mapMinX) / gridColumns),
                 mapMaxY
         -- rows
         for i = 0, gridRows
