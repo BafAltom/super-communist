@@ -1,3 +1,5 @@
+export ^
+
 class UI
     new: =>
         @displayHelp = false
