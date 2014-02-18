@@ -63,7 +63,6 @@ love.draw = ->
         shop\draw!
 
 love.update =  (dt) ->
-    print "#{player.id}"
     unless PAUSE or displayMenu
         world\update dt
 
@@ -85,13 +84,13 @@ love.keypressed = (k) ->
         -- player actions are in player\keypressed (called by world\keypressed)
         switch k
             when "o"
-                DEBUG = not DEBUG
+                export DEBUG = not DEBUG
             when "p"
-                PAUSE = not PAUSE
+                export PAUSE = not PAUSE
             when "escape"
                 menu.state = "pause"
-                PAUSE = true
-                displayMenu = true
+                export PAUSE = true
+                export displayMenu = true
             else
                 world\keypressed k
                 ui\keypressed k
