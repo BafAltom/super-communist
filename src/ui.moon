@@ -21,7 +21,7 @@ class UI
         richesPlus = dudeList\getAllRichPlus!
         for rdN, rd in ipairs(richesPlus)
             if not world.isEntityInScreen(rd, 0)
-                {richPlusDirX, richPlusDirY} = bafaltomVector player.x, player.y,
+                richPlusDirX, richPlusDirY = bafaltomVector player.x, player.y,
                     @getX!, @getY!, 50
                 love.graphics.setColor 255, 255, 255
                 d = player\dudeSize! * 2
