@@ -30,6 +30,7 @@ class EntityList
     iter: =>
         i = 1
         return ->
+            i += 1
             return @entList[i] if i <= #@entList
 
     as_list: =>
