@@ -140,7 +140,7 @@ class Dude extends Entity
             attackedDude = @currentPrey
             attackBuildUpFactor = 1 - (@attackTimer / richHitTimer)
             distance = distance2Entities dude, attackedDude
-            {endX, endY} = bafaltomVector @getX!, @getY!, attackedDude\getX!,
+            endX, endY = bafaltomVector @getX!, @getY!, attackedDude\getX!,
                 attackedDude\getY!, distance * attackBuildUpFactor
             love.graphics.setColor 255, 69, 0, 255 * attackBuildUpFactor
             love.graphics.line @getX!, @getY!, @getX! + endX, @getY! + endY
@@ -274,7 +274,7 @@ class Dude extends Entity
              -- hotfix
              smallerDude.x = smallerDude.x + @size! * 2
         else
-            {translationX, translationY} = bafaltomVector @x, @y,
+            translationX, translationY = bafaltomVector @x, @y,
                 smallerDude.x, smallerDude.y, @dudeSize! * 2
             smallerDude.destX = smallerDude\getX! + translationX
             smallerDude.destY = smallerDude\getY! + translationY
@@ -290,7 +290,7 @@ class Dude extends Entity
         findClosestOf filteredDudes, @, @preyRadius!
 
     findClosestCoin: =>
-        findClosestOf coins, @, dudeAttractionDistance
+        findClosestOf coinList, @, dudeAttractionDistance
 
     getX: =>
         @x
@@ -336,7 +336,7 @@ class Dude extends Entity
     calculateSpeed: =>
         actualSpeed = math.sqrt @speedX^2 + @speedY^2
         if actualSpeed > dudeMaxSpeed
-            {@speedX, @speedY} = bafaltomVector 0, 0, @speedX, @speedY, dudeMaxSpeed
+            @speedX, @speedY = bafaltomVector 0, 0, @speedX, @speedY, dudeMaxSpeed
 
     refreshDudeAnimation: =>
         -- update the dudePic and dudeAnim attributes of dude
