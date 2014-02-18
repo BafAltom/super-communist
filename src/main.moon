@@ -31,9 +31,10 @@ require "fireball"
 require "world"
 require "ui"
 require "shop"
+require "item"
 require "player"
 
-export world, player, dudeList, coinList, ui, fireballList
+export world, player, dudeList, coinList, ui, shop, fireballList
 
 love.load = ->
     seed = os.time! if not DEBUG else "I think it's better to have deterministic tests"
@@ -49,6 +50,7 @@ love.load = ->
     coinList = CoinList!
     fireballList = FireBallList!
     ui = UI!
+    shop = Shop!
 
     export displayMenu = true
 
