@@ -18,7 +18,7 @@ class UI
 
     draw: =>
         -- rich+ indicator
-        richesPlus = dudes.getAllRichPlus!
+        richesPlus = dudeList\getAllRichPlus!
         for rdN, rd in ipairs(richesPlus)
             if not world.isEntityInScreen(rd, 0)
                 {richPlusDirX, richPlusDirY} = bafaltomVector player.x, player.y,
@@ -92,7 +92,7 @@ class UI
             (mapMaxY - mapMinY) / minimapYfactor
 
         -- all the dudes
-        for d in #dudes
+        for d in dudeList\iter!
             miniSize, miniColors = nil, nil
             switch d\class!
                 when "poor"
