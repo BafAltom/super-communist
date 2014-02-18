@@ -2,12 +2,12 @@ export ^
 
 class Player extends Dude
     new: =>
+        -- FIXME (?) Player inherits Dude buts does not call constructor
         @items = {}
         @id = 0
-        x = (mapMinX + mapMaxX) / 2
-        y = (mapMinY + mapMaxY) / 2
-        money = 0
-        super x, y, money
+        @x = (mapMinX + mapMaxX) / 2
+        @y = (mapMinY + mapMaxY) / 2
+        @money = 0
         @corrupted = false
         @corruptLeakTimer = 0
         @speedX = 0
@@ -86,7 +86,7 @@ class Player extends Dude
         @corruptLeakTimer -= dt if @corruptLeakTimer > 0
 
     attack: (weaponRadius) =>
-        for prey in #dudes
+        for prey in dudeList\iter!
             if prey.invulnTimer <= 0 and distance2Entities(@, prey) < weaponRadius
                 moneyStolen = prey.money/2
                 prey\isAttacked @, moneyStolen
