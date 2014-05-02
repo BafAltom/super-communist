@@ -2,7 +2,7 @@ export ^
 
 class CoinList extends EntityList
     createCoinBatch: (x, y, totalValue) =>
-        createCoinBatchWithDirection x, y, totalValue, 0, 0
+        @createCoinBatchWithDirection x, y, totalValue, 0, 0
 
     createCoinBatchWithDirection: (x, y, totalValue, vx, vy) =>
         value = totalValue

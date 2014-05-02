@@ -78,7 +78,7 @@ class Player extends Dude
                 @updateMoney -playerCorruptionLeakValue
                 dirX = math.random(-100,100)/100
                 dirY = math.random(-100,100)/100
-                Coins.createCoinBatchWithDirection @x, @y,
+                CoinList\createCoinBatchWithDirection @x, @y,
                     playerCorruptionLeakValue, dirX, dirY
 
         -- timer
@@ -93,7 +93,7 @@ class Player extends Dude
 
     isAttacked: =>
         @money = math.max 0, @money - moneyStolenByHit
-        Coins\createCoinBatch @x, @y, moneyStolenByHit
+        CoinList\createCoinBatch @x, @y, moneyStolenByHit
         @invulnTimer = playerInvulnTimeByHit
         @life -= 1
 
@@ -115,7 +115,7 @@ class Player extends Dude
 
     moneyDrop: (amount) =>
         droppedAmount = math.min @money, amount
-        Coins\createCoinBatch @x, @y, droppedAmount
+        CoinList\createCoinBatch @x, @y, droppedAmount
         @updateMoney -droppedAmount
 
     getItem: (item) =>
