@@ -60,7 +60,7 @@ distance2Points = (x1, y1, x2, y2) ->
 distance2Entities = (ent1, ent2) ->
     distance2Points ent1\getX!, ent1\getY!, ent2\getX!, ent2\getY!
 
-findClosestOf = (candidates, origin, maxDistance) ->
+findClosestOf = (candidates, origin, maxDistance=nil) ->
     -- Returns the entity from entities closest to origin with a distance less
     --  than maxDistance (if specified)
     -- parameters:
