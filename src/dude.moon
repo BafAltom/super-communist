@@ -107,7 +107,7 @@ class Dude extends Entity
         if DEBUG
             love.graphics.print @id, @getX! + dudeSize + 5, @getY!
             love.graphics.print @state, @getX! + dudeSize + 5, @getY! + 10
-            love.graphics.print 'w: #{@waitingTime}',
+            love.graphics.print "w: #{@waitingTime}",
                 @getX! + dudeSize + 5, @getY! + 30
             if @class! == 'rich'
                 love.graphics.print @attackTimer, @getX! + dudeSize + 5, @getY! + 20
