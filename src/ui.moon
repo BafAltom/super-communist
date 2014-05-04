@@ -22,7 +22,7 @@ class UI
         for rd in *richesPlus
             if not world\isEntityInScreen(rd, 0)
                 richPlusDirX, richPlusDirY = bafaltomVector player.x, player.y,
-                    @getX!, @getY!, 50
+                    rd\getX!, rd\getY!, 50
                 love.graphics.setColor 255, 255, 255
                 d = player\dudeSize! * 2
                 love.graphics.circle "line", wScr / 2, hScr / 2, d
