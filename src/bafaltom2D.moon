@@ -77,15 +77,14 @@ findClosestOf = (candidates, origin, maxDistance=nil) ->
         return nil, nil
 
     if maxDistance == nil
-        -- make sure the first candidate is not the origin
+        -- use the distance to an arbitrary candidate as maxDistance
         while candidates[1] == origin
             table.remove candidates, 1
         if #candidates == 0
             return nil, nil
-        -- set maxDistance to the first distance
         maxDistance = distance2Entities origin, candidates[1]
 
-    closestCandidate = candidates[1]
+    closestCandidate = nil
     closestDistance = maxDistance
 
     for _,e in ipairs(candidates)
