@@ -197,7 +197,7 @@ class Dude extends Entity
 
         -- rich+ dudes are attracted to player
         if @class! == "rich+"
-            if distance2Entities(dude, player) > richPlusStalkDistance
+            if distance2Entities(@, player) > richPlusStalkDistance
                 @destX = player.x
                 @destY = player.y
                 @setState 'playerPursuing'
@@ -233,8 +233,8 @@ class Dude extends Entity
                 @attackTimer = richHitTimer
 
         -- rich+ shoot Fireballz
-        if @class! == "rich+" and not @attackTimer > 0 and distance2Entities(@, player) < superRichHitDistance
-            FireBallClass.createFireBall(dude,player.x,player.y)
+        if @class! == "rich+" and not (@attackTimer > 0) and distance2Entities(@, player) < superRichHitDistance
+            fireballList\createFireBall(@, player.x, player.y)
             @attackTimer = fireBallAttackTimer -- FIXME
             @attacked = 0
 

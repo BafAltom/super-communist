@@ -7,7 +7,7 @@ class Player extends Dude
         @id = 0
         @x = (mapMinX + mapMaxX) / 2
         @y = (mapMinY + mapMaxY) / 2
-        @money = 0
+        @money = 950
         @corrupted = false
         @corruptLeakTimer = 0
         @speedX = 0
@@ -37,7 +37,7 @@ class Player extends Dude
         @y += @speedY * dt
 
         -- speed update
-        speedFactor = 1 if not @corrupted else playerCorruptionSpeedFactor
+        speedFactor = if not @corrupted then 1 else playerCorruptionSpeedFactor
 
         -- key Presses
         if (love.keyboard.isDown "z") or (love.keyboard.isDown "w")
@@ -78,7 +78,7 @@ class Player extends Dude
                 @updateMoney -playerCorruptionLeakValue
                 dirX = math.random(-100,100)/100
                 dirY = math.random(-100,100)/100
-                CoinList\createCoinBatchWithDirection @x, @y,
+                coinList\createCoinBatchWithDirection @x, @y,
                     playerCorruptionLeakValue, dirX, dirY
 
         -- timer
@@ -93,7 +93,7 @@ class Player extends Dude
 
     isAttacked: =>
         @money = math.max 0, @money - moneyStolenByHit
-        CoinList\createCoinBatch @x, @y, moneyStolenByHit
+        coinList\createCoinBatch @x, @y, moneyStolenByHit
         @invulnTimer = playerInvulnTimeByHit
         @life -= 1
 
@@ -111,11 +111,11 @@ class Player extends Dude
         if @money > playerMaxMoney
             @life -= 1
             @corrupted = true
-            @moneyDrop @money - playerMaxMoney
+            @moneyDrop(@money - playerMaxMoney)
 
     moneyDrop: (amount) =>
-        droppedAmount = math.min @money, amount
-        CoinList\createCoinBatch @x, @y, droppedAmount
+        droppedAmount = math.min(@money, amount)
+        coinList\createCoinBatch(@x, @y, droppedAmount)
         @updateMoney -droppedAmount
 
     getItem: (item) =>

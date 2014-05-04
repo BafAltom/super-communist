@@ -1,8 +1,8 @@
 export ^
 
 class FireBallList extends EntityList
-    createFireBall: (x, y, destX, destY) =>
-        @add Fireball x, y, destX, destY
+    createFireBall: (sender, destX, destY) =>
+        @add FireBall(sender, destX, destY)
 
     update: (dt) =>
         for fb in #@entList
@@ -10,16 +10,10 @@ class FireBallList extends EntityList
             if fb.lifeTime <= 0
                 @remove fb.id
 
-class FireBall
-    nextID = 0
-    getNextId = ->
-        FireBall.nextID += 1
-
+class FireBall extends Entity
     new: (@sender, destX, destY) =>
-        @id = FireBall\getNextID!
-        @x = sender\getX!
-        @y = sender\getY!
-        {@speedX, @speedY} = bafaltomVector(@x, @y, destX, destY, fireballSpeed)
+        super(@sender\getX(), @sender\getY())
+        @speedX, @speedY = bafaltomVector(@x, @y, destX, destY, fireballSpeed)
         @lifeTime = fireballLifeTime
 
     update: (dt) =>
@@ -28,7 +22,7 @@ class FireBall
 
         -- Hit detection
             -- player
-        if distance2Entities(player, @) < player\dudeSize! and player.invulnTimer <= 0 and (not @lifeTime < fireballFadeTimer)
+        if distance2Entities(player, @) < player\dudeSize! and player.invulnTimer <= 0 and not (@lifeTime < fireballFadeTimer)
             player.isAttacked!
             @lifeTime = 0
 
