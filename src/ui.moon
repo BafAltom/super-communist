@@ -20,7 +20,7 @@ class UI
         richesPlus = dudeList\getAllRichPlus!
 
         for rd in *richesPlus
-            if not world.isEntityInScreen(rd, 0)
+            if not world\isEntityInScreen(rd, 0)
                 richPlusDirX, richPlusDirY = bafaltomVector player.x, player.y,
                     @getX!, @getY!, 50
                 love.graphics.setColor 255, 255, 255
