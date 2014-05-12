@@ -59,7 +59,7 @@ class Shop
                 love.graphics.setColor 255,255,255,200
                 love.graphics.print item.name, x, y
                 love.graphics.draw item.pic, x, y + 15
-                love.graphics.print item.descr, x, y + shopItemSize[2] - 20
+                love.graphics.print item.description, x, y + shopItemSize[2] - 20
                 love.graphics.setColor 255, 255, 0
                 love.graphics.print item.price, x + shopItemSize[1] - 15, y
                 love.graphics.setColor 255, 255, 255, 255
@@ -105,9 +105,7 @@ class Shop
                 @currentCol = math.min(@currentCol, @itemCntInRow(@currentRow) - 1)
             when "return"
                 chosenItemNbr = @itemNbr(@currentRow, @currentCol)
-                print "chosenItemNbr : #{chosenItemNbr}"
                 chosenItem = @items[chosenItemNbr]
-                print "chosenItem name : #{chosenItem.name}"
                 if player.money > chosenItem.price
                     player\updateMoney -chosenItem.price
                     player\getItem chosenItem
