@@ -16,6 +16,7 @@ class Player extends Dude
         @life = playerLives
 
         @weaponRadius = 0
+        @maxWeaponRadius = playerWeaponRadiusMax -- can be increased with items
 
     draw: =>
         love.graphics.setColor 0, 255, 255
@@ -64,7 +65,7 @@ class Player extends Dude
         if (love.keyboard.isDown " ") and @invulnTimer <= 0
             if not @corrupted
                 weaponRadius = @weaponRadius + playerWeaponRadiusSpeed * dt
-                @weaponRadius = math.min weaponRadius, playerWeaponRadiusMax
+                @weaponRadius = math.min weaponRadius, @maxWeaponRadius
         elseif @weaponRadius > 0
             @attack @weaponRadius
             @weaponRadius = 0
@@ -127,6 +128,12 @@ class Player extends Dude
             @life = 0
         elseif item.name == "Useless"
             assert true == true, "42"
+        elseif item.name == "Health Potion"
+            if @life < playerLives
+                @life += 1
+        elseif item.name == "Eagle eye"
+            @maxWeaponRadius *= 1.1
+
 
     keypressed: (k) =>
         switch k

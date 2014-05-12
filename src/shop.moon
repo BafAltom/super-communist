@@ -16,9 +16,10 @@ class Shop
         table.insert @items, Item("YOU WIN", picItemPlaceHolder, "That is totally OP!", 10)
         table.insert @items, Item("YOU LOOSE", picItemPlaceHolder, "Why would I buy this?", 10)
         table.insert @items, Item("Useless", picItemPlaceHolder, "I have too much money", 10)
-        table.insert @items, Item("YOU LOOSE", picItemPlaceHolder, "Why would I buy this?", 10)
-        table.insert @items, Item("YOU WIN", picItemPlaceHolder, "That is totally OP!", 10)
-        table.insert @items, Item("YOU LOOSE", picItemPlaceHolder, "Why would I buy this?", 10)
+        table.insert @items, EagleEye!
+        table.insert @items, HealthPotion!
+        table.insert @items, EagleEye!
+        table.insert @items, EagleEye!
 
     rowCount: =>
         math.floor #@items / shopItemPerRow
