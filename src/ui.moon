@@ -60,6 +60,11 @@ class UI
         if @displayMinimap
             @drawMinimap!
 
+        -- gini coefficient
+        gc = dudeList\getGiniCoefficient()
+        gc = "" .. ((math.floor(gc * 1000)) / 1000)
+        love.graphics.printf "GC : #{gc}", 0, hScr - 20, wScr - 10, "right"
+
         -- FPS
         if true
             love.graphics.setColor 255,255,255

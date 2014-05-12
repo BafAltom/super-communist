@@ -43,6 +43,34 @@ class DudeList extends EntityList
                 table.insert correspondingDudes, d
         return correspondingDudes
 
+    getGiniCoefficient: =>
+        -- http://en.wikipedia.org/wiki/Gini_coefficient
+        dudeList = @as_list()
+        n = #dudeList
+        totalMoney = 0
+        for i, d in ipairs(dudeList)
+            totalMoney += d.money
+        table.sort(dudeList, (p1, p2) -> p1.money < p2.money)
+        -- from Wikipedia:
+        -- Xk is the cumulated proportion of the population variable, for k = 0,...,n
+        -- Yk is the cumulated proportion of the income variable, for k = 0,...,n
+        -- G_1 = 1 - \sum_{k=1}^{n} (X_{k} - X_{k-1}) (Y_{k} + Y_{k-1})
+        -- (note: this seems weird to me)
+        oldX = 0
+        oldY = 0
+        cumulMoney = 0
+        cumulArea = 0
+        for i, d in ipairs(dudeList)
+            newMoney = d.money / totalMoney
+            cumulMoney += newMoney
+            newX = i / n
+            newY = cumulMoney
+            cumulArea += (newX - oldX) * (newY + oldY)
+            oldX = newX
+            oldY = newY
+        return 1 - cumulArea
+
+
 
 class Dude extends Entity
     new: (x, y, @money) =>
