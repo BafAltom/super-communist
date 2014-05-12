@@ -45,7 +45,7 @@ class Coin
             closestDude = @findClosestDude!
 
             -- Move towards him
-            if @closestDude ~= nil and not closestDude.invulnTimer > 0 and not closestDude\class! == "rich+"
+            if closestDude ~= nil and not (closestDude.invulnTimer > 0) and not (closestDude\class! == "rich+")
 
                 -- magic numbers
                 @accX = (closestDude.x - @x) * 20
