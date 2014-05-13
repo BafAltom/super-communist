@@ -20,7 +20,7 @@ class Player extends Dude
 
     draw: =>
         love.graphics.setColor 0, 255, 255
-        fillage = "fill" if @invulnTimer <= 0 else "line"
+        fillage = if @invulnTimer <= 0 then "fill" else "line"
         sizeCorruptionFactor = if @corrupted then 2 else 1
 
         love.graphics.rectangle fillage,

@@ -23,7 +23,7 @@ class FireBall extends Entity
         -- Hit detection
             -- player
         if distance2Entities(player, @) < player\dudeSize! and player.invulnTimer <= 0 and not (@lifeTime < fireballFadeTimer)
-            player.isAttacked!
+            player\isAttacked!
             @lifeTime = 0
 
         -- Timer decrease
