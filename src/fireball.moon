@@ -2,13 +2,13 @@ export ^
 
 class FireBallList extends EntityList
     createFireBall: (sender, destX, destY) =>
-        @add FireBall(sender, destX, destY)
+        @add(FireBall(sender, destX, destY))
 
     update: (dt) =>
         for fb in #@entList
-            fb\update dt
+            fb\update(dt)
             if fb.lifeTime <= 0
-                @remove fb.id
+                @remove(fb.id)
 
 class FireBall extends Entity
     new: (@sender, destX, destY) =>
@@ -22,8 +22,8 @@ class FireBall extends Entity
 
         -- Hit detection
             -- player
-        if distance2Entities(player, @) < player\dudeSize! and player.invulnTimer <= 0 and not (@lifeTime < fireballFadeTimer)
-            player\isAttacked!
+        if distance2Entities(player, @) < player\dudeSize() and player.invulnTimer <= 0 and not (@lifeTime < fireballFadeTimer)
+            player\isAttacked()
             @lifeTime = 0
 
         -- Timer decrease
@@ -33,8 +33,8 @@ class FireBall extends Entity
     draw: =>
         fadeFactor = 255 * math.max(0, math.min(1, @lifeTime/fireballFadeTimer))
         -- create "firework" look when fading. Unintended but pretty cool!
-        love.graphics.setColor 255, 100, 0, fadeFactor
-        love.graphics.circle "fill", @getX!, @getY!, 5, 20
+        love.graphics.setColor(255, 100, 0, fadeFactor)
+        love.graphics.circle("fill", @getX(), @getY(), 5, 20)
 
     getX: =>
         @x

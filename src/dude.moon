@@ -2,28 +2,28 @@ export ^
 
 class DudeList extends EntityList
     new: =>
-        super!
+        super()
         poorCount, middleCount , richCount = 0, 0, 0
         for i = 1, numberOfDudes
             dudeX, dudeY, dudeM = nil, nil, nil
-            randomPercent = math.random 100
+            randomPercent = math.random(100)
             if randomPercent < poorPercent -- poor
                 poorCount += 1
-                dudeX, dudeY = randomPointInSubMapCorners!
-                dudeM = math.random 0, moneyMaxPoor
+                dudeX, dudeY = randomPointInSubMapCorners()
+                dudeM = math.random(0, moneyMaxPoor)
             else
-                dudeX = math.random mapMinX, mapMaxX
-                dudeY = math.random mapMinY, mapMaxY
+                dudeX = math.random(mapMinX, mapMaxX)
+                dudeY = math.random(mapMinY, mapMaxY)
 
                 if randomPercent < poorPercent + middlePercent -- middle
                     middleCount += 1
-                    dudeM = math.random moneyMaxPoor + 1, moneyMaxMiddle
+                    dudeM = math.random(moneyMaxPoor + 1, moneyMaxMiddle)
                 else -- rich
                     richCount += 1
                     moneyMin = moneyMaxRich - (moneyMaxRich-moneyMaxMiddle)*0.5
                     moneyMax = moneyMaxRich - (moneyMaxRich-moneyMaxMiddle)*0.25
                     dudeM = math.random(moneyMin, moneyMax)
-            @add Dude dudeX, dudeY, dudeM
+            @add(Dude dudeX, dudeY, dudeM)
 
     find: (id) =>
         if id == 0
@@ -74,17 +74,17 @@ class DudeList extends EntityList
 
 class Dude extends Entity
     new: (x, y, @money) =>
-        super x, y
-        if @class! ~= "poor" then
-            @x = math.random mapMinX, mapMaxX
-            @y = math.random mapMinY, mapMaxY
+        super(x, y)
+        if @class() ~= "poor" then
+            @x = math.random(mapMinX, mapMaxX)
+            @y = math.random(mapMinY, mapMaxY)
         else
             -- TODO: generation better distributed in submap
-            @x = math.random subMapMinX, subMapMaxX
+            @x = math.random(subMapMinX, subMapMaxX)
             if @x < mapMinX or @x > mapMaxX
-                @y = math.random subMapMinY, subMapMaxY
+                @y = math.random(subMapMinY, subMapMaxY)
             else
-                @y = math.random subMapMinY, mapMinY
+                @y = math.random(subMapMinY, mapMinY)
         @destX = @x
         @destY = @y
         @speedX = 0
@@ -99,13 +99,13 @@ class Dude extends Entity
         @state = ''
         @dudePic = nil
         @dudeAnim = nil
-        @findNewDestination!
+        @findNewDestination()
         @setState 'walking'
 
 
     draw: =>
         dudeColors = nil
-        switch @class!
+        switch @class()
             when "poor"
                 dudeColors = poorColor
             when "middle"
@@ -118,9 +118,9 @@ class Dude extends Entity
                 error "dude class '#{dude\class!}' is not recognized"
         love.graphics.setColor dudeColors
 
-        dudeSize = @dudeSize!
-        --- SIMPLE GRAPHICS
-        if true or @class! == "rich+"
+        dudeSize = @dudeSize()
+        --- PROGRAMMER GRAPHICS
+        if true or @class() == "rich+"
             fillage = if @invulnTimer <= 0 then "fill" else "line"
             love.graphics.rectangle fillage,
                 @x - dudeSize / 2, @y - dudeSize / 2, dudeSize, dudeSize
@@ -129,24 +129,24 @@ class Dude extends Entity
         if false and @dudeAnim and @dudePic
             directionIsLeft = -1 if @speedX > 0 else 1
             alpha = 100 if @invulnTimer > 0 else 255
-            love.graphics.setColor 255, 255, 255, alpha
+            love.graphics.setColor(255, 255, 255, alpha)
             @dudeAnim\draw @dudePic,
                 @x, @y, 0, directionIsLeft, 1, @dudePic\getWidth! / 2, 32
         if DEBUG
-            love.graphics.print @id, @getX! + dudeSize + 5, @getY!
-            love.graphics.print @state, @getX! + dudeSize + 5, @getY! + 10
+            love.graphics.print(@id, @getX() + dudeSize + 5, @getY())
+            love.graphics.print(@state, @getX() + dudeSize + 5, @getY() + 10)
             love.graphics.print "w: #{@waitingTime}",
-                @getX! + dudeSize + 5, @getY! + 30
-            if @class! == 'rich'
-                love.graphics.print @attackTimer, @getX! + dudeSize + 5, @getY! + 20
+                @getX() + dudeSize + 5, @getY() + 30
+            if @class() == 'rich'
+                love.graphics.print(@attackTimer, @getX() + dudeSize + 5, @getY() + 20)
 
         -- draw prey circle
-        if @class! == "rich"
-            love.graphics.circle "line", @getX!, @getY!, @preyRadius!, 50
+        if @class() == "rich"
+            love.graphics.circle("line", @getX(), @getY(), @preyRadius(), 50)
 
         -- draw moneyBar
         if @moneyDisplayTimer > 0
-            dudeM = math.ceil @money
+            dudeM = math.ceil(@money)
             moneyMin, moneyMax = nil, nil
             if dudeM <= moneyMaxPoor
                 moneyMin, moneyMax = 0, moneyMaxPoor
@@ -159,29 +159,30 @@ class Dude extends Entity
                 colorAlpha = 255
                 if @moneyDisplayTimer < dudeMoneyFade
                     colorAlpha = 255 * @moneyDisplayTimer / dudeMoneyFade
-                --love.graphics.print "#{moneyMin} < #{dudeM} < #{moneyMax}", @x, @y
-                love.graphics.setColor 0, 0, 0, colorAlpha
+                --love.graphics.print("#{moneyMin} < #{dudeM} < #{moneyMax}", @x, @y)
+                love.graphics.setColor(0, 0, 0, colorAlpha)
                 love.graphics.rectangle "line",
-                    @getX! - 20, @getY! - 40, 40, 10 -- magic numbers!
-                love.graphics.setColor 255, 255, 0, colorAlpha
+                    @getX() - 20, @getY() - 40, 40, 10 -- magic numbers!
+                love.graphics.setColor(255, 255, 0, colorAlpha)
                 love.graphics.rectangle "fill",
-                    @getX! - 19, @getY! - 39,
+                    @getX() - 19, @getY() - 39,
                     math.floor(relativeMoney * 38), 8 -- magic numbers!
 
         -- draw lightning
-        if @currentPrey ~= nil and not @class! == "rich+"
+        if @currentPrey ~= nil and not @class() == "rich+"
             attackedDude = @currentPrey
             attackBuildUpFactor = 1 - (@attackTimer / richHitTimer)
-            distance = distance2Entities dude, attackedDude
-            endX, endY = bafaltomVector @getX!, @getY!, attackedDude\getX!,
-                attackedDude\getY!, distance * attackBuildUpFactor
-            love.graphics.setColor 255, 69, 0, 255 * attackBuildUpFactor
-            love.graphics.line @getX!, @getY!, @getX! + endX, @getY! + endY
+            distance = distance2Entities(dude, attackedDude)
+            endX, endY = bafaltomVector @getX(), @getY(),
+                attackedDude\getX(), attackedDude\getY(),
+                distance * attackBuildUpFactor
+            love.graphics.setColor(255, 69, 0, 255 * attackBuildUpFactor)
+            love.graphics.line(@getX(), @getY(), @getX() + endX, @getY() + endY)
 
         -- draw dest Path
         if DEBUG
-            love.graphics.setColor dudeColors
-            love.graphics.line @getX!, @getY!, @destX, @destY
+            love.graphics.setColor(dudeColors)
+            love.graphics.line(@getX(), @getY(), @destX, @destY)
 
     class: =>
         if @money <= moneyMaxPoor
@@ -199,21 +200,21 @@ class Dude extends Entity
 
         -- dude pathfinding
         -- arrived at destination?
-        distDest = distance2Points @getX!, @getY!, @destX, @destY
+        distDest = distance2Points(@getX(), @getY(), @destX, @destY)
         if distDest <= destAcceptanceRadius
             if @state ~= 'waiting'
-                @destX = @getX!
-                @destY = @getY!
+                @destX = @getX()
+                @destY = @getY()
                 @setState 'waiting'
-                @waitingTime = math.random dudeNextDestWaitTimeMin,dudeNextDestWaitTimeMax
+                @waitingTime = math.random(dudeNextDestWaitTimeMin,dudeNextDestWaitTimeMax)
             elseif @waitingTime > 0
                 @waitingTime -= dt
             else
-                @findNewDestination!
+                @findNewDestination()
                 @setState 'walking'
         -- attracted by coins
-        closestCoin = @findClosestCoin!
-        if closestCoin ~= nil and @state ~= 'fleeing' and @class! ~= "rich+"
+        closestCoin = @findClosestCoin()
+        if closestCoin ~= nil and @state ~= 'fleeing' and @class() ~= "rich+"
             @destX = closestCoin.x
             @destY = closestCoin.y
             @setState 'moneyPursuing'
@@ -224,7 +225,7 @@ class Dude extends Entity
 
 
         -- rich+ dudes are attracted to player
-        if @class! == "rich+"
+        if @class() == "rich+"
             if distance2Entities(@, player) > richPlusStalkDistance
                 @destX = player.x
                 @destY = player.y
@@ -234,24 +235,24 @@ class Dude extends Entity
         @speedX = @destX - @x
         @speedY = @destY - @y
 
-        @calculateSpeed!
+        @calculateSpeed()
 
         -- push or be pushed by other players
-        closestDude = findClosestOf dudeList\as_list!, @, @dudeSize! * 2
+        closestDude = findClosestOf dudeList\as_list(), @, @dudeSize() * 2
         if closestDude ~= nil
-            @dudePush closestDude
+            @dudePush(closestDude)
 
         -- prey on the weak
-        if @class! == "rich"
-            if (@invulnTimer <= 0) and (@state == "walking" or @state == "waiting")
-                prey = @findClosestPrey!
+        if @class() == "rich"
+            if @invulnTimer <= 0 and (@state == "walking" or @state == "waiting")
+                prey = @findClosestPrey()
                 if prey ~= nil
                     if @attackTimer < 0
                         @attackTimer = richHitTimer
                         @attacked = prey.id
                         @attackTimer = richHitTimer
-                        stolenMoney = math.min prey.money, moneyStolenByHit
-                        prey\isAttacked @, stolenMoney
+                        stolenMoney = math.min(prey.money, moneyStolenByHit)
+                        prey\isAttacked(@, stolenMoney)
                     else
                         @attackTimer -= dt
                 else
@@ -261,7 +262,7 @@ class Dude extends Entity
                 @attackTimer = richHitTimer
 
         -- rich+ shoot Fireballz
-        if @class! == "rich+" and not (@attackTimer > 0) and distance2Entities(@, player) < superRichHitDistance
+        if @class() == "rich+" and not (@attackTimer > 0) and distance2Entities(@, player) < superRichHitDistance
             fireballList\createFireBall(@, player.x, player.y)
             @attackTimer = fireBallAttackTimer -- FIXME
             @attacked = 0
@@ -269,30 +270,30 @@ class Dude extends Entity
         -- flee
         if @attackedBy ~= -1
             attacker = dudeList\find(@attackedBy)
-            destX = @getX! + 2 * (@getX! - attacker\getX!)
-            destY = @getY! + 2 * (@getY! - attacker\getY!)
-            destX = math.max destX, fleeMinX
-            destX = math.min destX, fleeMaxX
-            destY = math.max destY, fleeMinY
-            destY = math.min destY, fleeMaxY
+            destX = @getX() + 2 * (@getX() - attacker\getX())
+            destY = @getY() + 2 * (@getY() - attacker\getY())
+            destX = math.max(destX, fleeMinX)
+            destX = math.min(destX, fleeMaxX)
+            destY = math.max(destY, fleeMinY)
+            destY = math.min(destY, fleeMaxY)
             @destX, @destY = destX, destY
             @attackedBy = -1
             @setState 'fleeing'
 
         -- animation
         if @dudeAnim ~= nil
-            @dudeAnim\update dt
+            @dudeAnim\update(dt)
 
         -- timers
         @invulnTimer -= dt if @invulnTimer > 0
         @moneyDisplayTimer -= dt if @moneyDisplayTimer > 0
-        @attackTimer -= dt if @class! == "rich+" and @attackTimer > 0
+        @attackTimer -= dt if @class() == "rich+" and @attackTimer > 0
 
     updateMoney: (amount) => -- negative/positive amount : take/give money
-        previousClass = @class!
+        previousClass = @class()
         @money += amount
-        if @class! ~= previousClass
-            @changeClass _previousClass
+        if @class() ~= previousClass
+            @changeClass(previousClass)
         @moneyDisplayTimer = dudeMoneyTimer
 
     changeClass: (previousClass) =>
@@ -301,30 +302,33 @@ class Dude extends Entity
         @attackTimer = 0
         @waitingTime = invulnTimeByClassChange
         @setState "waiting"
-        @refreshDudeAnimation!
+        @refreshDudeAnimation()
 
     dudePush: (smallerDude) =>
-        if @getX! == smallerDude\getX! and @getY! == smallerDude\getY!
+        if @getX() == smallerDude\getX() and @getY() == smallerDude\getY()
              -- hotfix
-             smallerDude.x = smallerDude.x + @dudeSize! * 2
+             smallerDude.x = smallerDude.x + @dudeSize() * 2
         else
             translationX, translationY = bafaltomVector @x, @y,
-                smallerDude.x, smallerDude.y, @dudeSize! * 2
-            smallerDude.destX = smallerDude\getX! + translationX
-            smallerDude.destY = smallerDude\getY! + translationY
+                smallerDude.x, smallerDude.y, @dudeSize() * 2
+            smallerDude.destX = smallerDude\getX() + translationX
+            smallerDude.destY = smallerDude\getY() + translationY
 
     preyRadius: =>
-        return 0 if @class! ~= "rich" else @money * moneyRadiusFactor
+        if @class() ~= "rich"
+            return 0
+        else
+            return @money * moneyRadiusFactor
 
     findClosestPrey: =>
         filteredDudes = {}
-        for d in dudeList\iter!
+        for d in dudeList\iter()
             if (d.money < @money) and not (d.invulnTimer > 0)
                 table.insert filteredDudes, d
-        findClosestOf filteredDudes, @, @preyRadius!
+        findClosestOf filteredDudes, @, @preyRadius()
 
     findClosestCoin: =>
-        findClosestOf coinList\as_list!, @, dudeAttractionDistance
+        findClosestOf coinList\as_list(), @, dudeAttractionDistance
 
     getX: =>
         @x
@@ -333,25 +337,25 @@ class Dude extends Entity
         @y
 
     dudeSize: =>
-        math.max 5, @money / 10
+        math.max(5, @money / 10)
 
     isAttacked: (predator, moneyStolen) =>
-        @updateMoney -1 * moneyStolen
-        coinList\createCoinBatchWithDirection @getX!, @getY!, moneyStolen, 0, 0
+        @updateMoney(-1 * moneyStolen)
+        coinList\createCoinBatchWithDirection(@getX(), @getY(), moneyStolen, 0, 0)
         @attackedBy = predator.id
         @invulnTimer = invulnTimeByHit
 
     findNewDestination: =>
-        if @class! == "poor" and not isInSubMap @getX!, @getY!
+        if @class() == "poor" and not isInSubMap(@getX(), @getY())
             -- poor go to the closest suburbs corner
-            @destX = subMapMinX if @getX! - subMapMinX < subMapMaxX - @getX! else subMapMaxX
-            @destY = subMapMinY if @getY! - subMapMinY < subMapMaxY - @getY! else subMapMaxY
+            @destX = if @getX() - subMapMinX < subMapMaxX - @getX() then subMapMinX else subMapMaxX
+            @destY = if @getY() - subMapMinY < subMapMaxY - @getY() then subMapMinY else subMapMaxY
         else
-            @destX = math.random @x - dudeNextDestRadius, @x + dudeNextDestRadius
-            @destY = math.random @y - dudeNextDestRadius, @y + dudeNextDestRadius
+            @destX = math.random(@x - dudeNextDestRadius, @x + dudeNextDestRadius)
+            @destY = math.random(@y - dudeNextDestRadius, @y + dudeNextDestRadius)
 
             local limitMinX, limitMaxX, limitMinY, limitMaxY
-            if @class! == "poor"
+            if @class() == "poor"
                 limitMinX = subMapMinX
                 limitMaxX = subMapMaxX
                 limitMinY = subMapMinY
@@ -361,63 +365,63 @@ class Dude extends Entity
                 limitMaxX = mapMaxX
                 limitMinY = mapMinY
                 limitMaxY = mapMaxY
-            @destX = math.max limitMinX, @destX
-            @destX = math.min limitMaxX, @destX
-            @destY = math.max limitMinY, @destY
-            @destY = math.min limitMaxY, @destY
+            @destX = math.max(limitMinX, @destX)
+            @destX = math.min(limitMaxX, @destX)
+            @destY = math.max(limitMinY, @destY)
+            @destY = math.min(limitMaxY, @destY)
             @setState 'walking'
 
     calculateSpeed: =>
-        actualSpeed = math.sqrt @speedX^2 + @speedY^2
+        actualSpeed = math.sqrt(@speedX^2 + @speedY^2)
         if actualSpeed > dudeMaxSpeed
-            @speedX, @speedY = bafaltomVector 0, 0, @speedX, @speedY, dudeMaxSpeed
+            @speedX, @speedY = bafaltomVector(0, 0, @speedX, @speedY, dudeMaxSpeed)
 
     refreshDudeAnimation: =>
         -- update the dudePic and dudeAnim attributes of dude
         -- there's probably a clever way to do it (with less copypaste)
         dudeP, dudeA = nil, nil
-        if @class! == "poor"
+        if @class() == "poor"
             switch @state
                 when "waiting"
                     dudeP = picPoorIdle
-                    dudeA = anim8.newAnimation "loop", dudeGrid('1,1-4'), 0.3
+                    dudeA = anim8.newAnimation("loop", dudeGrid('1,1-4'), 0.3)
                 when "walking"
                     dudeP = picPoorWalking
-                    dudeA = anim8.newAnimation "loop", dudeGrid('1,1-4'), 0.2
+                    dudeA = anim8.newAnimation("loop", dudeGrid('1,1-4'), 0.2)
                 when "fleeing"
                     dudeP = picPoorRunning
-                    dudeA = anim8.newAnimation "loop", dudeGrid('1,1-4'), 0.15
+                    dudeA = anim8.newAnimation("loop", dudeGrid('1,1-4'), 0.15)
                 when "moneyPursuing"
                     dudeP = picPoorMoney
-                    dudeA = anim8.newAnimation "loop", dudeGrid('1,1-4'), 0.15
-        elseif @class! == "middle"
+                    dudeA = anim8.newAnimation("loop", dudeGrid('1,1-4'), 0.15)
+        elseif @class() == "middle"
             switch @state
                 when "waiting"
                     dudeP = picMiddleIdle
-                    dudeA = anim8.newAnimation "loop", dudeGrid('1,1-4'), 0.3
+                    dudeA = anim8.newAnimation("loop", dudeGrid('1,1-4'), 0.3)
                 when "walking"
                     dudeP = picMiddleWalking
-                    dudeA = anim8.newAnimation "loop", dudeGrid('1,1-4'), 0.2
+                    dudeA = anim8.newAnimation("loop", dudeGrid('1,1-4'), 0.2)
                 when "fleeing"
                     dudeP = picMiddleRunning
-                    dudeA = anim8.newAnimation "loop", dudeGrid('1,1-4'), 0.15
+                    dudeA = anim8.newAnimation("loop", dudeGrid('1,1-4'), 0.15)
                 when "moneyPursuing"
                     dudeP = picMiddleMoney
                     dudeA = anim8.newAnimation("loop", dudeGrid('1,1-4'), 0.15)
-        elseif @class! == "rich"
+        elseif @class() == "rich"
             switch @state
                 when "waiting"
                     dudeP = picRichIdle
-                    dudeA = anim8.newAnimation "loop", dudeGrid('1,1-4'), 0.3
+                    dudeA = anim8.newAnimation("loop", dudeGrid('1,1-4'), 0.3)
                 when "walking"
                     dudeP = picRichWalking
-                    dudeA = anim8.newAnimation "loop", dudeGrid('1,1-4'), 0.2
+                    dudeA = anim8.newAnimation("loop", dudeGrid('1,1-4'), 0.2)
                 when "fleeing"
                     dudeP = picRichRunning
-                    dudeA = anim8.newAnimation "loop", dudeGrid('1,1-4'), 0.15
+                    dudeA = anim8.newAnimation("loop", dudeGrid('1,1-4'), 0.15)
                 when "moneyPursuing"
                     dudeP = picRichMoney
-                    dudeA = anim8.newAnimation "loop", dudeGrid('1,1-4'), 0.15
+                    dudeA = anim8.newAnimation("loop", dudeGrid('1,1-4'), 0.15)
 
         @dudePic = dudeP
         @dudeAnim = dudeA
@@ -434,7 +438,7 @@ class Dude extends Entity
         for _,s in ipairs Dude.acceptedStates
             if newState == s
                 @state = newState
-                @refreshDudeAnimation!
+                @refreshDudeAnimation()
                 return
         error('Dude.setState(newState) : newState = '..newState..' was not in accepted states')
 

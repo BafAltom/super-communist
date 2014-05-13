@@ -7,55 +7,55 @@ class World
         @scaleFactor = 1
 
     update: (dt) =>
-        player\update dt
-        ui\update dt
-        shop\update dt
-        for dude in dudeList\iter!
-            dude\update dt
+        player\update(dt)
+        ui\update(dt)
+        shop\update(dt)
+        for dude in dudeList\iter()
+            dude\update(dt)
 
-        for coin in coinList\iter!
-            coin\update dt
+        for coin in coinList\iter()
+            coin\update(dt)
 
-        for fb in fireballList\iter!
-            fb\update dt
+        for fb in fireballList\iter()
+            fb\update(dt)
 
 
     draw: =>
-        @translateAxes!
+        @translateAxes()
 
-        @drawMapGrid!
+        @drawMapGrid()
 
-        for dude in dudeList\iter!
-            dude\draw!
+        for dude in dudeList\iter()
+            dude\draw()
 
-        for coin in coinList\iter!
-            coin\draw!
+        for coin in coinList\iter()
+            coin\draw()
 
-        for fb in fireballList\iter!
-            fb\draw!
+        for fb in fireballList\iter()
+            fb\draw()
 
-        player\draw!
+        player\draw()
 
-        @inverseTranslateAxes!
+        @inverseTranslateAxes()
 
     keypressed: (k) =>
         if k == "tab" and not shop.opened
-            shop\open!
+            shop\open()
         elseif shop.opened
-            shop\keypressed k
-        player\keypressed k
+            shop\keypressed(k)
+        player\keypressed(k)
 
     drawMapGrid: =>
         -- suburbs
-        love.graphics.setColor(20,10,10)
+        love.graphics.setColor(20, 10, 10)
         love.graphics.rectangle("fill", subMapMinX, subMapMinY, subMapMaxX - subMapMinX, subMapMaxY - subMapMinY)
 
         -- maps
-        love.graphics.setColor(10,20,10)
+        love.graphics.setColor(10, 20, 10)
         love.graphics.rectangle("fill", mapMinX, mapMinY, mapMaxX - mapMinX, mapMaxY - mapMinY)
 
         -- columns
-        love.graphics.setColor(100,100,100)
+        love.graphics.setColor(100, 100, 100)
         for i = 0, gridColumns
             love.graphics.line mapMinX + (i * (mapMaxX - mapMinX) / gridColumns),
                 mapMinY,

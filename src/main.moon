@@ -11,7 +11,6 @@
 --   o heart containers
 --   o VIVA LA REVOLUTION (poor attack rich for x minutes)
 --   o ...
--- - Refactor : make methods in player, ui, world, etc? use the standard "inst.foo(inst, param)" to be called with "inst:foo(param)"
 --
 
 -- this is to enable live console output in Sublime Text
@@ -37,37 +36,37 @@ require "player"
 export world, player, dudeList, coinList, ui, shop, fireballList
 
 love.load = ->
-    seed = os.time! if not DEBUG else "I think it's better to have deterministic tests"
-    math.randomseed seed
-    math.random!
-    math.random!
-    math.random!
-    love.mouse.setVisible false
+    seed = os.time() if not DEBUG else "I think it's better to have deterministic tests"
+    math.randomseed(seed)
+    math.random()
+    math.random()
+    math.random()
+    love.mouse.setVisible(false)
 
-    world = World!
-    player = Player!
-    dudeList = DudeList!
-    coinList = CoinList!
-    fireballList = FireBallList!
-    ui = UI!
-    shop = Shop!
+    world = World()
+    player = Player()
+    dudeList = DudeList()
+    coinList = CoinList()
+    fireballList = FireBallList()
+    ui = UI()
+    shop = Shop()
 
     export displayMenu = true
 
 love.draw = ->
     if displayMenu
-        menu\draw!
+        menu\draw()
     else
-        world\draw!
-        ui\draw!
-        shop\draw!
+        world\draw()
+        ui\draw()
+        shop\draw()
 
 love.update =  (dt) ->
     unless PAUSE or displayMenu
-        world\update dt
+        world\update(dt)
 
         -- WIN
-        if dudeList\areAllMiddle!
+        if dudeList\areAllMiddle()
             menu.state = "won"
             displayMenu = true
 
@@ -79,7 +78,7 @@ love.update =  (dt) ->
 
 love.keypressed = (k) ->
     if displayMenu
-        menu\keypressed k
+        menu\keypressed(k)
     else
         -- player actions are in player\keypressed (called by world\keypressed)
         switch k
@@ -92,5 +91,5 @@ love.keypressed = (k) ->
                 export PAUSE = true
                 export displayMenu = true
             else
-                world\keypressed k
-                ui\keypressed k
+                world\keypressed(k)
+                ui\keypressed(k)

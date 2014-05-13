@@ -41,33 +41,33 @@ class Player extends Dude
         speedFactor = if not @corrupted then 1 else playerCorruptionSpeedFactor
 
         -- key Presses
-        if (love.keyboard.isDown "z") or (love.keyboard.isDown "w")
+        if love.keyboard.isDown("z") or love.keyboard.isDown("w")
             @speedY -= speedFactor * playerSpeedKeyDownIncrease * dt
         elseif @speedY < 0
-            @speedY = math.min 0, @speedY + playerSpeedKeyUpDecrease * dt
+            @speedY = math.min(0, @speedY + playerSpeedKeyUpDecrease * dt)
 
-        if (love.keyboard.isDown "s")
+        if love.keyboard.isDown("s")
             @speedY += speedFactor * playerSpeedKeyDownIncrease * dt
         elseif @speedY > 0
-            @speedY = math.max 0, @speedY - playerSpeedKeyUpDecrease * dt
+            @speedY = math.max(0, @speedY - playerSpeedKeyUpDecrease * dt)
 
-        if (love.keyboard.isDown "a") or (love.keyboard.isDown "q")
+        if love.keyboard.isDown("a") or love.keyboard.isDown("q")
             @speedX -= speedFactor * playerSpeedKeyDownIncrease * dt
         elseif @speedX < 0
-            @speedX = math.min 0, @speedX + playerSpeedKeyUpDecrease * dt
+            @speedX = math.min(0, @speedX + playerSpeedKeyUpDecrease * dt)
 
-        if (love.keyboard.isDown "d")
+        if love.keyboard.isDown("d")
             @speedX += speedFactor * playerSpeedKeyDownIncrease * dt
         elseif @speedX > 0
-            @speedX = math.max 0, @speedX - playerSpeedKeyUpDecrease * dt
+            @speedX = math.max(0, @speedX - playerSpeedKeyUpDecrease * dt)
 
         -- attack
-        if (love.keyboard.isDown " ") and @invulnTimer <= 0
+        if love.keyboard.isDown(" ") and @invulnTimer <= 0
             if not @corrupted
                 weaponRadius = @weaponRadius + playerWeaponRadiusSpeed * dt
-                @weaponRadius = math.min weaponRadius, @maxWeaponRadius
+                @weaponRadius = math.min(weaponRadius, @maxWeaponRadius)
         elseif @weaponRadius > 0
-            @attack @weaponRadius
+            @attack(@weaponRadius)
             @weaponRadius = 0
 
         -- corruption
@@ -77,8 +77,8 @@ class Player extends Dude
             if @corruptLeakTimer <= 0
                 @corruptLeakTimer = playerCorruptionLeakTimer
                 @updateMoney -playerCorruptionLeakValue
-                dirX = math.random(-100,100)/100
-                dirY = math.random(-100,100)/100
+                dirX = math.random(-100,100) / 100
+                dirY = math.random(-100,100) / 100
                 coinList\createCoinBatchWithDirection @x, @y,
                     playerCorruptionLeakValue, dirX, dirY
 
@@ -87,14 +87,14 @@ class Player extends Dude
         @corruptLeakTimer -= dt if @corruptLeakTimer > 0
 
     attack: (weaponRadius) =>
-        for prey in dudeList\iter!
+        for prey in dudeList\iter()
             if prey.invulnTimer <= 0 and distance2Entities(@, prey) < weaponRadius
                 moneyStolen = prey.money/2
-                prey\isAttacked @, moneyStolen
+                prey\isAttacked(@, moneyStolen)
 
     isAttacked: =>
-        @money = math.max 0, @money - moneyStolenByHit
-        coinList\createCoinBatch @x, @y, moneyStolenByHit
+        @money = math.max(0, @money - moneyStolenByHit)
+        coinList\createCoinBatch(@x, @y, moneyStolenByHit)
         @invulnTimer = playerInvulnTimeByHit
         @life -= 1
 
@@ -107,7 +107,7 @@ class Player extends Dude
     updateMoney: (amount) =>
         -- negative/positive amount : take/give money
 
-        super amount
+        super(amount)
 
         if @money > playerMaxMoney
             @life -= 1
@@ -120,11 +120,11 @@ class Player extends Dude
         @updateMoney -droppedAmount
 
     getItem: (item) =>
-        table.insert @items, item
+        table.insert(@items, item)
         if item.name == "YOU LOOSE"
             @life = 0
         elseif item.name == "YOU WIN"
-            print "cheater!"
+            print("Life's not that easy!")
             @life = 0
         elseif item.name == "Useless"
             assert true == true, "42"
@@ -138,6 +138,6 @@ class Player extends Dude
     keypressed: (k) =>
         switch k
             when "lshift"
-                @moneyDrop playerMegaDropAmount
+                @moneyDrop(playerMegaDropAmount)
             when "e"
-                @moneyDrop playerMiniDropAmount
+                @moneyDrop(playerMiniDropAmount)
