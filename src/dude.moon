@@ -139,10 +139,8 @@ class Dude extends Entity
                 @getX() + dudeSize + 5, @getY() + 30
             if @class() == 'rich'
                 love.graphics.print(@attackTimer, @getX() + dudeSize + 5, @getY() + 20)
-
-        -- draw prey circle
-        if @class() == "rich"
-            love.graphics.circle("line", @getX(), @getY(), @preyRadius(), 50)
+                -- draw prey circle
+                love.graphics.circle("line", @getX(), @getY(), @preyRadius(), 50)
 
         -- draw moneyBar
         if @moneyDisplayTimer > 0
