@@ -62,7 +62,7 @@ class Player extends Dude
             @speedX = math.max(0, @speedX - playerSpeedKeyUpDecrease * dt)
 
         -- attack
-        if love.keyboard.isDown(" ") and @invulnTimer <= 0
+        if love.keyboard.isDown("space") and @invulnTimer <= 0
             if not @corrupted
                 weaponRadius = @weaponRadius + playerWeaponRadiusSpeed * dt
                 @weaponRadius = math.min(weaponRadius, @maxWeaponRadius)

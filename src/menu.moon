@@ -21,7 +21,7 @@ class Menu
                 --FIXME: should not use global variables this way
                 export displayMenu = false
                 export PAUSE = false
-            when " "
+            when "space"
                 export displayMenu = false
                 export PAUSE = false
             when "escape"
