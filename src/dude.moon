@@ -120,18 +120,10 @@ class Dude extends Entity
 
         dudeSize = @dudeSize()
         --- PROGRAMMER GRAPHICS
-        if true or @class() == "rich+"
-            fillage = if @invulnTimer <= 0 then "fill" else "line"
-            love.graphics.rectangle fillage,
-                @x - dudeSize / 2, @y - dudeSize / 2, dudeSize, dudeSize
+        fillage = if @invulnTimer <= 0 then "fill" else "line"
+        love.graphics.rectangle fillage,
+            @x - dudeSize / 2, @y - dudeSize / 2, dudeSize, dudeSize
 
-        --- PICTURE GRAPHICS
-        if false and @dudeAnim and @dudePic
-            directionIsLeft = -1 if @speedX > 0 else 1
-            alpha = 100 if @invulnTimer > 0 else 255
-            love.graphics.setColor(255, 255, 255, alpha)
-            @dudeAnim\draw @dudePic,
-                @x, @y, 0, directionIsLeft, 1, @dudePic\getWidth! / 2, 32
         if DEBUG
             love.graphics.print(@id, @getX() + dudeSize + 5, @getY())
             love.graphics.print(@state, @getX() + dudeSize + 5, @getY() + 10)
