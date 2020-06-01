@@ -72,7 +72,7 @@ class Player extends Dude
 
         -- corruption
         if @corrupted
-            if @money < 3 * playerMaxMoney / 4
+            if @money < 0.75 * playerMaxMoney
                 @corrupted = false
             if @corruptLeakTimer <= 0
                 @corruptLeakTimer = playerCorruptionLeakTimer
