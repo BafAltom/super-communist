@@ -44,7 +44,7 @@ class Coin
             -- Find closest Dude (or player)
             closestDude = @findClosestDude!
 
-            -- Move towards him
+            -- Move towards them
             if closestDude ~= nil and not (closestDude.invulnTimer > 0) and not (closestDude\class! == "rich+")
 
                 -- magic numbers
@@ -54,7 +54,7 @@ class Coin
                 @accX = -@speedX
                 @accY = -@speedY
 
-            -- Caught by him?
+            -- Caught by them?
             if closestDude ~= nil and @noCatchTimer <= 0 and closestDude.invulnTimer <= 0 and closestDude\class! ~= "rich+"
                     if distance2Entities(@, closestDude) < closestDude\dudeSize()
                         closestDude\updateMoney(@value)
