@@ -28,10 +28,10 @@ class EntityList
         return @currentID
 
     iter: =>
-        i = 1
+        i = #@entList + 1
         return ->
-            i += 1
-            return @entList[i] if i <= #@entList
+            i -= 1
+            return @entList[i] if i >= 1
 
     as_list: =>
         return @entList
@@ -77,12 +77,15 @@ findClosestOf = (candidates, origin, maxDistance=nil) ->
         return nil, nil
 
     if maxDistance == nil
+        -- work with a copy of the original array
+        candidatesCopy = table.clone(candidates)
+
         -- use the distance to an arbitrary candidate as maxDistance
-        while candidates[1] == origin
-            table.remove candidates, 1
-        if #candidates == 0
+        while candidatesCopy[1] == origin
+            table.remove candidatesCopy, 1
+        if #candidatesCopy == 0
             return nil, nil
-        maxDistance = distance2Entities origin, candidates[1]
+        maxDistance = distance2Entities origin, candidatesCopy[1]
 
     closestCandidate = nil
     closestDistance = maxDistance

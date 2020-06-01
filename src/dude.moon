@@ -134,8 +134,7 @@ class Dude extends Entity
         dudeSize = @dudeSize()
         --- PROGRAMMER GRAPHICS
         fillage = if @invulnTimer <= 0 then "fill" else "line"
-        love.graphics.rectangle fillage,
-            @x - dudeSize / 2, @y - dudeSize / 2, dudeSize, dudeSize
+        love.graphics.rectangle fillage, @x - dudeSize / 2, @y - dudeSize / 2, dudeSize, dudeSize
 
         if DEBUG
             love.graphics.print(@id, @getX() + dudeSize + 5, @getY())
@@ -162,7 +161,7 @@ class Dude extends Entity
                 colorAlpha = 255
                 if @moneyDisplayTimer < dudeMoneyFade
                     colorAlpha =  @moneyDisplayTimer / dudeMoneyFade
-                --love.graphics.print("#{moneyMin} < #{dudeM} < #{moneyMax}", @x, @y)
+                -- love.graphics.print("#{moneyMin} < #{dudeM} < #{moneyMax}", @x, @y)
                 love.graphics.setColor(0, 0, 0, colorAlpha)
                 love.graphics.rectangle "line",
                     @getX() - 20, @getY() - 40, 40, 10 -- magic numbers!
@@ -202,48 +201,59 @@ class Dude extends Entity
         @y += @speedY * dt
 
         -- dude pathfinding
-        -- arrived at destination?
-        distDest = distance2Points(@getX(), @getY(), @destX, @destY)
-        if distDest <= destAcceptanceRadius
-            if @state ~= 'waiting'
-                @destX = @getX()
-                @destY = @getY()
-                @setState 'waiting'
-                @waitingTime = math.random(dudeNextDestWaitTimeMin,dudeNextDestWaitTimeMax)
-            elseif @waitingTime > 0
-                @waitingTime -= dt
-            else
-                @findNewDestination()
-                @setState 'walking'
-        -- attracted by coins
-        closestCoin = @findClosestCoin()
-        if closestCoin ~= nil and @state ~= 'fleeing' and @class() ~= "rich+"
-            @destX = closestCoin.x
-            @destY = closestCoin.y
-            @setState 'moneyPursuing'
-        if closestCoin == nil and @state == 'moneyPursuing'
-            -- this dude was attracted to a coin which doesn't exist anymore
-            @destX = @x
-            @destY = @y
-
-
-        -- rich+ dudes are attracted to player
-        if @class() == "rich+"
+        if @state == "rich+"
             if distance2Entities(@, player) > richPlusStalkDistance
                 @destX = player.x
                 @destY = player.y
                 @setState 'playerPursuing'
+            else
+                @destX = @x
+                @destY = @y
+        else
+            -- arrived at destination?
+            distDest = distance2Points(@getX(), @getY(), @destX, @destY)
+            if distDest <= destAcceptanceRadius
+                if @state ~= 'waiting'
+                    @destX = @getX()
+                    @destY = @getY()
+                    @setState 'waiting'
+                    @waitingTime = math.random(dudeNextDestWaitTimeMin,dudeNextDestWaitTimeMax)
+                elseif @waitingTime > 0
+                    @waitingTime -= dt
+                else
+                    @findNewDestination()
+                    @setState 'walking'
+            -- attracted by coins
+            closestCoin = @findClosestCoin()
+            if closestCoin ~= nil and @state ~= 'fleeing'
+                @destX = closestCoin.x
+                @destY = closestCoin.y
+                @setState 'moneyPursuing'
+            if closestCoin == nil and @state == 'moneyPursuing'
+                -- this dude was attracted to a coin which doesn't exist anymore
+                @destX = @x
+                @destY = @y
+                @setState 'walking'
 
-        -- no distraction --> go to destination
-        @speedX = @destX - @x
-        @speedY = @destY - @y
+        -- calculate new speed
+        newSpeedX, newSpeedY = 0, 0
+        if @x ~= @destX or @y ~= @destY
+            newSpeedX, newSpeedY = bafaltomVector(@x, @y, @destX, @destY, dudeMaxSpeed)
 
-        @calculateSpeed()
+        -- Be pushed by bigger dudes around
+        closestDude, closestDudeDistance = findClosestOf dudeList\as_list(), @
+        if closestDude ~= nil and closestDude\dudeSize() > @dudeSize() and closestDudeDistance < closestDude\dudeSize()
+            -- hotfix
+            if @getX() == closestDude\getX() and @getY() == closestDude\getY()
+                 closestDude.x = closestDude.x + 1
+            bumpSpeedX, bumpSpeedY = bafaltomVector closestDude.x, closestDude.y, @x, @y, dudeMaxSpeed
+            newSpeedX += bumpSpeedX
+            newSpeedY += bumpSpeedY
 
-        -- push or be pushed by other players
-        closestDude = findClosestOf dudeList\as_list(), @, @dudeSize() * 2
-        if closestDude ~= nil
-            @dudePush(closestDude)
+        @normalizeSpeed(newSpeedX, newSpeedY)
+
+        if isNan(@speedX) or isNan(@speedY)
+            error("isNan")
 
         -- prey on the weak
         if @class() == "rich"
@@ -267,7 +277,7 @@ class Dude extends Entity
         -- rich+ shoot Fireballz
         if @class() == "rich+" and not (@attackTimer > 0) and distance2Entities(@, player) < superRichHitDistance
             fireballList\createFireBall(@, player.x, player.y)
-            @attackTimer = fireBallAttackTimer -- FIXME
+            @attackTimer = fireBallAttackTimer
             @attacked = 0
 
         -- flee
@@ -292,6 +302,7 @@ class Dude extends Entity
         @moneyDisplayTimer -= dt if @moneyDisplayTimer > 0
         @attackTimer -= dt if @class() == "rich+" and @attackTimer > 0
 
+
     updateMoney: (amount) => -- negative/positive amount : take/give money
         previousClass = @class()
         @money += amount
@@ -306,16 +317,6 @@ class Dude extends Entity
         @waitingTime = invulnTimeByClassChange
         @setState "waiting"
         @refreshDudeAnimation()
-
-    dudePush: (smallerDude) =>
-        if @getX() == smallerDude\getX() and @getY() == smallerDude\getY()
-             -- hotfix
-             smallerDude.x = smallerDude.x + @dudeSize() * 2
-        else
-            translationX, translationY = bafaltomVector @x, @y,
-                smallerDude.x, smallerDude.y, @dudeSize() * 2
-            smallerDude.destX = smallerDude\getX() + translationX
-            smallerDude.destY = smallerDude\getY() + translationY
 
     preyRadius: =>
         if @class() ~= "rich"
@@ -374,10 +375,11 @@ class Dude extends Entity
             @destY = math.min(limitMaxY, @destY)
             @setState 'walking'
 
-    calculateSpeed: =>
-        actualSpeed = math.sqrt(@speedX^2 + @speedY^2)
-        if actualSpeed > dudeMaxSpeed
-            @speedX, @speedY = bafaltomVector(0, 0, @speedX, @speedY, dudeMaxSpeed)
+    normalizeSpeed: (newSpeedX, newSpeedY) =>
+        if newSpeedX == 0 and newSpeedY == 0
+            @speedX, @speedY = newSpeedX, newSpeedY
+        else
+            @speedX, @speedY = bafaltomVector(0, 0, newSpeedX, newSpeedY, dudeMaxSpeed)
 
     refreshDudeAnimation: =>
         -- update the dudePic and dudeAnim attributes of dude

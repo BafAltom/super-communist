@@ -5,10 +5,10 @@ class FireBallList extends EntityList
         @add(FireBall(sender, destX, destY))
 
     update: (dt) =>
-        for fb in #@entList
+        for fb in @iter()
             fb\update(dt)
             if fb.lifeTime <= 0
-                @remove(fb.id)
+                @removeID(fb.id)
 
 class FireBall extends Entity
     new: (@sender, destX, destY) =>
@@ -28,7 +28,6 @@ class FireBall extends Entity
 
         -- Timer decrease
         @lifeTime -= dt
-
 
     draw: =>
         fadeFactor = math.max(0, math.min(1, @lifeTime/fireballFadeTimer))

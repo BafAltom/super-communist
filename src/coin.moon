@@ -13,6 +13,12 @@ class CoinList extends EntityList
             @add Coin(x, y, coinsAcceptedValue[choice], vx, vy)
             value -= coinsAcceptedValue[choice]
 
+    update: (dt) =>
+        for coin in @iter()
+            coin\update(dt)
+            if coin.lifeTime <= 0 or coin.taken
+                @removeID(coin.id)
+
 class Coin
     new: (@x, @y, @value, sx, sy) =>
         if sx ~= 0 and sy ~= 0 then
@@ -33,6 +39,7 @@ class Coin
         @accY = 0
         @noCatchTimer = coinsNoCatchTime
         @lifeTime = coinsLifeTime
+        @taken = false
 
     normalizeSpeed: (speed) =>
         @speedX, @speedY = bafaltomVector(0, 0, @speedX, @speedY, speed)
@@ -56,9 +63,9 @@ class Coin
 
             -- Caught by them?
             if closestDude ~= nil and @noCatchTimer <= 0 and closestDude.invulnTimer <= 0 and closestDude\class! ~= "rich+"
-                    if distance2Entities(@, closestDude) < closestDude\dudeSize()
-                        closestDude\updateMoney(@value)
-                        coinList\removeID(@id)
+                if distance2Entities(@, closestDude) < closestDude\dudeSize()
+                    closestDude\updateMoney(@value)
+                    @taken = true
         else
             @noCatchTimer -= dt
 

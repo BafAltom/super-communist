@@ -22,6 +22,7 @@ export anim8 = require "lib/anim8"
 
 -- custom libraries
 require "bafaltom2D"
+require "helpers"
 require "variables"
 require "menu"
 require "dude"

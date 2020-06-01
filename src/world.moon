@@ -10,14 +10,12 @@ class World
         player\update(dt)
         ui\update(dt)
         shop\update(dt)
+
         for dude in dudeList\iter()
             dude\update(dt)
 
-        for coin in coinList\iter()
-            coin\update(dt)
-
-        for fb in fireballList\iter()
-            fb\update(dt)
+        coinList\update(dt)
+        fireballList\update(dt)
 
 
     draw: =>
