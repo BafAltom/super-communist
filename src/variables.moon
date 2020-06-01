@@ -32,16 +32,18 @@ picHeartEmpty = love.graphics.newImage("res/heart_empty.png")
 picItemPlaceHolder = love.graphics.newImage("res/item_placeholder.png")
 
 -- MAPS CONSTANTS
--- TODO : Change all of those with two variables "mapSize" and "subMapSize" (easier)
-mapMaxX = 600
-mapMinX = -600
-mapMaxY = 600
-mapMinY = -600
+mapSize = 600
+subMapSize = 1000
+
+mapMaxX = mapSize
+mapMinX = -mapSize
+mapMaxY = mapSize
+mapMinY = -mapSize
 -- subMap should be bigger than normal map
-subMapMaxX = 1000
-subMapMinX = -1000
-subMapMaxY = 1000
-subMapMinY = -1000
+subMapMaxX = subMapSize
+subMapMinX = -subMapSize
+subMapMaxY = subMapSize
+subMapMinY = -subMapSize
 
 isInSubMap = (x, y) ->
     x < mapMinX or x > mapMaxX or y < mapMinY or y > mapMaxY
