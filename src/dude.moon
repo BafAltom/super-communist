@@ -199,7 +199,7 @@ class Dude extends Entity
         @y += @speedY * dt
 
         -- dude pathfinding
-        if @state == "rich+"
+        if @class() == "rich+"
             if distance2Entities(@, player) > richPlusStalkDistance
                 @destX = player.x
                 @destY = player.y
@@ -239,14 +239,15 @@ class Dude extends Entity
             newSpeedX, newSpeedY = bafaltomVector(@x, @y, @destX, @destY, dudeMaxSpeed)
 
         -- Be pushed by bigger dudes around
-        closestDude, closestDudeDistance = findClosestOf dudeList\as_list(), @
-        if closestDude ~= nil and closestDude\dudeSize() > @dudeSize() and closestDudeDistance < closestDude\dudeSize()
-            -- hotfix
-            if @getX() == closestDude\getX() and @getY() == closestDude\getY()
-                 closestDude.x = closestDude.x + 1
-            bumpSpeedX, bumpSpeedY = bafaltomVector closestDude.x, closestDude.y, @x, @y, dudeMaxSpeed
-            newSpeedX += bumpSpeedX
-            newSpeedY += bumpSpeedY
+        if @class() ~= "rich+"
+            closestDude, closestDudeDistance = findClosestOf dudeList\as_list(), @
+            if closestDude ~= nil and closestDude\dudeSize() > @dudeSize() and closestDudeDistance < closestDude\dudeSize()
+                -- hotfix
+                if @getX() == closestDude\getX() and @getY() == closestDude\getY()
+                     closestDude.x = closestDude.x + 1
+                bumpSpeedX, bumpSpeedY = bafaltomVector closestDude.x, closestDude.y, @x, @y, dudeMaxSpeed
+                newSpeedX += bumpSpeedX
+                newSpeedY += bumpSpeedY
 
         @normalizeSpeed(newSpeedX, newSpeedY)
 
