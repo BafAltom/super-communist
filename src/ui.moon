@@ -55,6 +55,8 @@ class UI
         if @displayMinimap
             @drawMinimap()
 
+        @drawInequalityBar()
+
         -- gini coefficient
         gc = dudeList\getGiniCoefficient()
         gc = tostring((math.floor(gc * 1000)) / 1000)
@@ -69,6 +71,25 @@ class UI
         local helpText
         displayText = if @displayHelp then @helpText else @helpHiddenText
         love.graphics.print(displayText, moneyBarX, moneyBarY + 50)
+
+    drawInequalityBar: =>
+        {poorCount, middleCount, richCount, richPlusCount} = dudeList\getClassCount()
+        dudeCount = poorCount + middleCount + richCount + richPlusCount
+        poorRatio = poorCount / dudeCount
+        middleRatio = middleCount / dudeCount
+        richRatio = richCount / dudeCount
+        richPlusRatio = richPlusCount / dudeCount
+
+        love.graphics.translate(minimapX, minimapY - 10)
+        love.graphics.setColor poorColor
+        love.graphics.rectangle "fill", 0, 0, poorRatio * minimapLength, 10
+        love.graphics.setColor middleColor
+        love.graphics.rectangle "fill", poorRatio * minimapLength, 0, middleRatio * minimapLength, 10
+        love.graphics.setColor richColor
+        love.graphics.rectangle "fill", (poorRatio + middleRatio) * minimapLength, 0, richRatio * minimapLength, 10
+        love.graphics.setColor richPlusColor
+        love.graphics.rectangle "fill", (poorRatio + middleRatio + richRatio) * minimapLength, 0, richPlusRatio * minimapLength, 10
+        love.graphics.translate(-minimapX, -minimapY + 10)
 
     drawMinimap: =>
         love.graphics.translate(minimapX, minimapY)

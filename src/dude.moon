@@ -36,6 +36,19 @@ class DudeList extends EntityList
                 return false
         return true
 
+    getClassCount: =>
+        poorCount, middleCount, richCount, richPlusCount = 0, 0, 0, 0
+        for d in *@entList
+            if d\class() == "poor"
+                poorCount += 1
+            elseif d\class() == "middle"
+                middleCount += 1
+            elseif d\class() == "rich"
+                richCount += 1
+            elseif d\class() == "richPlus"
+                richPlusCount += 1
+        return {poorCount, middleCount, richCount, richPlusCount}
+
     getAllRichPlus: =>
         correspondingDudes = {}
         for d in *@entList
