@@ -13,13 +13,6 @@
 --   o ...
 --
 
--- this is to enable live console output in Sublime Text
-io.stdout\setvbuf'no'
-
-
--- External libraries
-export anim8 = require "lib/anim8"
-
 -- custom libraries
 require "bafaltom2D"
 require "helpers"

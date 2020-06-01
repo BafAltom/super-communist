@@ -8,25 +8,6 @@ DEBUG = false
 PAUSE = true
 
 -- RESSOURCES
--- picPoor = love.graphics.newImage("res/poor.png")
--- picMiddle = love.graphics.newImage("res/middle.png")
--- picRich = love.graphics.newImage("res/rich.png")
--- picRichPlus = love.graphics.newImage("res/richPlus.png")
-dudeGrid = anim8.newGrid(32,64,32,256)
--- default : anim8.newAnimation("loop", dudeGrid('1,1-4'), 0.3)
-
-picPoorIdle = love.graphics.newImage("res/poor_idle.png")
-picPoorWalking = love.graphics.newImage("res/poor_walking.png")
-picPoorRunning = love.graphics.newImage("res/poor_running.png")
-picPoorMoney = love.graphics.newImage("res/poor_moneyPursuing.png")
-picMiddleIdle = love.graphics.newImage("res/middle_idle.png")
-picMiddleWalking = love.graphics.newImage("res/middle_walking.png")
-picMiddleRunning = love.graphics.newImage("res/middle_running.png")
-picMiddleMoney = love.graphics.newImage("res/middle_moneyPursuing.png")
-picRichIdle = love.graphics.newImage("res/rich_idle.png")
-picRichWalking = love.graphics.newImage("res/rich_walking.png")
-picRichRunning = love.graphics.newImage("res/rich_running.png")
-picRichMoney = love.graphics.newImage("res/rich_moneyPursuing.png")
 picHeartFull = love.graphics.newImage("res/heart_full.png")
 picHeartEmpty = love.graphics.newImage("res/heart_empty.png")
 picItemPlaceHolder = love.graphics.newImage("res/item_placeholder.png")

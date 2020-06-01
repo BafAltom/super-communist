@@ -110,8 +110,6 @@ class Dude extends Entity
         @attackTimer = 0
         @moneyDisplayTimer = 0
         @state = ''
-        @dudePic = nil
-        @dudeAnim = nil
         @findNewDestination()
         @setState 'walking'
 
@@ -293,10 +291,6 @@ class Dude extends Entity
             @attackedBy = -1
             @setState 'fleeing'
 
-        -- animation
-        if @dudeAnim ~= nil
-            @dudeAnim\update(dt)
-
         -- timers
         @invulnTimer -= dt if @invulnTimer > 0
         @moneyDisplayTimer -= dt if @moneyDisplayTimer > 0
@@ -316,7 +310,6 @@ class Dude extends Entity
         @attackTimer = 0
         @waitingTime = invulnTimeByClassChange
         @setState "waiting"
-        @refreshDudeAnimation()
 
     preyRadius: =>
         if @class() ~= "rich"
@@ -381,56 +374,6 @@ class Dude extends Entity
         else
             @speedX, @speedY = bafaltomVector(0, 0, newSpeedX, newSpeedY, dudeMaxSpeed)
 
-    refreshDudeAnimation: =>
-        -- update the dudePic and dudeAnim attributes of dude
-        -- there's probably a clever way to do it (with less copypaste)
-        dudeP, dudeA = nil, nil
-        if @class() == "poor"
-            switch @state
-                when "waiting"
-                    dudeP = picPoorIdle
-                    dudeA = anim8.newAnimation("loop", dudeGrid('1,1-4'), 0.3)
-                when "walking"
-                    dudeP = picPoorWalking
-                    dudeA = anim8.newAnimation("loop", dudeGrid('1,1-4'), 0.2)
-                when "fleeing"
-                    dudeP = picPoorRunning
-                    dudeA = anim8.newAnimation("loop", dudeGrid('1,1-4'), 0.15)
-                when "moneyPursuing"
-                    dudeP = picPoorMoney
-                    dudeA = anim8.newAnimation("loop", dudeGrid('1,1-4'), 0.15)
-        elseif @class() == "middle"
-            switch @state
-                when "waiting"
-                    dudeP = picMiddleIdle
-                    dudeA = anim8.newAnimation("loop", dudeGrid('1,1-4'), 0.3)
-                when "walking"
-                    dudeP = picMiddleWalking
-                    dudeA = anim8.newAnimation("loop", dudeGrid('1,1-4'), 0.2)
-                when "fleeing"
-                    dudeP = picMiddleRunning
-                    dudeA = anim8.newAnimation("loop", dudeGrid('1,1-4'), 0.15)
-                when "moneyPursuing"
-                    dudeP = picMiddleMoney
-                    dudeA = anim8.newAnimation("loop", dudeGrid('1,1-4'), 0.15)
-        elseif @class() == "rich"
-            switch @state
-                when "waiting"
-                    dudeP = picRichIdle
-                    dudeA = anim8.newAnimation("loop", dudeGrid('1,1-4'), 0.3)
-                when "walking"
-                    dudeP = picRichWalking
-                    dudeA = anim8.newAnimation("loop", dudeGrid('1,1-4'), 0.2)
-                when "fleeing"
-                    dudeP = picRichRunning
-                    dudeA = anim8.newAnimation("loop", dudeGrid('1,1-4'), 0.15)
-                when "moneyPursuing"
-                    dudeP = picRichMoney
-                    dudeA = anim8.newAnimation("loop", dudeGrid('1,1-4'), 0.15)
-
-        @dudePic = dudeP
-        @dudeAnim = dudeA
-
     acceptedStates: {
         'waiting'
         'walking'
@@ -443,7 +386,6 @@ class Dude extends Entity
         for _,s in ipairs Dude.acceptedStates
             if newState == s
                 @state = newState
-                @refreshDudeAnimation()
                 return
         error('Dude.setState(newState) : newState = '..newState..' was not in accepted states')
 
