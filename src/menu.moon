@@ -9,10 +9,10 @@ class Menu
     draw: =>
         love.graphics.setColor(1, 1, 1, 1)
         love.graphics.print(@textDict[@state], wScr / 2, hScr / 2)
-        love.graphics.print("Press enter to start a new game", wScr / 2, hScr / 2 + 10)
+        love.graphics.print("Press enter to start a new game", wScr / 2, hScr / 2 + 30)
         if @state == "pause"
-            love.graphics.print("Press space to resume", wScr / 2, hScr / 2 + 20)
-        love.graphics.print("Press esc to quit", wScr/2, hScr/2 + 50)
+            love.graphics.print("Press space to resume", wScr / 2, hScr / 2 + 50)
+        love.graphics.print("Press esc to quit", wScr/2, hScr/2 + 100)
 
     keypressed: (k) =>
         switch k

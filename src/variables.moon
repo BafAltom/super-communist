@@ -62,7 +62,7 @@ playerMaxSpeed = 300 -- px/s
 playerSpeedKeyDownIncrease = 300 --px/s^2
 playerSpeedKeyUpDecrease = 600 -- px/s^2
 playerLives = 3
-playerMaxMoney = 1000
+playerMaxMoney = 3000
 playerWeaponRadiusSpeed = 60
 playerWeaponRadiusMax = 100
 playerMegaDropAmount = 100
@@ -140,7 +140,7 @@ gridColumns = 5
 -- MONEYBAR
 moneyBarX = 10
 moneyBarY = 10
-moneyBar_moneyByPx = 4
+moneyBar_moneyByPx = 5
 moneyBarLength = playerMaxMoney / moneyBar_moneyByPx
 moneyBarHeight = 20
 --MINIMAP
