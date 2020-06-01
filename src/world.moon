@@ -47,15 +47,15 @@ class World
 
     drawMapGrid: =>
         -- suburbs
-        love.graphics.setColor(20, 10, 10)
+        love.graphics.setColor(20 / 255, 10 / 255, 10 / 255)
         love.graphics.rectangle("fill", subMapMinX, subMapMinY, subMapMaxX - subMapMinX, subMapMaxY - subMapMinY)
 
         -- maps
-        love.graphics.setColor(10, 20, 10)
+        love.graphics.setColor(10 / 255, 20 / 255, 10 / 255)
         love.graphics.rectangle("fill", mapMinX, mapMinY, mapMaxX - mapMinX, mapMaxY - mapMinY)
 
         -- columns
-        love.graphics.setColor(100, 100, 100)
+        love.graphics.setColor(100 / 255, 100 / 255, 100 / 255)
         for i = 0, gridColumns
             love.graphics.line mapMinX + (i * (mapMaxX - mapMinX) / gridColumns),
                 mapMinY,

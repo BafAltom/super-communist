@@ -83,12 +83,12 @@ class Coin
         return findClosestOf(filteredDudes, @, coinsAttractionDistance)
 
     draw: => -- TODO clean up a bit?
-        love.graphics.setColor(255,255,0)
+        love.graphics.setColor 1, 1, 0
         coinRadius = math.max(1, @value / coinsValuePerPx)
         if @lifeTime < coinsFadeTime
             fadeFactor = @lifeTime / coinsFadeTime
             coinRadius = math.max(1, coinRadius * fadeFactor)
-            love.graphics.setColor(255 * fadeFactor, 255 * fadeFactor, 0)
+            love.graphics.setColor(fadeFactor, fadeFactor, 0)
         fillage = "fill"
         if @noCatchTimer > 0
             fillage = "line"

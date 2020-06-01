@@ -39,7 +39,7 @@ class Shop
         if @opened then
             fadeFactor = math.max(0, math.min(1, @fadeTimer)) / shopFadeTime
             love.graphics.translate(-shopRectangle[3] * (1 - fadeFactor), 0)
-            love.graphics.setColor(0, 0, 0, 100)
+            love.graphics.setColor(0, 0, 0, 100 / 1)
             love.graphics.rectangle "fill",
                 shopRectangle[1], shopRectangle[2],
                 shopRectangle[3], shopRectangle[4]
@@ -49,21 +49,21 @@ class Shop
                 x = shopRectangle[1] + shopItemMargin + (shopItemSize[1] + shopItemMargin) * column
                 y = shopRectangle[2] + shopItemMargin + (shopItemMargin + shopItemSize[2]) * row
 
-                love.graphics.setColor(0, 0, 0, 255)
+                love.graphics.setColor(0, 0, 0, 1)
                 if column == @currentCol and row == @currentRow
                     if item.price > player.money
-                        love.graphics.setColor(255, 0, 0, 255)
+                        love.graphics.setColor(1, 0, 0, 1)
                     else
-                        love.graphics.setColor(255, 255, 255, 255)
+                        love.graphics.setColor(1, 1, 1, 1)
                 love.graphics.rectangle "line",
                     x, y, shopItemSize[1], shopItemSize[2]
-                love.graphics.setColor(255, 255, 255, 200)
+                love.graphics.setColor(1, 1, 1, 200)
                 love.graphics.print(item.name, x, y)
                 love.graphics.draw(item.pic, x, y + 15)
                 love.graphics.print(item.description, x, y + shopItemSize[2] - 20)
-                love.graphics.setColor(255, 255, 0)
+                love.graphics.setColor(1, 1, 0)
                 love.graphics.print(item.price, x + shopItemSize[1] - 15, y)
-                love.graphics.setColor(255, 255, 255, 255)
+                love.graphics.setColor(1, 1, 1, 1)
             love.graphics.translate(shopRectangle[3] * fadeFactor, 0)
 
     update: (dt) =>

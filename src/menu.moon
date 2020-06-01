@@ -7,7 +7,7 @@ class Menu
     update: (dt) =>
 
     draw: =>
-        love.graphics.setColor(255, 255, 255,255)
+        love.graphics.setColor(1, 1, 1, 1)
         love.graphics.print(@textDict[@state], wScr / 2, hScr / 2)
         love.graphics.print("Press enter to start a new game", wScr / 2, hScr / 2 + 10)
         if @state == "pause"

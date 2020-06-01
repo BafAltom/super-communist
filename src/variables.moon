@@ -108,10 +108,10 @@ poorPercent = 30
 middlePercent = 40
 richPercent = 30
 
-poorColor = {153, 99, 67}
-middleColor = {139, 200, 130}
-richColor = {255, 0, 0}
-richPlusColor = {255, 255, 255}
+poorColor = {153 / 255, 99 / 255, 67 / 255}
+middleColor = {139 / 255, 200 / 255, 130 / 255}
+richColor = {1, 0, 0}
+richPlusColor = {1, 1, 1}
 
 -- COINS CONSTANTS
 coinsValuePerPx = 5

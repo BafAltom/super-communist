@@ -19,7 +19,7 @@ class Player extends Dude
         @maxWeaponRadius = playerWeaponRadiusMax -- can be increased with items
 
     draw: =>
-        love.graphics.setColor 0, 255, 255
+        love.graphics.setColor 0, 1, 1
         fillage = if @invulnTimer <= 0 then "fill" else "line"
         sizeCorruptionFactor = if @corrupted then 2 else 1
 

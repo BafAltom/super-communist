@@ -148,12 +148,12 @@ class Dude extends Entity
                 relativeMoney = (dudeM - moneyMin) / (moneyMax - moneyMin)
                 colorAlpha = 255
                 if @moneyDisplayTimer < dudeMoneyFade
-                    colorAlpha = 255 * @moneyDisplayTimer / dudeMoneyFade
+                    colorAlpha =  @moneyDisplayTimer / dudeMoneyFade
                 --love.graphics.print("#{moneyMin} < #{dudeM} < #{moneyMax}", @x, @y)
                 love.graphics.setColor(0, 0, 0, colorAlpha)
                 love.graphics.rectangle "line",
                     @getX() - 20, @getY() - 40, 40, 10 -- magic numbers!
-                love.graphics.setColor(255, 255, 0, colorAlpha)
+                love.graphics.setColor(1, 1, 0, colorAlpha)
                 love.graphics.rectangle "fill",
                     @getX() - 19, @getY() - 39,
                     math.floor(relativeMoney * 38), 8 -- magic numbers!
@@ -166,7 +166,7 @@ class Dude extends Entity
             endX, endY = bafaltomVector @getX(), @getY(),
                 attackedDude\getX(), attackedDude\getY(),
                 distance * attackBuildUpFactor
-            love.graphics.setColor(255, 69, 0, 255 * attackBuildUpFactor)
+            love.graphics.setColor(1, 69 / 255, 0, attackBuildUpFactor)
             love.graphics.line(@getX(), @getY(), @getX() + endX, @getY() + endY)
 
         -- draw dest Path

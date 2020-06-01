@@ -31,9 +31,9 @@ class FireBall extends Entity
 
 
     draw: =>
-        fadeFactor = 255 * math.max(0, math.min(1, @lifeTime/fireballFadeTimer))
+        fadeFactor = math.max(0, math.min(1, @lifeTime/fireballFadeTimer))
         -- create "firework" look when fading. Unintended but pretty cool!
-        love.graphics.setColor(255, 100, 0, fadeFactor)
+        love.graphics.setColor(1, 100 / 255, 0, fadeFactor)
         love.graphics.circle("fill", @getX(), @getY(), 5, 20)
 
     getX: =>
