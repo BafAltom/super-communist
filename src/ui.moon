@@ -82,17 +82,19 @@ class UI
 
         love.graphics.translate(minimapX, minimapY - 10)
         love.graphics.setColor poorColor
-        love.graphics.rectangle "fill", 0, 0, poorRatio * minimapLength, 10
+        love.graphics.rectangle "fill", 0, 0, poorRatio * minimapLength, 5
         love.graphics.setColor middleColor
-        love.graphics.rectangle "fill", poorRatio * minimapLength, 0, middleRatio * minimapLength, 10
+        love.graphics.rectangle "fill", poorRatio * minimapLength, 0, middleRatio * minimapLength, 5
         love.graphics.setColor richColor
-        love.graphics.rectangle "fill", (poorRatio + middleRatio) * minimapLength, 0, richRatio * minimapLength, 10
+        love.graphics.rectangle "fill", (poorRatio + middleRatio) * minimapLength, 0, richRatio * minimapLength, 5
         love.graphics.setColor richPlusColor
-        love.graphics.rectangle "fill", (poorRatio + middleRatio + richRatio) * minimapLength, 0, richPlusRatio * minimapLength, 10
+        love.graphics.rectangle "fill", (poorRatio + middleRatio + richRatio) * minimapLength, 0, richPlusRatio * minimapLength, 5
         love.graphics.translate(-minimapX, -minimapY + 10)
 
     drawMinimap: =>
         love.graphics.translate(minimapX, minimapY)
+        love.graphics.setColor(1, 1, 1)
+        love.graphics.rectangle("line", -1, -1, minimapLength + 2, minimapHeight + 2)
         love.graphics.setColor(20 / 255, 10 / 255, 10 / 255)
         love.graphics.rectangle("fill", 0, 0, minimapLength, minimapHeight)
         love.graphics.setColor(10 / 255, 20 / 255, 10 / 255)
