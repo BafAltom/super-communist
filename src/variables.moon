@@ -98,7 +98,7 @@ coinsFadeTime = 1
 -- FIREBALL CONSTANTS
 
 fireballSpeed = 70
-fireBallAttackTimer = 0.1
+fireBallAttackTimer = 0.3
 fireballLifeTime = 2.5
 fireballFadeTimer = 0.5
 
