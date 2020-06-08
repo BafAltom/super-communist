@@ -184,13 +184,14 @@ class Dude extends Entity
                     math.floor(relativeMoney * 38), 8 -- magic numbers!
 
         -- draw lightning
-        if @currentPrey ~= nil and not @class() == "rich+"
+        if @currentPrey ~= nil and @class() ~= "rich+"
             attackedDude = @currentPrey
             attackBuildUpFactor = 1 - (@attackTimer / richHitTimer)
-            distance = distance2Entities(dude, attackedDude)
+            distance = distance2Entities(@, attackedDude)
             endX, endY = bafaltomVector @getX(), @getY(),
                 attackedDude\getX(), attackedDude\getY(),
                 distance * attackBuildUpFactor
+
             love.graphics.setColor(1, 69 / 255, 0, attackBuildUpFactor)
             love.graphics.line(@getX(), @getY(), @getX() + endX, @getY() + endY)
 
