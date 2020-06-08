@@ -31,8 +31,8 @@ class DudeList extends EntityList
         super id
 
     areAllMiddle: =>
-        for _, d in ipairs @entList
-            if d\class! ~= "middle"
+        for d in *@entList
+            if d\class() ~= "middle"
                 return false
         return true
 
@@ -47,6 +47,8 @@ class DudeList extends EntityList
                 richCount += 1
             elseif d\class() == "richPlus"
                 richPlusCount += 1
+            else
+                error("Unknown class #{d\class()}" )
         return {poorCount, middleCount, richCount, richPlusCount}
 
     getAllRichPlus: =>

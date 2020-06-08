@@ -1,4 +1,4 @@
-del gen_love /Q
+rmdir /S /Q gen_love
 
 mkdir gen_love
 mkdir gen_love\lib
