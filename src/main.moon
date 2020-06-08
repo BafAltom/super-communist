@@ -62,13 +62,13 @@ love.update =  (dt) ->
         -- WIN
         if dudeList\areAllMiddle()
             menu.state = "won"
-            displayMenu = true
+            export displayMenu = true
 
         -- LOOSE
         if player.life <= 0
             menu.state = "lost"
             PAUSE = true
-            displayMenu = true
+            export displayMenu = true
 
 love.keypressed = (k) ->
     if displayMenu
