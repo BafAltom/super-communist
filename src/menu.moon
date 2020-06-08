@@ -28,9 +28,9 @@ class Menu
                 love.event.push("quit")
 
     restart_game: =>
-        world = World()
-        dudeList = DudeList()
-        player = Player()
+        export world = World()
+        export dudeList = DudeList()
+        export player = Player()
 
 
 dict = {
