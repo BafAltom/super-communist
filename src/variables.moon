@@ -57,6 +57,7 @@ moneyStolenByHit = 10
 dudeMoneyTimer = 2
 dudeMoneyFade = 0.3 --s
 superRichHitDistance = 150
+superRichCooldown = 2 -- s
 richHitTimer = 2.5
 invulnTimeByHit = 6
 invulnTimeByClassChange = 1

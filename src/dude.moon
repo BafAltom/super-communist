@@ -119,6 +119,7 @@ class Dude extends Entity
         @speedX = 0
         @speedY = 0
         @waitingTime = 0
+        @richPlusCooldown = 0
         @invulnTimer = 0
         @currentPrey = nil -- current target (dude)
         @attacked = -1 -- id of attacked dude (-1 if void)
@@ -216,7 +217,11 @@ class Dude extends Entity
 
         -- dude pathfinding
         if @class() == "rich+"
-            if distance2Entities(@, player) > richPlusStalkDistance
+            if @richPlusCooldown > 0
+                @richPlusCooldown -= dt
+                @destX = @x
+                @destY = @y
+            else if distance2Entities(@, player) > richPlusStalkDistance
                 @destX = player.x
                 @destY = player.y
                 @setState 'playerPursuing'
@@ -290,7 +295,7 @@ class Dude extends Entity
                 @attackTimer = richHitTimer
 
         -- rich+ shoot Fireballz
-        if @class() == "rich+" and not (@attackTimer > 0) and distance2Entities(@, player) < superRichHitDistance
+        if @class() == "rich+" and not (@attackTimer > 0) and not (@richPlusCooldown > 0) and distance2Entities(@, player) < superRichHitDistance
             fireballList\createFireBall(@, player.x, player.y)
             @attackTimer = fireBallAttackTimer
             @attacked = 0
@@ -324,6 +329,8 @@ class Dude extends Entity
     changeClass: (previousClass) =>
         if previousClass == "rich"
             @currentPrey = nil
+        if @class() == "rich+"
+            @richPlusCooldown = superRichCooldown
         @attackTimer = 0
         @waitingTime = invulnTimeByClassChange
         @setState "waiting"
