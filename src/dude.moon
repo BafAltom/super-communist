@@ -45,7 +45,7 @@ class DudeList extends EntityList
                 middleCount += 1
             elseif d\class() == "rich"
                 richCount += 1
-            elseif d\class() == "richPlus"
+            elseif d\class() == "rich+"
                 richPlusCount += 1
             else
                 error("Unknown class #{d\class()}" )
