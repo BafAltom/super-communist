@@ -85,8 +85,6 @@ class DudeList extends EntityList
             oldY = newY
         return 1 - cumulArea
 
-
-
 class Dude extends Entity
     new: (x, y, @money) =>
         super(x, y)
@@ -94,12 +92,28 @@ class Dude extends Entity
             @x = math.random(mapMinX, mapMaxX)
             @y = math.random(mapMinY, mapMaxY)
         else
-            -- TODO: generation better distributed in submap
-            @x = math.random(subMapMinX, subMapMaxX)
-            if @x < mapMinX or @x > mapMaxX
-                @y = math.random(subMapMinY, subMapMaxY)
-            else
-                @y = math.random(subMapMinY, mapMinY)
+            -- poor dudes generation in submap
+            -- first choose a "quadrant" (up, down, left or right)
+            -- then a position in this quadrant
+            quadrant = math.random(1, 4)
+            coord1 = math.random(-subMapSize, subMapSize)
+            coord2 = math.random(mapSize, subMapSize)
+            if quadrant == 1
+                -- UP quadrant
+                @x = coord1
+                @y = -coord2
+            elseif quadrant == 2
+                -- RIGHT quadrant
+                @x = coord2
+                @y = coord1
+            elseif quadrant == 3
+                -- DOWN quadrant
+                @x = coord1
+                @y = coord2
+            elseif quadrant == 4
+                -- LEFT
+                @x = -coord2
+                @y = coord1
         @destX = @x
         @destY = @y
         @speedX = 0
