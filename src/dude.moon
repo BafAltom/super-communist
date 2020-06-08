@@ -129,7 +129,6 @@ class Dude extends Entity
         @findNewDestination()
         @setState 'walking'
 
-
     draw: =>
         dudeColors = nil
         switch @class()
